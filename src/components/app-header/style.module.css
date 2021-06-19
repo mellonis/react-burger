@@ -1,0 +1,19 @@
+.app-header {
+    align-items: center;
+    display: grid;
+    font-family: 'Jet Brains Mono', sans-serif;
+    font-size: 16px;
+    grid-template-columns: max-content max-content 1fr max-content;
+    line-height: 24px;
+}
+
+.app-header__menu-item {
+    display: grid;
+    grid-template-columns: repeat(2, max-content);
+}
+
+.app-header__logo-wrapper {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
