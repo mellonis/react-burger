@@ -6,12 +6,12 @@ import {
   ListIcon,
   ProfileIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import styles from './style.module.css';
 import MenuItem from './menu-item';
+import styles from './style.module.css';
 
 const AppHeader = () => {
   return (
-    <header className={cs(styles['app-header'], 'text_type_main-default')}>
+    <header className={cs(styles['app-header'], 'text text_type_main-default')}>
       <nav>
         <ul className={cs(styles['app-header__menu-list'], 'pt-4 pb-4')}>
           <MenuItem

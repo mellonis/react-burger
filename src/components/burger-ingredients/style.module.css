@@ -1,0 +1,13 @@
+.burger-ingredients {
+
+}
+
+.burger-ingredients__filter {
+    display: flex;
+}
+
+.burger-ingredients__type-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}

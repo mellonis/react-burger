@@ -3,7 +3,7 @@ import cs from 'classnames';
 import { TIconProps } from '@ya.praktikum/react-developer-burger-ui-components/dist/ui/icons/utils';
 import style from './style.module.css';
 
-type EditIcon = ({ type }: TIconProps) => JSX.Element;
+type Icon_t = ({ type }: TIconProps) => JSX.Element;
 
 const MenuItem = ({
   className,
@@ -12,13 +12,13 @@ const MenuItem = ({
   text,
 }: {
   className?: string;
-  Icon: EditIcon;
+  Icon: Icon_t;
   isActive?: boolean;
   text: string;
 }) => {
   return (
     <li
-      className={cs(style['menu-item'], className, 'p-5', {
+      className={cs(style['menu-item'], className, 'p-5 text', {
         text_color_inactive: !isActive,
       })}
     >

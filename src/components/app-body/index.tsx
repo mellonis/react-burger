@@ -7,11 +7,14 @@ import styles from './style.module.css';
 const AppBody = () => {
   return (
     <main
-      className={cs(styles['app-body'], 'pl-5 pr-5 text_type_main-default')}
+      className={cs(
+        styles['app-body'],
+        'pl-5 pr-5 text text_type_main-default'
+      )}
     >
-      <BurgerIngredients />
+      <BurgerIngredients className={styles['app-body__ingredients']} />
       <div className={cs(styles['app-body__space'], 'pl-10')} />
-      <BurgerConstructor />
+      <BurgerConstructor className={styles['app-body__constructor']} />
     </main>
   );
 };

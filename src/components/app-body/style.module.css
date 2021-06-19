@@ -1,5 +1,13 @@
 .app-body {
-    align-items: center;
     display: grid;
     grid-template-columns: 1fr min-content 1fr;
+}
+
+.app-body__ingredients,
+.app-body__constructor {
+    width: 600px;
+}
+
+.app-body__space {
+
 }

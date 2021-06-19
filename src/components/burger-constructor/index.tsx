@@ -1,7 +1,7 @@
 import React from 'react';
 
-const BurgerConstructor = () => {
-  return <div>BC</div>;
+const BurgerConstructor = ({ className }: { className?: string }) => {
+  return <div className={className}>BC</div>;
 };
 
 export default BurgerConstructor;
