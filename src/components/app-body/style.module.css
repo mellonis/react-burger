@@ -1,7 +1,5 @@
 .app-body {
     align-items: center;
     display: grid;
-    font-family: 'Jet Brains Mono', sans-serif;
-    font-size: 16px;
     grid-template-columns: 1fr min-content 1fr;
 }
