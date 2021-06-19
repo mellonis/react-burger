@@ -1,0 +1,20 @@
+.burger-constructor {
+
+}
+
+.burger-constructor__list {
+    display: grid;
+}
+
+.burger-constructor__constructor-element-wrapper {
+    align-items: center;
+    display: grid;
+    grid-template-columns: 32px 24px 1fr;
+}
+
+.burger-constructor__total-wrapper {
+    align-items: center;
+    display: grid;
+    grid-template-columns: repeat(3, max-content);
+    justify-content: flex-end;
+}

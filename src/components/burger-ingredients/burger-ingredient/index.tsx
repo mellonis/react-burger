@@ -1,10 +1,8 @@
 import React from 'react';
 import cs from 'classnames';
-import {
-  Counter,
-  CurrencyIcon,
-} from '@ya.praktikum/react-developer-burger-ui-components';
+import { Counter } from '@ya.praktikum/react-developer-burger-ui-components';
 import style from './style.module.css';
+import Amount from '../../amount';
 
 export type Ingredient_t = { image: string; name: string; price: number };
 
@@ -27,17 +25,10 @@ const BurgerIngredient = ({
           src={image}
         />
       </div>
-      <div
-        className={cs(
-          style['burger-ingredient__price-wrapper'],
-          'pt-1 pb-1 text text_type_digits-default'
-        )}
-      >
-        <div className={cs(style['burger-ingredient__price'])}>{price}</div>
-        <div className={cs(style['burger-ingredient__currency'])}>
-          <CurrencyIcon type={'primary'} />
-        </div>
-      </div>
+      <Amount
+        amount={price}
+        className={cs(style['burger-ingredient__price-wrapper'], 'pt-1 pb-1')}
+      />
       <div className={cs(style['burger-ingredient__title'])}>{name}</div>
     </li>
   );
