@@ -20,8 +20,8 @@ const BurgerIngredientType = ({
         )}
       >
         {ingredients.map((ingredient, ix) => (
-          <>
-            <BurgerIngredient key={ix} data={ingredient} />
+          <React.Fragment key={ix}>
+            <BurgerIngredient data={ingredient} />
             <li
               key={`${ix}:g`}
               className={cs({
@@ -29,7 +29,7 @@ const BurgerIngredientType = ({
                 'pt-8': ix % 2 === 1,
               })}
             />
-          </>
+          </React.Fragment>
         ))}
       </ul>
     </li>

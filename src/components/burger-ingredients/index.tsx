@@ -58,6 +58,7 @@ const BurgerIngredients = ({ className }: { className?: string }) => {
       <div className={cs(style['burger-ingredients__filter'])}>
         {ingredientTypes.map((type) => (
           <Tab
+            key={type}
             active={selectedIngredientType === type}
             value={type}
             onClick={setSelectedIngredientType}
