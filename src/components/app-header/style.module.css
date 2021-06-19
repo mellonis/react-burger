@@ -10,11 +10,6 @@
     grid-template-columns: max-content max-content 1fr max-content;
 }
 
-.app-header__menu-item {
-    display: grid;
-    grid-template-columns: repeat(2, max-content);
-}
-
 .app-header__logo-wrapper {
     align-items: center;
     display: flex;

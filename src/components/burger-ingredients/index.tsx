@@ -1,7 +1,7 @@
-import React from 'react'
+import React from 'react';
 
 const BurgerIngredients = () => {
-    return <div>BI</div>
-}
+  return <div>BI</div>;
+};
 
 export default BurgerIngredients;
