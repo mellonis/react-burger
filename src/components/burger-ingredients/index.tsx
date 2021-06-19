@@ -67,16 +67,15 @@ const BurgerIngredients = ({ className }: { className?: string }) => {
         ))}
       </div>
       <ul className={style['burger-ingredients__type-list']}>
-        <BurgerIngredientType
-          title={
-            ingredientTypeTitles[
-              selectedIngredientType as 'bun' | 'sauce' | 'main'
-            ]
-          }
-          ingredients={ingredientTypeToIngredientsMap.get(
-            selectedIngredientType
-          )}
-        />
+        {Array.from(ingredientTypeToIngredientsMap.entries()).map(
+          ([type, ingredients]) => (
+            <BurgerIngredientType
+              key={type}
+              title={ingredientTypeTitles[type as 'bun' | 'sauce' | 'main']}
+              ingredients={ingredients}
+            />
+          )
+        )}
       </ul>
     </div>
   );
