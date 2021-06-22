@@ -13,9 +13,7 @@ const BurgerIngredient = ({
 }) => {
   return (
     <li className={style['burger-ingredient']}>
-      <div className={style['burger-ingredient__counter-wrapper']}>
-        <Counter count={1} />
-      </div>
+      <Counter count={1} />
       <div
         className={cs(style['burger-ingredient__image-wrapper'], 'pl-4 pr-4')}
       >
