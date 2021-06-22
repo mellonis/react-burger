@@ -23,7 +23,6 @@ const BurgerIngredientType = ({
           <React.Fragment key={ix}>
             <BurgerIngredient data={ingredient} />
             <li
-              key={`${ix}:g`}
               className={cs({
                 'pl-6': ix % 2 === 0,
                 'pt-8': ix % 2 === 1,
