@@ -18,9 +18,17 @@ const MenuItem = ({
 }) => {
   return (
     <li
-      className={cs(style['menu-item'], className, 'p-5 text', {
-        text_color_inactive: !isActive,
-      })}
+      className={cs(
+        style['menu-item'],
+        {
+          [style['menu-item_active']]: isActive,
+        },
+        className,
+        'p-5 text',
+        {
+          text_color_inactive: !isActive,
+        }
+      )}
     >
       <Icon type={isActive ? 'primary' : 'secondary'} />
       <span className="ml-2">{text}</span>
