@@ -1,0 +1,34 @@
+.app-body {
+    display: grid;
+    grid-template-columns: 1fr min-content 1fr;
+}
+
+.app-body__constructor {
+    scrollbar-color: var(--background-element) var(--text-inactive-color);
+    scrollbar-width: thin;
+}
+
+.app-body__constructor::-webkit-scrollbar {
+    height: 12px;
+    width: 12px;
+}
+
+.app-body__constructor::-webkit-scrollbar-track {
+    background: var(--background-element);
+}
+
+.app-body__constructor::-webkit-scrollbar-thumb {
+    background: var(--text-inactive-color);
+    border: 3px solid var(--background-element);
+    border-radius: 6px;
+}
+
+.app-body__ingredients,
+.app-body__constructor,
+.app-body__space {
+    max-height: calc(100vh - 64px);
+}
+
+.app-body__constructor {
+    overflow-y: scroll;
+}
