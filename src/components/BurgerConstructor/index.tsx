@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
 import cs from 'classnames';
 import { Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Ingredient_t, OrderDetails_t, OrderStatus_t } from '../../types';
@@ -6,6 +6,7 @@ import { lexemes } from '../../consts';
 import { useIngredientsContextValue } from '../../contexts/IngredientContext';
 import Amount from '../Amount';
 import BurgerConstructorItem from './BurgerConstructorElement';
+import IngredientDetails from '../IngredientDetails';
 import Modal from '../Modal';
 import OrderDetails from '../OrderDetails';
 
@@ -146,6 +147,9 @@ const BurgerConstructor = ({ className }: { className?: string }) => {
     { isOrderDetailsShown, list, orderDetails, total },
     dispatch,
   ] = useReducer(reducer, actualIngredientIds, init);
+  const [detailedIngredient, setDetailedIngredient] = useState(
+    null as Ingredient_t | null
+  );
 
   useEffect(() => {
     dispatch({ type: 'actualize-ingredients', ingredients });
@@ -173,6 +177,7 @@ const BurgerConstructor = ({ className }: { className?: string }) => {
                   <BurgerConstructorItem
                     ingredient={idToIngredientMap.get(refId)!}
                     isLocked={isLocked}
+                    onClick={() => setDetailedIngredient(ingredient)}
                     type={type}
                   />
                 )
@@ -193,6 +198,7 @@ const BurgerConstructor = ({ className }: { className?: string }) => {
                     <BurgerConstructorItem
                       ingredient={idToIngredientMap.get(refId)!}
                       isLocked={isLocked}
+                      onClick={() => setDetailedIngredient(ingredient)}
                       onDelete={() => {
                         dispatch({ type: 'remove-ingredient', id });
                       }}
@@ -216,6 +222,7 @@ const BurgerConstructor = ({ className }: { className?: string }) => {
                   <BurgerConstructorItem
                     ingredient={idToIngredientMap.get(refId)!}
                     isLocked={isLocked}
+                    onClick={() => setDetailedIngredient(ingredient)}
                     type={type}
                   />
                 )
@@ -247,6 +254,14 @@ const BurgerConstructor = ({ className }: { className?: string }) => {
               'mt-4 mb-20'
             )}
             orderDetails={orderDetails}
+          />
+        </Modal>
+      )}
+      {detailedIngredient && (
+        <Modal onClose={() => setDetailedIngredient(null)}>
+          <IngredientDetails
+            className={cs(style['burger-constructor__ingredient-details'])}
+            ingredient={detailedIngredient}
           />
         </Modal>
       )}
