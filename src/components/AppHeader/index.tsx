@@ -6,6 +6,7 @@ import {
   ListIcon,
   ProfileIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
+import { lexemes } from '../../consts';
 import MenuItem from './MenuItem';
 
 import styles from './style.module.css';
@@ -23,13 +24,13 @@ const AppHeader = () => {
           <MenuItem
             className={styles['app-header__menu-item']}
             Icon={BurgerIcon}
-            text="Конструктор"
+            text={lexemes.constructor}
           />
           <MenuItem
             className={styles['app-header__menu-item']}
             Icon={ListIcon}
             isActive={false}
-            text="Лента заказов"
+            text={lexemes.orderList}
           />
           <li className={styles['app-header__logo-wrapper']}>
             <Logo />
@@ -38,7 +39,7 @@ const AppHeader = () => {
             className={styles['app-header__menu-item']}
             Icon={ProfileIcon}
             isActive={false}
-            text="Личный кабинет"
+            text={lexemes.profile}
           />
         </ul>
       </nav>

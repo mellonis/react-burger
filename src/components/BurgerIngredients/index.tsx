@@ -1,17 +1,20 @@
 import React, { useMemo, useState } from 'react';
 import cs from 'classnames';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
+import { lexemes } from '../../consts';
 import { useIngredientsContextValue } from '../../contexts/IngredientContext';
 import BurgerIngredientType from './BurgerIngredientType';
 
 import style from './style.module.css';
 
 const ingredientTypeTitles = {
-  bun: 'Булки',
-  sauce: 'Соусы',
-  main: 'Начинки',
+  bun: lexemes.buns,
+  sauce: lexemes.sauces,
+  main: lexemes.burgerFillings,
 };
-const ingredientTypes = Object.keys(ingredientTypeTitles);
+const ingredientTypes = Object.keys(ingredientTypeTitles) as Array<
+  keyof typeof ingredientTypeTitles
+>;
 
 const BurgerIngredients = ({ className }: { className?: string }) => {
   const { ingredients } = useIngredientsContextValue();
@@ -54,7 +57,7 @@ const BurgerIngredients = ({ className }: { className?: string }) => {
           'pt-10 pb-5 text text_type_main-large'
         )}
       >
-        Соберите бургер
+        {lexemes.assembleABurger}
       </div>
       <div className={cs(style['burger-ingredients__filter'])}>
         {ingredientTypes.map((type) => (
@@ -62,7 +65,11 @@ const BurgerIngredients = ({ className }: { className?: string }) => {
             key={type}
             active={selectedIngredientType === type}
             value={type}
-            onClick={setSelectedIngredientType}
+            onClick={(type) =>
+              setSelectedIngredientType(
+                type as keyof typeof ingredientTypeTitles
+              )
+            }
           >
             {(ingredientTypeTitles as any)[type]}
           </Tab>

@@ -10,3 +10,18 @@ export const orderStatusToStatusTitleMap: {
   BEING_DELIVERED: 'Ваш заказ доставляется',
   DELIVERED: 'Заказ доставлен',
 };
+
+const allLexemes = {
+  ru: {
+    assembleABurger: 'Соберите бургер',
+    buns: 'Булки',
+    burgerFillings: 'Начинки',
+    constructor: 'Конструктор',
+    orderList: 'Лента заказов',
+    sauces: 'Соусы',
+    placeAnOrder: 'Оформиль заказ',
+    profile: 'Личный кабинет',
+  },
+};
+
+export const lexemes = allLexemes.ru;

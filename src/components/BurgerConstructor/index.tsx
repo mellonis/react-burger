@@ -2,6 +2,7 @@ import React, { useEffect, useReducer } from 'react';
 import cs from 'classnames';
 import { Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Ingredient_t, OrderDetails_t, OrderStatus_t } from '../../types';
+import { lexemes } from '../../consts';
 import { useIngredientsContextValue } from '../../contexts/IngredientContext';
 import Amount from '../Amount';
 import BurgerConstructorItem from './BurgerConstructorElement';
@@ -234,7 +235,7 @@ const BurgerConstructor = ({ className }: { className?: string }) => {
           size={'large'}
           type={'primary'}
         >
-          Оформить заказ
+          {lexemes.placeAnOrder}
         </Button>
       </div>
       {isOrderDetailsShown && orderDetails && (
