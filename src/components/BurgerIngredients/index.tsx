@@ -1,10 +1,10 @@
 import React, { useMemo, useState } from 'react';
 import cs from 'classnames';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
+import { useIngredientsContextValue } from '../../contexts/IngredientContext';
 import BurgerIngredientType from './BurgerIngredientType';
-import style from './style.module.css';
 
-import ingredients from '../../utils/data';
+import style from './style.module.css';
 
 const ingredientTypeTitles = {
   bun: 'Булки',
@@ -14,6 +14,7 @@ const ingredientTypeTitles = {
 const ingredientTypes = Object.keys(ingredientTypeTitles);
 
 const BurgerIngredients = ({ className }: { className?: string }) => {
+  const { ingredients } = useIngredientsContextValue();
   const [selectedIngredientType, setSelectedIngredientType] = useState(
     ingredientTypes[0]
   );
@@ -43,7 +44,7 @@ const BurgerIngredients = ({ className }: { className?: string }) => {
     axillaryMap.clear();
 
     return result;
-  }, []);
+  }, [ingredients]);
 
   return (
     <div className={cs(style['burger-ingredients'], className)}>

@@ -1,82 +1,47 @@
-import React, { useReducer } from 'react';
+import React, { useEffect, useReducer } from 'react';
 import cs from 'classnames';
 import { Button } from '@ya.praktikum/react-developer-burger-ui-components';
-import ingredients from '../../utils/data';
+import { Ingredient_t } from '../../types';
+import { useIngredientsContextValue } from '../../contexts/IngredientContext';
 import Amount from '../Amount';
 import BurgerConstructorItem from './BurgerConstructorElement';
-import { Ingredient_t } from './types';
 
 import style from './style.module.css';
 
-const idToIngredientMap: Map<string, Ingredient_t> = ingredients.reduce(
-  (result, ingredient) => {
-    result.set(ingredient._id, ingredient);
-
-    return result;
-  },
-  new Map()
-);
-
 type ActualIngredient_t = {
-  id: number;
+  id: string;
   refId: string;
   isLocked?: boolean;
   type?: 'top' | 'bottom';
 };
 
 type State = {
+  ingredientsMap: Map<string, Ingredient_t>;
   list: ActualIngredient_t[];
   total: number;
 };
-type Action = { type: 'remove'; id: number };
+type Action =
+  | { type: 'remove'; id: string }
+  | { type: 'actualize-ingredients-map'; map: Map<string, Ingredient_t> }
+  | { type: 'actualize-ingredients'; ingredients: Ingredient_t[] };
 
-const actualIngredientIds: ActualIngredient_t[] = [
-  {
-    id: 1,
-    refId: '60666c42cc7b410027a1a9b1',
-    isLocked: true,
-    type: 'top',
-  },
-  {
-    id: 2,
-    refId: '60666c42cc7b410027a1a9b9',
-  },
-  {
-    id: 3,
-    refId: '60666c42cc7b410027a1a9b4',
-  },
-  {
-    id: 4,
-    refId: '60666c42cc7b410027a1a9bc',
-  },
-  {
-    id: 5,
-    refId: '60666c42cc7b410027a1a9bb',
-  },
-  {
-    id: 6,
-    refId: '60666c42cc7b410027a1a9bb',
-  },
-  {
-    id: 7,
-    refId: '60666c42cc7b410027a1a9b1',
-    isLocked: true,
-    type: 'bottom',
-  },
-];
+const actualIngredientIds: ActualIngredient_t[] = [];
 
-const calcTotal = (ingredientIds: ActualIngredient_t[]) => {
-  return ingredientIds.reduce((result, { refId }) => {
+const calcTotal = (
+  idToIngredientMap: Map<string, Ingredient_t>,
+  ingredientIds: ActualIngredient_t[]
+) =>
+  ingredientIds.reduce((result, { refId }) => {
     const { price } = idToIngredientMap.get(refId)!;
 
     return result + price;
   }, 0);
-};
 
 const init = (actualIngredientIds: ActualIngredient_t[]): State => {
   return {
+    ingredientsMap: new Map(),
     list: actualIngredientIds,
-    total: calcTotal(actualIngredientIds),
+    total: 0,
   };
 };
 
@@ -88,74 +53,146 @@ const reducer = (state: State, action: Action): State => {
       return {
         ...state,
         list: filteredList,
-        total: calcTotal(filteredList),
+        total: calcTotal(state.ingredientsMap, filteredList),
+      };
+    }
+    case 'actualize-ingredients':
+      const timestamp = new Date().getTime();
+      const { ingredients } = action;
+
+      return {
+        ...state,
+        list: ingredients.map(({ _id }, ix, list) => {
+          const isItTop = ix === 0;
+          const isItBottom = ix === list.length - 1;
+          const result = {
+            id: `${timestamp}:${ix}`,
+            refId: _id,
+            isLocked: isItTop || isItBottom,
+            type: isItTop
+              ? 'top'
+              : isItBottom
+              ? 'bottom'
+              : (undefined as 'top' | 'bottom' | undefined),
+          };
+
+          if (isItTop || isItBottom) {
+            result.isLocked = true;
+          }
+
+          if (isItTop) {
+            result.type = 'top';
+          }
+
+          if (isItBottom) {
+            result.type = 'bottom';
+          }
+
+          return result;
+        }),
+      };
+    case 'actualize-ingredients-map': {
+      const { map } = action;
+
+      return {
+        ...state,
+        ingredientsMap: map,
+        total: calcTotal(map, state.list),
       };
     }
   }
 };
 
 const BurgerConstructor = ({ className }: { className?: string }) => {
+  const { ingredients, idToIngredientMap } = useIngredientsContextValue();
   const [{ list, total }, dispatch] = useReducer(
     reducer,
     actualIngredientIds,
     init
   );
 
+  useEffect(() => {
+    dispatch({ type: 'actualize-ingredients', ingredients });
+    dispatch({ type: 'actualize-ingredients-map', map: idToIngredientMap });
+  }, [idToIngredientMap, ingredients]);
+
   const top = list[0];
   const bottom = list[list.length - 1];
 
-  console.log({ top, bottom });
+  if (idToIngredientMap.size === 0) {
+    return null;
+  }
 
   return (
     <div className={cs(style['burger-constructor'], 'pt-25', className)}>
       <div className={style['burger-constructor__list']}>
-        {(() => {
-          const { id, isLocked = false, refId, type } = top;
+        {top && (
+          <>
+            {(() => {
+              const { id, isLocked = false, refId, type } = top;
+              const ingredient = idToIngredientMap.get(refId);
 
-          return (
-            <BurgerConstructorItem
-              ingredient={idToIngredientMap.get(refId)!}
-              isLocked={isLocked}
-              onDelete={() => {
-                dispatch({ type: 'remove', id });
-              }}
-              type={type}
-            />
-          );
-        })()}
-        <div className={'pt-4'} />
+              return (
+                ingredient && (
+                  <BurgerConstructorItem
+                    ingredient={idToIngredientMap.get(refId)!}
+                    isLocked={isLocked}
+                    onDelete={() => {
+                      dispatch({ type: 'remove', id });
+                    }}
+                    type={type}
+                  />
+                )
+              );
+            })()}
+            <div className={'pt-4'} />
+          </>
+        )}
         <div className={style['burger-constructor__filling']}>
           {list
             .slice(1, -1)
-            .map(({ id, isLocked = false, refId, type }, ix, list) => (
-              <React.Fragment key={id}>
-                <BurgerConstructorItem
-                  ingredient={idToIngredientMap.get(refId)!}
-                  isLocked={isLocked}
-                  onDelete={() => {
-                    dispatch({ type: 'remove', id });
-                  }}
-                  type={type}
-                />
-                {ix + 1 < list.length ? <div className={'pt-4'} /> : null}
-              </React.Fragment>
-            ))}
-        </div>
-        <div className={'pt-4'} />
-        {(() => {
-          const { id, isLocked = false, refId, type } = bottom;
+            .map(({ id, isLocked = false, refId, type }, ix, list) => {
+              const ingredient = idToIngredientMap.get(refId);
 
-          return (
-            <BurgerConstructorItem
-              ingredient={idToIngredientMap.get(refId)!}
-              isLocked={isLocked}
-              onDelete={() => {
-                dispatch({ type: 'remove', id });
-              }}
-              type={type}
-            />
-          );
-        })()}
+              return (
+                ingredient && (
+                  <React.Fragment key={id}>
+                    <BurgerConstructorItem
+                      ingredient={idToIngredientMap.get(refId)!}
+                      isLocked={isLocked}
+                      onDelete={() => {
+                        dispatch({ type: 'remove', id });
+                      }}
+                      type={type}
+                    />
+                    {ix + 1 < list.length ? <div className={'pt-4'} /> : null}
+                  </React.Fragment>
+                )
+              );
+            })}
+        </div>
+        {bottom && (
+          <>
+            <div className={'pt-4'} />
+            {(() => {
+              const { id, isLocked = false, refId, type } = bottom;
+              const ingredient = idToIngredientMap.get(refId);
+
+              return (
+                ingredient && (
+                  <BurgerConstructorItem
+                    ingredient={idToIngredientMap.get(refId)!}
+                    isLocked={isLocked}
+                    onDelete={() => {
+                      dispatch({ type: 'remove', id });
+                    }}
+                    type={type}
+                  />
+                )
+              );
+            })()}
+          </>
+        )}
       </div>
       <div className={cs(style['burger-constructor__total-wrapper'], 'pt-10')}>
         <Amount

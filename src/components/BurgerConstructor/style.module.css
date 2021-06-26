@@ -1,5 +1,6 @@
 .burger-constructor {
-
+    display: grid;
+    grid-template-rows: minmax(0, 1fr) max-content;
 }
 
 .burger-constructor__list {

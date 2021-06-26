@@ -1,10 +1,10 @@
 import React from 'react';
 import cs from 'classnames';
-import { Counter } from '@ya.praktikum/react-developer-burger-ui-components';
-import style from './style.module.css';
+import { Ingredient_t } from '../../../types';
 import Amount from '../../Amount';
+import { Counter } from '@ya.praktikum/react-developer-burger-ui-components';
 
-export type Ingredient_t = { image: string; name: string; price: number };
+import style from './style.module.css';
 
 const BurgerIngredient = ({
   data: { image, name, price },

@@ -1,6 +1,8 @@
 import React from 'react';
 import cs from 'classnames';
-import BurgerIngredient, { Ingredient_t } from '../BurgerIngredient';
+import { Ingredient_t } from '../../../types';
+import BurgerIngredient from '../BurgerIngredient';
+
 import style from './style.module.css';
 
 const BurgerIngredientType = ({
