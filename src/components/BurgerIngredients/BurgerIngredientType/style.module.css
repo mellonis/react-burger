@@ -12,3 +12,7 @@
 .burger-ingredient-type__ingredient-list li:nth-child(4n) {
     grid-column: span 3;
 }
+
+.burger-ingredient-type__ingredient-details {
+    width: 520px;
+}

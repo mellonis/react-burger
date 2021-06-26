@@ -16,12 +16,16 @@ const allLexemes = {
     assembleABurger: 'Соберите бургер',
     buns: 'Булки',
     burgerFillings: 'Начинки',
+    calories: 'Калории, ккал',
+    carbohydrates: 'Углеводы, г',
     constructor: 'Конструктор',
+    fat: 'Жиры, г',
     orderId: 'Идентификатор заказа',
     orderList: 'Лента заказов',
     sauces: 'Соусы',
     placeAnOrder: 'Оформиль заказ',
     profile: 'Личный кабинет',
+    proteins: 'Белки, г',
   },
 };
 

@@ -7,7 +7,7 @@ import { Counter } from '@ya.praktikum/react-developer-burger-ui-components';
 import style from './style.module.css';
 
 const BurgerIngredient = ({
-  data: { image, name, price },
+  data: { image, name: title, price },
   onClick,
 }: {
   data: Ingredient_t;
@@ -20,7 +20,7 @@ const BurgerIngredient = ({
         className={cs(style['burger-ingredient__image-wrapper'], 'pl-4 pr-4')}
       >
         <img
-          alt={name}
+          alt={title}
           className={style['burger-ingredient__image']}
           src={image}
         />
@@ -29,7 +29,7 @@ const BurgerIngredient = ({
         amount={price}
         className={cs(style['burger-ingredient__price-wrapper'], 'pt-1 pb-1')}
       />
-      <div className={cs(style['burger-ingredient__title'])}>{name}</div>
+      <div className={cs(style['burger-ingredient__title'])}>{title}</div>
     </li>
   );
 };

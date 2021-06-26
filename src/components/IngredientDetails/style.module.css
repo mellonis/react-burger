@@ -1,0 +1,38 @@
+.ingredient-details {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.ingredient-details__picture-wrapper {
+    width: 100%;
+}
+
+.ingredient-details__picture {
+    height: auto;
+    width: 100%;
+}
+
+.ingredient-details__title {
+
+}
+
+.ingredient-details__nutritional-values {
+    color: var(--text-inactive-color);
+    display: grid;
+    grid-auto-flow: column;
+}
+
+.ingredient-details__nutritional-value {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.ingredient-details__nutritional-value-title {
+
+}
+
+.ingredient-details__nutritional-value-value {
+
+}

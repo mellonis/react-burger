@@ -2,6 +2,7 @@ import React, { useCallback, useState } from 'react';
 import cs from 'classnames';
 import { Ingredient_t } from '../../../types';
 import BurgerIngredient from '../BurgerIngredient';
+import IngredientDetails from '../../IngredientDetails';
 import Modal from '../../Modal';
 
 import style from './style.module.css';
@@ -52,7 +53,10 @@ const BurgerIngredientType = ({
           onClose={() => setDetailedIngredient(null)}
           title={'Детали ингредиента'}
         >
-          ! Здесь будет информация об ингредиенте !
+          <IngredientDetails
+            className={style['burger-ingredient-type__ingredient-details']}
+            ingredient={detailedIngredient}
+          />
         </Modal>
       )}
     </li>
