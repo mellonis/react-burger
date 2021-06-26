@@ -1,6 +1,6 @@
 import React from 'react';
-import AppHeader from '../app-header';
-import AppBody from '../app-body';
+import AppHeader from '../AppHeader';
+import AppBody from '../AppBody';
 import style from './style.module.css';
 
 const App = () => {
