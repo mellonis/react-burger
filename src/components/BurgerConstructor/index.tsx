@@ -1,10 +1,11 @@
 import React, { useEffect, useReducer } from 'react';
 import cs from 'classnames';
 import { Button } from '@ya.praktikum/react-developer-burger-ui-components';
-import { Ingredient_t } from '../../types';
+import { Ingredient_t, OrderDetails_t, OrderStatus_t } from '../../types';
 import { useIngredientsContextValue } from '../../contexts/IngredientContext';
 import Amount from '../Amount';
 import BurgerConstructorItem from './BurgerConstructorElement';
+import Modal from '../Modal';
 
 import style from './style.module.css';
 
@@ -17,13 +18,18 @@ type ActualIngredient_t = {
 
 type State = {
   ingredientsMap: Map<string, Ingredient_t>;
+  isOrderDetailsShown: boolean;
   list: ActualIngredient_t[];
+  orderDetails: OrderDetails_t | null;
   total: number;
 };
 type Action =
-  | { type: 'remove'; id: string }
   | { type: 'actualize-ingredients-map'; map: Map<string, Ingredient_t> }
-  | { type: 'actualize-ingredients'; ingredients: Ingredient_t[] };
+  | { type: 'actualize-ingredients'; ingredients: Ingredient_t[] }
+  | { type: 'actualize-order-details'; orderDetails: OrderDetails_t | null }
+  | { type: 'hide-order-details' }
+  | { type: 'remove-ingredient'; id: string }
+  | { type: 'show-order-details' };
 
 const actualIngredientIds: ActualIngredient_t[] = [];
 
@@ -40,22 +46,19 @@ const calcTotal = (
 const init = (actualIngredientIds: ActualIngredient_t[]): State => {
   return {
     ingredientsMap: new Map(),
+    isOrderDetailsShown: false,
     list: actualIngredientIds,
+    orderDetails: {
+      id: '034536',
+      message: 'Дождитесь готовности на орбитальной станции',
+      status: OrderStatus_t.BEING_COOKED,
+    },
     total: 0,
   };
 };
 
 const reducer = (state: State, action: Action): State => {
   switch (action.type) {
-    case 'remove': {
-      const filteredList = state.list.filter(({ id }) => id !== action.id);
-
-      return {
-        ...state,
-        list: filteredList,
-        total: calcTotal(state.ingredientsMap, filteredList),
-      };
-    }
     case 'actualize-ingredients':
       const timestamp = new Date().getTime();
       const { ingredients } = action;
@@ -100,16 +103,47 @@ const reducer = (state: State, action: Action): State => {
         total: calcTotal(map, state.list),
       };
     }
+    case 'actualize-order-details': {
+      const { orderDetails } = action;
+
+      return {
+        ...state,
+        isOrderDetailsShown: state.isOrderDetailsShown && !!orderDetails,
+        orderDetails,
+      };
+    }
+    case 'hide-order-details':
+      return {
+        ...state,
+        isOrderDetailsShown: false,
+      };
+    case 'remove-ingredient': {
+      const filteredList = state.list.filter(({ id }) => id !== action.id);
+
+      return {
+        ...state,
+        list: filteredList,
+        total: calcTotal(state.ingredientsMap, filteredList),
+      };
+    }
+    case 'show-order-details':
+      if (state.orderDetails) {
+        return {
+          ...state,
+          isOrderDetailsShown: true,
+        };
+      }
+
+      return state;
   }
 };
 
 const BurgerConstructor = ({ className }: { className?: string }) => {
   const { ingredients, idToIngredientMap } = useIngredientsContextValue();
-  const [{ list, total }, dispatch] = useReducer(
-    reducer,
-    actualIngredientIds,
-    init
-  );
+  const [
+    { isOrderDetailsShown, list, orderDetails, total },
+    dispatch,
+  ] = useReducer(reducer, actualIngredientIds, init);
 
   useEffect(() => {
     dispatch({ type: 'actualize-ingredients', ingredients });
@@ -124,12 +158,12 @@ const BurgerConstructor = ({ className }: { className?: string }) => {
   }
 
   return (
-    <div className={cs(style['burger-constructor'], 'pt-25', className)}>
+    <div className={cs(style['burger-constructor'], 'pt-25 pb-5', className)}>
       <div className={style['burger-constructor__list']}>
         {top && (
           <>
             {(() => {
-              const { id, isLocked = false, refId, type } = top;
+              const { isLocked = false, refId, type } = top;
               const ingredient = idToIngredientMap.get(refId);
 
               return (
@@ -137,9 +171,6 @@ const BurgerConstructor = ({ className }: { className?: string }) => {
                   <BurgerConstructorItem
                     ingredient={idToIngredientMap.get(refId)!}
                     isLocked={isLocked}
-                    onDelete={() => {
-                      dispatch({ type: 'remove', id });
-                    }}
                     type={type}
                   />
                 )
@@ -161,7 +192,7 @@ const BurgerConstructor = ({ className }: { className?: string }) => {
                       ingredient={idToIngredientMap.get(refId)!}
                       isLocked={isLocked}
                       onDelete={() => {
-                        dispatch({ type: 'remove', id });
+                        dispatch({ type: 'remove-ingredient', id });
                       }}
                       type={type}
                     />
@@ -175,7 +206,7 @@ const BurgerConstructor = ({ className }: { className?: string }) => {
           <>
             <div className={'pt-4'} />
             {(() => {
-              const { id, isLocked = false, refId, type } = bottom;
+              const { isLocked = false, refId, type } = bottom;
               const ingredient = idToIngredientMap.get(refId);
 
               return (
@@ -183,9 +214,6 @@ const BurgerConstructor = ({ className }: { className?: string }) => {
                   <BurgerConstructorItem
                     ingredient={idToIngredientMap.get(refId)!}
                     isLocked={isLocked}
-                    onDelete={() => {
-                      dispatch({ type: 'remove', id });
-                    }}
                     type={type}
                   />
                 )
@@ -201,10 +229,19 @@ const BurgerConstructor = ({ className }: { className?: string }) => {
           isTotal={true}
         />
         <div className={'pl-10'} />
-        <Button type={'primary'} size={'large'}>
+        <Button
+          onClick={() => dispatch({ type: 'show-order-details' })}
+          size={'large'}
+          type={'primary'}
+        >
           Оформить заказ
         </Button>
       </div>
+      {isOrderDetailsShown && orderDetails && (
+        <Modal onClose={() => dispatch({ type: 'hide-order-details' })}>
+          ! Здесь будет информация о заказе !
+        </Modal>
+      )}
     </div>
   );
 };

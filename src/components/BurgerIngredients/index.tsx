@@ -47,11 +47,11 @@ const BurgerIngredients = ({ className }: { className?: string }) => {
   }, [ingredients]);
 
   return (
-    <div className={cs(style['burger-ingredients'], className)}>
+    <div className={cs(style['burger-ingredients'], 'pb-5', className)}>
       <div
         className={cs(
           style['burger-ingredients__title'],
-          'pt-10 pb-5 text text_type_main-large '
+          'pt-10 pb-5 text text_type_main-large'
         )}
       >
         Соберите бургер

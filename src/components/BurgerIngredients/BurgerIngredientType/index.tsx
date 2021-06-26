@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import cs from 'classnames';
 import { Ingredient_t } from '../../../types';
 import BurgerIngredient from '../BurgerIngredient';
+import Modal from '../../Modal';
 
 import style from './style.module.css';
 
@@ -12,6 +13,16 @@ const BurgerIngredientType = ({
   title: string;
   ingredients: Ingredient_t[];
 }) => {
+  const [detailedIngredient, setDetailedIngredient] = useState(
+    null as Ingredient_t | null
+  );
+  const handleClick = useCallback(
+    (ix: number) => {
+      setDetailedIngredient(ingredients[ix]);
+    },
+    [ingredients]
+  );
+
   return (
     <li className={'pt-10'}>
       <div className={'text text_type_main-medium'}>{title}</div>
@@ -23,7 +34,10 @@ const BurgerIngredientType = ({
       >
         {ingredients.map((ingredient, ix) => (
           <React.Fragment key={ix}>
-            <BurgerIngredient data={ingredient} />
+            <BurgerIngredient
+              data={ingredient}
+              onClick={() => handleClick(ix)}
+            />
             <li
               className={cs({
                 'pl-6': ix % 2 === 0,
@@ -33,6 +47,14 @@ const BurgerIngredientType = ({
           </React.Fragment>
         ))}
       </ul>
+      {detailedIngredient && (
+        <Modal
+          onClose={() => setDetailedIngredient(null)}
+          title={'Детали ингредиента'}
+        >
+          ! Здесь будет информация об ингредиенте !
+        </Modal>
+      )}
     </li>
   );
 };

@@ -12,3 +12,16 @@ export type Ingredient_t = {
   image_large: string;
   __v: number;
 };
+
+export enum OrderStatus_t {
+  BEING_COOKED,
+  COOKED,
+  BEING_DELIVERED,
+  DELIVERED,
+}
+
+export type OrderDetails_t = {
+  id: string;
+  status: OrderStatus_t;
+  message: string;
+};

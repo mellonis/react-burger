@@ -7,6 +7,7 @@ import './index.css';
 ReactDOM.render(
   <React.StrictMode>
     <App />
+    <div id="modal-container" />
   </React.StrictMode>,
   document.getElementById('root')
 );

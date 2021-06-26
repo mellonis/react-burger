@@ -8,11 +8,13 @@ import style from './style.module.css';
 
 const BurgerIngredient = ({
   data: { image, name, price },
+  onClick,
 }: {
   data: Ingredient_t;
+  onClick?: () => void;
 }) => {
   return (
-    <li className={style['burger-ingredient']}>
+    <li className={style['burger-ingredient']} onClick={onClick}>
       <Counter count={1} />
       <div
         className={cs(style['burger-ingredient__image-wrapper'], 'pl-4 pr-4')}

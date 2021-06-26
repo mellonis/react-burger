@@ -1,0 +1,37 @@
+.modal {
+    background-color: black;
+    border: 1px solid var(--colors-interface-accent); /* can't set alpha :'( */
+    border-radius: var(--common-border-radius-s);
+    left: 50%;
+    position: fixed;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 720px;
+    z-index: 1000;
+}
+
+.modal:focus {
+    box-shadow: 0 0 50px 1px var(--colors-interface-accent);
+}
+
+.modal__header {
+    display: flex;
+    min-height: 64px;
+}
+
+.modal__title {
+    align-self: center;
+    flex-grow: 1;
+}
+
+.modal__close-button {
+    align-items: center;
+    background: transparent;
+    border: none;
+    display: flex;
+    justify-content: flex-end;
+    padding: 0;
+}
+
+.modal__content {
+}

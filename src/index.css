@@ -1,3 +1,7 @@
 * {
     box-sizing: border-box;
 }
+
+button:not(:disabled) {
+    cursor: pointer;
+}
