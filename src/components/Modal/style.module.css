@@ -11,7 +11,8 @@
 }
 
 .modal:focus {
-    box-shadow: 0 0 50px 1px var(--colors-interface-accent);
+    box-shadow: 0 0 5000px 1px var(--colors-interface-accent);
+    outline: none;
 }
 
 .modal__header {
