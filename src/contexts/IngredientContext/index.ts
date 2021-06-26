@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { Ingredient_t } from '../../types';
+import { apiHostUrl } from '../../consts';
 
 export const IngredientContext = React.createContext({
   ingredients: [],
@@ -12,9 +13,7 @@ export const IngredientContext = React.createContext({
 export const useIngredientContextValue = () => useContext(IngredientContext);
 
 export const getIngredients = async (): Promise<Ingredient_t[]> => {
-  const response = await fetch(
-    'https://norma.nomoreparties.space/api/ingredients'
-  );
+  const response = await fetch(`${apiHostUrl}/api/ingredients`);
   const result = await response.json();
 
   if (result.success === true) {
