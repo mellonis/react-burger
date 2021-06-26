@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import cs from 'classnames';
 import { Ingredient_t } from '../../../types';
+import { lexemes } from '../../../consts';
 import BurgerIngredient from '../BurgerIngredient';
 import IngredientDetails from '../../IngredientDetails';
 import Modal from '../../Modal';
@@ -51,7 +52,7 @@ const BurgerIngredientType = ({
       {detailedIngredient && (
         <Modal
           onClose={() => setDetailedIngredient(null)}
-          title={'Детали ингредиента'}
+          title={lexemes.ingredientDetails}
         >
           <IngredientDetails
             className={style['burger-ingredient-type__ingredient-details']}

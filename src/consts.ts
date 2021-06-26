@@ -20,6 +20,7 @@ const allLexemes = {
     carbohydrates: 'Углеводы, г',
     constructor: 'Конструктор',
     fat: 'Жиры, г',
+    ingredientDetails: 'Детали ингредиента',
     orderId: 'Идентификатор заказа',
     orderList: 'Лента заказов',
     sauces: 'Соусы',

@@ -258,7 +258,10 @@ const BurgerConstructor = ({ className }: { className?: string }) => {
         </Modal>
       )}
       {detailedIngredient && (
-        <Modal onClose={() => setDetailedIngredient(null)}>
+        <Modal
+          onClose={() => setDetailedIngredient(null)}
+          title={lexemes.ingredientDetails}
+        >
           <IngredientDetails
             className={cs(style['burger-constructor__ingredient-details'])}
             ingredient={detailedIngredient}
