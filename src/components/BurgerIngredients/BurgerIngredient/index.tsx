@@ -14,7 +14,12 @@ const BurgerIngredient = ({
   onClick?: () => void;
 }) => {
   return (
-    <li className={style['burger-ingredient']} onClick={onClick}>
+    <li
+      className={cs(style['burger-ingredient'], {
+        [style['burger-ingredient_interactive']]: onClick,
+      })}
+      onClick={onClick}
+    >
       <Counter count={1} />
       <div
         className={cs(style['burger-ingredient__image-wrapper'], 'pl-4 pr-4')}
