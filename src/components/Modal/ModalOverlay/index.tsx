@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import cs from 'classnames';
 
 import style from './style.module.css';
@@ -21,5 +22,10 @@ const ModalOverlay = ({
     onClick={onClick}
   />
 );
+
+ModalOverlay.propTypes = {
+  className: PropTypes.string,
+  onClose: PropTypes.func,
+};
 
 export default ModalOverlay;

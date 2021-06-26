@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import cs from 'classnames';
 import { Ingredient_t } from '../../../types';
 import Amount from '../../Amount';
@@ -7,10 +8,10 @@ import { Counter } from '@ya.praktikum/react-developer-burger-ui-components';
 import style from './style.module.css';
 
 const BurgerIngredient = ({
-  data: { image, name: title, price },
+  ingredient: { image, name: title, price },
   onClick,
 }: {
-  data: Ingredient_t;
+  ingredient: Ingredient_t;
   onClick?: () => void;
 }) => {
   return (
@@ -37,6 +38,11 @@ const BurgerIngredient = ({
       <div className={cs(style['burger-ingredient__title'])}>{title}</div>
     </li>
   );
+};
+
+BurgerIngredient.propTypes = {
+  ingredient: PropTypes.object.isRequired,
+  onClick: PropTypes.func,
 };
 
 export default BurgerIngredient;

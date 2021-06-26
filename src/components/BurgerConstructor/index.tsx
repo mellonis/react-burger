@@ -1,4 +1,5 @@
 import React, { useEffect, useReducer, useState } from 'react';
+import PropTypes from 'prop-types';
 import cs from 'classnames';
 import { Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Ingredient_t, OrderDetails_t, OrderStatus_t } from '../../types';
@@ -271,5 +272,7 @@ const BurgerConstructor = ({ className }: { className?: string }) => {
     </div>
   );
 };
+
+BurgerConstructor.propTypes = { className: PropTypes.string };
 
 export default BurgerConstructor;

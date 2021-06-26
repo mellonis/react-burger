@@ -1,4 +1,5 @@
 import React, { useCallback, useState } from 'react';
+import PropTypes from 'prop-types';
 import cs from 'classnames';
 import { Ingredient_t } from '../../../types';
 import { lexemes } from '../../../consts';
@@ -37,7 +38,7 @@ const BurgerIngredientType = ({
         {ingredients.map((ingredient, ix) => (
           <React.Fragment key={ix}>
             <BurgerIngredient
-              data={ingredient}
+              ingredient={ingredient}
               onClick={() => handleClick(ix)}
             />
             <li
@@ -62,6 +63,11 @@ const BurgerIngredientType = ({
       )}
     </li>
   );
+};
+
+BurgerIngredientType.propTypes = {
+  title: PropTypes.string.isRequired,
+  ingredients: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 export default BurgerIngredientType;

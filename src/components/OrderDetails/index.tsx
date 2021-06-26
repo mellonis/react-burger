@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import cs from 'classnames';
 import { CheckMarkIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { OrderDetails_t } from '../../types';
@@ -40,5 +41,10 @@ const OrderDetails = ({
     <div className={style['order-details__message']}>{message}</div>
   </div>
 );
+
+OrderDetails.propTypes = {
+  className: PropTypes.string,
+  orderDetails: PropTypes.object.isRequired,
+};
 
 export default OrderDetails;

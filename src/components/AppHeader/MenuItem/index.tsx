@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import cs from 'classnames';
 import { TIconProps } from '@ya.praktikum/react-developer-burger-ui-components/dist/ui/icons/utils';
 import style from './style.module.css';
@@ -8,7 +9,7 @@ type Icon_t = ({ type }: TIconProps) => JSX.Element;
 const MenuItem = ({
   className,
   Icon,
-  isActive = true,
+  isActive,
   text,
 }: {
   className?: string;
@@ -34,6 +35,17 @@ const MenuItem = ({
       <span className="ml-2">{text}</span>
     </li>
   );
+};
+
+MenuItem.propTypes = {
+  className: PropTypes.string,
+  Icon: PropTypes.elementType.isRequired,
+  isActive: PropTypes.bool,
+  text: PropTypes.string.isRequired,
+};
+
+MenuItem.defaultProps = {
+  isActive: true,
 };
 
 export default MenuItem;

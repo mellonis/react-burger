@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from 'react';
+import PropTypes from 'prop-types';
 import cs from 'classnames';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import { lexemes } from '../../consts';
@@ -89,5 +90,7 @@ const BurgerIngredients = ({ className }: { className?: string }) => {
     </div>
   );
 };
+
+BurgerIngredients.propTypes = { className: PropTypes.string };
 
 export default BurgerIngredients;

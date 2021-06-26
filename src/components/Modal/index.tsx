@@ -6,6 +6,7 @@ import React, {
   useEffect,
   useRef,
 } from 'react';
+import PropTypes from 'prop-types';
 import cs from 'classnames';
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import ModalOverlay from './ModalOverlay';
@@ -67,6 +68,16 @@ const Modal = ({
       </div>
     </>
   );
+};
+
+Modal.propTypes = {
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node,
+  ]),
+  className: PropTypes.string,
+  onClose: PropTypes.func.isRequired,
+  title: PropTypes.string,
 };
 
 export default Modal;

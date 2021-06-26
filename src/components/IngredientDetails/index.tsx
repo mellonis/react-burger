@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import PropTypes from 'prop-types';
 import cs from 'classnames';
 import { Ingredient_t } from '../../types';
 import { lexemes } from '../../consts';
@@ -69,6 +70,11 @@ const IngredientDetails = ({
       </div>
     </div>
   );
+};
+
+IngredientDetails.propTypes = {
+  className: PropTypes.string,
+  ingredient: PropTypes.object.isRequired,
 };
 
 export default IngredientDetails;

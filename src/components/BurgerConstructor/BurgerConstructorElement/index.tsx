@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import cs from 'classnames';
 import {
   ConstructorElement,
@@ -46,6 +47,15 @@ const BurgerConstructorItem = ({
       />
     </div>
   );
+};
+
+BurgerConstructorItem.propTypes = {
+  className: PropTypes.string,
+  ingredient: PropTypes.object.isRequired,
+  isLocked: PropTypes.bool.isRequired,
+  onClick: PropTypes.func,
+  onDelete: PropTypes.func,
+  type: PropTypes.oneOf(['top', 'bottom']),
 };
 
 export default BurgerConstructorItem;
