@@ -7,6 +7,7 @@ import { useIngredientsContextValue } from '../../contexts/IngredientContext';
 import Amount from '../Amount';
 import BurgerConstructorItem from './BurgerConstructorElement';
 import Modal from '../Modal';
+import OrderDetails from '../OrderDetails';
 
 import style from './style.module.css';
 
@@ -240,7 +241,13 @@ const BurgerConstructor = ({ className }: { className?: string }) => {
       </div>
       {isOrderDetailsShown && orderDetails && (
         <Modal onClose={() => dispatch({ type: 'hide-order-details' })}>
-          ! Здесь будет информация о заказе !
+          <OrderDetails
+            className={cs(
+              style['burger-constructor__order-details'],
+              'mt-4 mb-20'
+            )}
+            orderDetails={orderDetails}
+          />
         </Modal>
       )}
     </div>

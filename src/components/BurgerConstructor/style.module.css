@@ -40,4 +40,7 @@
     justify-content: flex-end;
 }
 
+.burger-constructor__order-details {
+    max-width: 520px;
+}
 

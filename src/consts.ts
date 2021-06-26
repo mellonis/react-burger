@@ -3,12 +3,12 @@ import { OrderStatus_t } from './types';
 export const apiHostUrl = 'https://norma.nomoreparties.space';
 
 export const orderStatusToStatusTitleMap: {
-  [key in keyof typeof OrderStatus_t]: string;
+  [key in OrderStatus_t]: string;
 } = {
-  BEING_COOKED: 'Ваш заказ начали готовить',
-  COOKED: 'Заказ приготовлен',
-  BEING_DELIVERED: 'Ваш заказ доставляется',
-  DELIVERED: 'Заказ доставлен',
+  [OrderStatus_t.BEING_COOKED]: 'Ваш заказ начали готовить',
+  [OrderStatus_t.COOKED]: 'Заказ приготовлен',
+  [OrderStatus_t.BEING_DELIVERED]: 'Ваш заказ доставляется',
+  [OrderStatus_t.DELIVERED]: 'Заказ доставлен',
 };
 
 const allLexemes = {
@@ -17,6 +17,7 @@ const allLexemes = {
     buns: 'Булки',
     burgerFillings: 'Начинки',
     constructor: 'Конструктор',
+    orderId: 'Идентификатор заказа',
     orderList: 'Лента заказов',
     sauces: 'Соусы',
     placeAnOrder: 'Оформиль заказ',
