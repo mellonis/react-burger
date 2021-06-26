@@ -1,21 +1,21 @@
 import React, { useReducer } from 'react';
 import cs from 'classnames';
-import {
-  Button,
-  ConstructorElement,
-  DragIcon,
-} from '@ya.praktikum/react-developer-burger-ui-components';
-import Amount from '../amount';
+import { Button } from '@ya.praktikum/react-developer-burger-ui-components';
+import ingredients from '../../utils/data';
+import Amount from '../Amount';
+import BurgerConstructorItem from './BurgerConstructorElement';
+import { Ingredient_t } from './types';
 
 import style from './style.module.css';
 
-import ingredients from '../../utils/data';
+const idToIngredientMap: Map<string, Ingredient_t> = ingredients.reduce(
+  (result, ingredient) => {
+    result.set(ingredient._id, ingredient);
 
-const idToIngredientMap = ingredients.reduce((result, ingredient) => {
-  result.set(ingredient._id, ingredient);
-
-  return result;
-}, new Map());
+    return result;
+  },
+  new Map()
+);
 
 type ActualIngredient_t = {
   id: number;
@@ -67,7 +67,7 @@ const actualIngredientIds: ActualIngredient_t[] = [
 
 const calcTotal = (ingredientIds: ActualIngredient_t[]) => {
   return ingredientIds.reduce((result, { refId }) => {
-    const { price } = idToIngredientMap.get(refId);
+    const { price } = idToIngredientMap.get(refId)!;
 
     return result + price;
   }, 0);
@@ -101,42 +101,61 @@ const BurgerConstructor = ({ className }: { className?: string }) => {
     init
   );
 
-  void dispatch;
+  const top = list[0];
+  const bottom = list[list.length - 1];
+
+  console.log({ top, bottom });
 
   return (
     <div className={cs(style['burger-constructor'], 'pt-25', className)}>
       <div className={style['burger-constructor__list']}>
-        {list.map(({ id, isLocked, refId, type }, ix) => {
-          const { image, name, price } = idToIngredientMap.get(refId);
+        {(() => {
+          const { id, isLocked = false, refId, type } = top;
 
           return (
-            <React.Fragment key={id}>
-              <div
-                className={
-                  style['burger-constructor__constructor-element-wrapper']
-                }
-              >
-                {!isLocked ? (
-                  <DragIcon type={'primary'} />
-                ) : (
-                  <div className={'pl-8'} />
-                )}
-                <div className={'pl-6'} />
-                <ConstructorElement
-                  handleClose={() => {
+            <BurgerConstructorItem
+              ingredient={idToIngredientMap.get(refId)!}
+              isLocked={isLocked}
+              onDelete={() => {
+                dispatch({ type: 'remove', id });
+              }}
+              type={type}
+            />
+          );
+        })()}
+        <div className={'pt-4'} />
+        <div className={style['burger-constructor__filling']}>
+          {list
+            .slice(1, -1)
+            .map(({ id, isLocked = false, refId, type }, ix, list) => (
+              <React.Fragment key={id}>
+                <BurgerConstructorItem
+                  ingredient={idToIngredientMap.get(refId)!}
+                  isLocked={isLocked}
+                  onDelete={() => {
                     dispatch({ type: 'remove', id });
                   }}
-                  isLocked={isLocked}
-                  price={price}
-                  text={name}
-                  thumbnail={image}
                   type={type}
                 />
-              </div>
-              {ix + 1 < list.length ? <div className={'pt-4'} /> : null}
-            </React.Fragment>
+                {ix + 1 < list.length ? <div className={'pt-4'} /> : null}
+              </React.Fragment>
+            ))}
+        </div>
+        <div className={'pt-4'} />
+        {(() => {
+          const { id, isLocked = false, refId, type } = bottom;
+
+          return (
+            <BurgerConstructorItem
+              ingredient={idToIngredientMap.get(refId)!}
+              isLocked={isLocked}
+              onDelete={() => {
+                dispatch({ type: 'remove', id });
+              }}
+              type={type}
+            />
           );
-        })}
+        })()}
       </div>
       <div className={cs(style['burger-constructor__total-wrapper'], 'pt-10')}>
         <Amount

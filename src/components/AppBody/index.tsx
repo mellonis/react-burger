@@ -1,7 +1,7 @@
 import React from 'react';
 import cs from 'classnames';
-import BurgerIngredients from '../burger-ingredients';
-import BurgerConstructor from '../burger-constructor';
+import BurgerIngredients from '../BurgerIngredients';
+import BurgerConstructor from '../BurgerConstructor';
 import styles from './style.module.css';
 
 const AppBody = () => {

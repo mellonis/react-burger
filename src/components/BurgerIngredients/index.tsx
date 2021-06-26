@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import cs from 'classnames';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
-import BurgerIngredientType from './burger-ingredient-type';
+import BurgerIngredientType from './BurgerIngredientType';
 import style from './style.module.css';
 
 import ingredients from '../../utils/data';

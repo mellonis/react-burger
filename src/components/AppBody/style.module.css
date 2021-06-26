@@ -1,0 +1,10 @@
+.app-body {
+    display: grid;
+    grid-template-columns: 1fr min-content 1fr;
+}
+
+.app-body__ingredients,
+.app-body__constructor,
+.app-body__space {
+    max-height: calc(100vh - 88px);
+}

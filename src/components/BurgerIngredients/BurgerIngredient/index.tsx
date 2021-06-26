@@ -2,7 +2,7 @@ import React from 'react';
 import cs from 'classnames';
 import { Counter } from '@ya.praktikum/react-developer-burger-ui-components';
 import style from './style.module.css';
-import Amount from '../../amount';
+import Amount from '../../Amount';
 
 export type Ingredient_t = { image: string; name: string; price: number };
 
