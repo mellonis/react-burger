@@ -1,9 +1,0 @@
-.burger-constructor-item {
-    align-items: center;
-    display: grid;
-    grid-template-columns: 32px 24px 1fr;
-}
-
-.burger-constructor-item_interactive {
-    cursor: pointer;
-}

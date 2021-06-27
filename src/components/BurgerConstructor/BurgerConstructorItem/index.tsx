@@ -13,14 +13,14 @@ const BurgerConstructorItem = ({
   className,
   ingredient: { image, name, price },
   isLocked,
-  onClick,
+  onShowIngredientInfo,
   onDelete,
   type,
 }: {
   className?: string;
   ingredient: Ingredient_t;
   isLocked: boolean;
-  onClick?: () => void;
+  onShowIngredientInfo?: () => void;
   onDelete?: () => void;
   type?: 'top' | 'bottom';
 }) => {
@@ -29,22 +29,40 @@ const BurgerConstructorItem = ({
       className={cs(
         style['burger-constructor-item'],
         {
-          [style['burger-constructor-item_interactive']]: onClick,
+          [style['burger-constructor-item_interactive']]: onShowIngredientInfo,
         },
         className
       )}
-      onClick={onClick}
+      onClick={(event) => {
+        const target = event.target as HTMLElement;
+
+        if (
+          onShowIngredientInfo &&
+          target.closest(
+            `.${style['burger-constructor-item__constructor-element-wrapper']}`
+          ) &&
+          !target.closest('.constructor-element__action')
+        ) {
+          onShowIngredientInfo();
+        }
+      }}
     >
       {!isLocked ? <DragIcon type={'primary'} /> : <div className={'pl-8'} />}
       <div className={'pl-6'} />
-      <ConstructorElement
-        handleClose={onDelete}
-        isLocked={isLocked}
-        price={price}
-        text={name}
-        thumbnail={image}
-        type={type}
-      />
+      <div
+        className={
+          style['burger-constructor-item__constructor-element-wrapper']
+        }
+      >
+        <ConstructorElement
+          handleClose={onDelete}
+          isLocked={isLocked}
+          price={price}
+          text={name}
+          thumbnail={image}
+          type={type}
+        />
+      </div>
     </div>
   );
 };
@@ -53,7 +71,7 @@ BurgerConstructorItem.propTypes = {
   className: PropTypes.string,
   ingredient: PropTypes.object.isRequired,
   isLocked: PropTypes.bool.isRequired,
-  onClick: PropTypes.func,
+  onShowIngredientInfo: PropTypes.func,
   onDelete: PropTypes.func,
   type: PropTypes.oneOf(['top', 'bottom']),
 };

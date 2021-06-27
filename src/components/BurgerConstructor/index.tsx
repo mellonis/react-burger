@@ -6,7 +6,7 @@ import { Ingredient_t, OrderDetails_t, OrderStatus_t } from '../../types';
 import { lexemes } from '../../consts';
 import { useIngredientsContextValue } from '../../contexts/IngredientContext';
 import Amount from '../Amount';
-import BurgerConstructorItem from './BurgerConstructorElement';
+import BurgerConstructorItem from './BurgerConstructorItem';
 import IngredientDetails from '../IngredientDetails';
 import Modal from '../Modal';
 import OrderDetails from '../OrderDetails';
@@ -178,7 +178,9 @@ const BurgerConstructor = ({ className }: { className?: string }) => {
                   <BurgerConstructorItem
                     ingredient={idToIngredientMap.get(refId)!}
                     isLocked={isLocked}
-                    onClick={() => setDetailedIngredient(ingredient)}
+                    onShowIngredientInfo={() =>
+                      setDetailedIngredient(ingredient)
+                    }
                     type={type}
                   />
                 )
@@ -199,7 +201,9 @@ const BurgerConstructor = ({ className }: { className?: string }) => {
                     <BurgerConstructorItem
                       ingredient={idToIngredientMap.get(refId)!}
                       isLocked={isLocked}
-                      onClick={() => setDetailedIngredient(ingredient)}
+                      onShowIngredientInfo={() =>
+                        setDetailedIngredient(ingredient)
+                      }
                       onDelete={() => {
                         dispatch({ type: 'remove-ingredient', id });
                       }}
@@ -223,7 +227,9 @@ const BurgerConstructor = ({ className }: { className?: string }) => {
                   <BurgerConstructorItem
                     ingredient={idToIngredientMap.get(refId)!}
                     isLocked={isLocked}
-                    onClick={() => setDetailedIngredient(ingredient)}
+                    onShowIngredientInfo={() =>
+                      setDetailedIngredient(ingredient)
+                    }
                     type={type}
                   />
                 )
