@@ -36,7 +36,7 @@ const BurgerIngredientType = ({
         )}
       >
         {ingredients.map((ingredient, ix) => (
-          <React.Fragment key={ix}>
+          <React.Fragment key={ingredient._id}>
             <BurgerIngredient
               ingredient={ingredient}
               onClick={() => handleClick(ix)}
