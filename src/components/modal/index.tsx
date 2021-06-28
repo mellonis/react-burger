@@ -9,7 +9,7 @@ import React, {
 import PropTypes from 'prop-types';
 import cs from 'classnames';
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import ModalOverlay from './ModalOverlay';
+import ModalOverlay from './modal-overlay';
 
 import style from './style.module.css';
 

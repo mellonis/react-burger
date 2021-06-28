@@ -2,9 +2,9 @@ import React from 'react';
 import {
   IngredientContext,
   useIngredientsContextValue,
-} from '../../contexts/IngredientContext';
-import AppHeader from '../AppHeader';
-import AppBody from '../AppBody';
+} from '../../contexts/ingredient-context';
+import AppHeader from '../app-header';
+import AppBody from '../app-body';
 
 import style from './style.module.css';
 

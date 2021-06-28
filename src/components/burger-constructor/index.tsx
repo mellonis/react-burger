@@ -4,12 +4,12 @@ import cs from 'classnames';
 import { Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Ingredient_t, OrderDetails_t, OrderStatus_t } from '../../types';
 import { lexemes } from '../../consts';
-import { useIngredientsContextValue } from '../../contexts/IngredientContext';
-import Amount from '../Amount';
-import BurgerConstructorItem from './BurgerConstructorItem';
-import IngredientDetails from '../IngredientDetails';
-import Modal from '../Modal';
-import OrderDetails from '../OrderDetails';
+import { useIngredientsContextValue } from '../../contexts/ingredient-context';
+import Amount from '../amount';
+import BurgerConstructorItem from './burger-constructor-item';
+import IngredientDetails from '../ingredient-details';
+import Modal from '../modal';
+import OrderDetails from '../order-details';
 
 import style from './style.module.css';
 

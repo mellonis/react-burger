@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import cs from 'classnames';
 import { Ingredient_t } from '../../../types';
-import Amount from '../../Amount';
+import Amount from '../../amount';
 import { Counter } from '@ya.praktikum/react-developer-burger-ui-components';
 
 import style from './style.module.css';

@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import cs from 'classnames';
 import { Ingredient_t } from '../../../types';
 import { lexemes } from '../../../consts';
-import BurgerIngredient from '../BurgerIngredient';
-import IngredientDetails from '../../IngredientDetails';
-import Modal from '../../Modal';
+import BurgerIngredient from '../burger-ingredient';
+import IngredientDetails from '../../ingredient-details';
+import Modal from '../../modal';
 
 import style from './style.module.css';
 
