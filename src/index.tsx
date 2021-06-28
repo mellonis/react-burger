@@ -1,12 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import reportWebVitals from './reportWebVitals';
-import App from './components/App';
-import './styles/common.css';
+import App from './components/app';
+import './index.css';
 
 ReactDOM.render(
   <React.StrictMode>
     <App />
+    <div id="modal-container" />
   </React.StrictMode>,
   document.getElementById('root')
 );

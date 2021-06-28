@@ -1,0 +1,36 @@
+.order-details {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.order-details__id {
+    text-shadow: 0 0 50px var(--colors-interface-accent);
+}
+
+.order-details__id-title {
+    text-transform: lowercase;
+}
+
+.order-details__status-icon-wrapper {
+    align-items: center;
+    background-image:
+        url('/src/images/order-status-icons-wrapper/01.png'),
+        url('/src/images/order-status-icons-wrapper/02.png'),
+        url('/src/images/order-status-icons-wrapper/03.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    justify-content: center;
+    height: 120px;
+    width: 120px;
+}
+
+.order-details__status-title {
+
+}
+
+.order-details__message {
+    color: var(--text-inactive-color);
+}
+
