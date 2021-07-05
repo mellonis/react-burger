@@ -1,11 +1,11 @@
-import React, { useEffect, useReducer, useState } from 'react';
+import React, { useCallback, useEffect, useReducer, useState } from 'react';
 import PropTypes from 'prop-types';
 import cs from 'classnames';
 import { v4 as uuidv4 } from 'uuid';
 import { Button } from '@ya.praktikum/react-developer-burger-ui-components';
-import { Ingredient_t, OrderDetails_t, OrderStatus_t } from '../../types';
+import { Ingredient_t } from '../../types';
 import { IngredientType, lexemes } from '../../consts';
-import { useIngredientContext } from '../../contexts/ingredient-context';
+import { useIngredientContext, useOrderContext } from '../../contexts';
 import Amount from '../amount';
 import BurgerConstructorItem from './burger-constructor-item';
 import IngredientDetails from '../ingredient-details';
@@ -26,13 +26,11 @@ type State = {
   idToIngredientMap: Map<string, Ingredient_t>;
   isOrderDetailsShown: boolean;
   list: ActualIngredient_t[];
-  orderDetails: OrderDetails_t | null;
   topBun?: ActualIngredient_t;
   total: number;
 };
 type Action =
   | { type: 'actualize-ingredients-map'; map: Map<string, Ingredient_t> }
-  | { type: 'actualize-order-details'; orderDetails: OrderDetails_t | null }
   | { type: 'add-ingredient'; ingredient: Ingredient_t }
   | { type: 'hide-order-details' }
   | { type: 'remove-ingredient'; id: string }
@@ -75,11 +73,6 @@ const init = (actualIngredientIds: ActualIngredient_t[]): State => {
     idToIngredientMap: new Map(),
     isOrderDetailsShown: false,
     list: actualIngredientIds,
-    orderDetails: {
-      id: '034536',
-      message: 'Дождитесь готовности на орбитальной станции',
-      status: OrderStatus_t.BEING_COOKED,
-    },
     total: 0,
   };
 };
@@ -98,15 +91,6 @@ const reducer = (state: State, action: Action): State => {
           list: state.list,
           topBun: state.topBun,
         }),
-      };
-    }
-    case 'actualize-order-details': {
-      const { orderDetails } = action;
-
-      return {
-        ...state,
-        isOrderDetailsShown: state.isOrderDetailsShown && !!orderDetails,
-        orderDetails,
       };
     }
     case 'add-ingredient': {
@@ -178,21 +162,18 @@ const reducer = (state: State, action: Action): State => {
       };
     }
     case 'show-order-details':
-      if (state.orderDetails) {
-        return {
-          ...state,
-          isOrderDetailsShown: true,
-        };
-      }
-
-      return state;
+      return {
+        ...state,
+        isOrderDetailsShown: true,
+      };
   }
 };
 
 const BurgerConstructor = ({ className }: { className?: string }) => {
   const { ingredients, idToIngredientMap } = useIngredientContext();
+  const { orderDetails, placeAnOrder } = useOrderContext();
   const [
-    { bottomBun, isOrderDetailsShown, list, orderDetails, topBun, total },
+    { bottomBun, isOrderDetailsShown, list, topBun, total },
     dispatch,
   ] = useReducer(reducer, actualIngredientIds, init);
   const [detailedIngredient, setDetailedIngredient] = useState(
@@ -208,6 +189,22 @@ const BurgerConstructor = ({ className }: { className?: string }) => {
       });
     }
   }, [idToIngredientMap, ingredients]);
+
+  const placeAnOrderClickHandler = useCallback(() => {
+    const orderIngredientsList = [...list];
+
+    if (topBun) {
+      orderIngredientsList.unshift(topBun);
+    }
+
+    if (bottomBun) {
+      orderIngredientsList.push(bottomBun);
+    }
+
+    placeAnOrder(orderIngredientsList.map(({ refId }) => refId))
+      .then(() => dispatch({ type: 'show-order-details' }))
+      .catch(console.error);
+  }, [list, topBun, bottomBun, placeAnOrder]);
 
   if (idToIngredientMap.size === 0) {
     return null;
@@ -293,7 +290,7 @@ const BurgerConstructor = ({ className }: { className?: string }) => {
         />
         <div className={'pl-10'} />
         <Button
-          onClick={() => dispatch({ type: 'show-order-details' })}
+          onClick={placeAnOrderClickHandler}
           size={'large'}
           type={'primary'}
         >

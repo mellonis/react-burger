@@ -12,7 +12,7 @@ export const IngredientContext = React.createContext({
 
 export const useIngredientContext = () => useContext(IngredientContext);
 
-export const getIngredients = async (): Promise<Ingredient_t[]> => {
+export const fetchIngredients = async (): Promise<Ingredient_t[]> => {
   const response = await fetch(`${apiHostUrl}/api/ingredients`);
   const result = await response.json();
 
@@ -37,7 +37,7 @@ export const useIngredientContextValue = () => {
   );
 
   useEffect(() => {
-    getIngredients().then(setIngredients).catch(console.error);
+    fetchIngredients().then(setIngredients).catch(console.error);
   }, []);
 
   return { ingredients, idToIngredientMap };

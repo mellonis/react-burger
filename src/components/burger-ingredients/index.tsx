@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import cs from 'classnames';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import { IngredientType, lexemes } from '../../consts';
-import { useIngredientContext } from '../../contexts/ingredient-context';
+import { useIngredientContext } from '../../contexts';
 import BurgerIngredientType from './burger-ingredient-type';
 
 import style from './style.module.css';

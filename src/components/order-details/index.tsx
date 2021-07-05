@@ -18,7 +18,7 @@ const OrderDetails = ({
     <div
       className={cs(style['order-details__id'], 'text text_type_digits-large')}
     >
-      {id}
+      {String(id).padStart(6, '0')}
     </div>
     <div className={'pt-8'} />
     <div
