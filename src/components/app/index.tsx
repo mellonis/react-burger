@@ -1,7 +1,7 @@
 import React from 'react';
 import {
   IngredientContext,
-  useIngredientsContextValue,
+  useIngredientContextValue,
 } from '../../contexts/ingredient-context';
 import AppHeader from '../app-header';
 import AppBody from '../app-body';
@@ -9,10 +9,10 @@ import AppBody from '../app-body';
 import style from './style.module.css';
 
 const App = () => {
-  const ingredientsContextValue = useIngredientsContextValue();
+  const ingredientContextValue = useIngredientContextValue();
 
   return (
-    <IngredientContext.Provider value={ingredientsContextValue}>
+    <IngredientContext.Provider value={ingredientContextValue}>
       <div className={style.app}>
         <AppHeader />
         <AppBody />

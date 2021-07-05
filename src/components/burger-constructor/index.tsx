@@ -4,7 +4,7 @@ import cs from 'classnames';
 import { Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Ingredient_t, OrderDetails_t, OrderStatus_t } from '../../types';
 import { lexemes } from '../../consts';
-import { useIngredientsContextValue } from '../../contexts/ingredient-context';
+import { useIngredientContext } from '../../contexts/ingredient-context';
 import Amount from '../amount';
 import BurgerConstructorItem from './burger-constructor-item';
 import IngredientDetails from '../ingredient-details';
@@ -143,7 +143,7 @@ const reducer = (state: State, action: Action): State => {
 };
 
 const BurgerConstructor = ({ className }: { className?: string }) => {
-  const { ingredients, idToIngredientMap } = useIngredientsContextValue();
+  const { ingredients, idToIngredientMap } = useIngredientContext();
   const [
     { isOrderDetailsShown, list, orderDetails, total },
     dispatch,
