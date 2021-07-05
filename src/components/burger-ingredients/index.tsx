@@ -2,7 +2,7 @@ import React, { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import cs from 'classnames';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
-import { lexemes } from '../../consts';
+import { IngredientType, lexemes } from '../../consts';
 import { useIngredientContext } from '../../contexts/ingredient-context';
 import BurgerIngredientType from './burger-ingredient-type';
 
@@ -81,7 +81,7 @@ const BurgerIngredients = ({ className }: { className?: string }) => {
           ([type, ingredients]) => (
             <BurgerIngredientType
               key={type}
-              title={ingredientTypeTitles[type as 'bun' | 'sauce' | 'main']}
+              title={ingredientTypeTitles[type as IngredientType]}
               ingredients={ingredients}
             />
           )
