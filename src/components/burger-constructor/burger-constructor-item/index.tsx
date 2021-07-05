@@ -5,6 +5,7 @@ import {
   ConstructorElement,
   DragIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
+import { lexemes } from '../../../consts';
 import { Ingredient_t } from '../../../types';
 
 import style from './style.module.css';
@@ -58,7 +59,9 @@ const BurgerConstructorItem = ({
           handleClose={onDelete}
           isLocked={isLocked}
           price={price}
-          text={name}
+          text={`${name}${
+            type ? ` (${type === 'top' ? lexemes.top : lexemes.bottom})` : ''
+          }`}
           thumbnail={image}
           type={type}
         />

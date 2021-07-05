@@ -33,6 +33,8 @@ const allLexemes = {
     placeAnOrder: 'Оформиль заказ',
     profile: 'Личный кабинет',
     proteins: 'Белки, г',
+    top: 'верх',
+    bottom: 'низ',
   },
 };
 
