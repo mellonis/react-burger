@@ -1,10 +1,11 @@
-import React, { useEffect, useReducer, useState } from 'react';
+import React, { useCallback, useEffect, useReducer, useState } from 'react';
 import PropTypes from 'prop-types';
 import cs from 'classnames';
+import { v4 as uuidv4 } from 'uuid';
 import { Button } from '@ya.praktikum/react-developer-burger-ui-components';
-import { Ingredient_t, OrderDetails_t, OrderStatus_t } from '../../types';
-import { lexemes } from '../../consts';
-import { useIngredientsContextValue } from '../../contexts/ingredient-context';
+import { Ingredient_t } from '../../types';
+import { IngredientType, lexemes } from '../../consts';
+import { useIngredientContext, useOrderContext } from '../../contexts';
 import Amount from '../amount';
 import BurgerConstructorItem from './burger-constructor-item';
 import IngredientDetails from '../ingredient-details';
@@ -21,99 +22,124 @@ type ActualIngredient_t = {
 };
 
 type State = {
-  ingredientsMap: Map<string, Ingredient_t>;
+  bottomBun?: ActualIngredient_t;
+  idToIngredientMap: Map<string, Ingredient_t>;
   isOrderDetailsShown: boolean;
   list: ActualIngredient_t[];
-  orderDetails: OrderDetails_t | null;
+  topBun?: ActualIngredient_t;
   total: number;
 };
 type Action =
   | { type: 'actualize-ingredients-map'; map: Map<string, Ingredient_t> }
-  | { type: 'actualize-ingredients'; ingredients: Ingredient_t[] }
-  | { type: 'actualize-order-details'; orderDetails: OrderDetails_t | null }
+  | { type: 'add-ingredient'; ingredient: Ingredient_t }
   | { type: 'hide-order-details' }
   | { type: 'remove-ingredient'; id: string }
   | { type: 'show-order-details' };
 
+const generateIngredientId = () => uuidv4();
+
 const actualIngredientIds: ActualIngredient_t[] = [];
 
-const calcTotal = (
-  idToIngredientMap: Map<string, Ingredient_t>,
-  ingredientIds: ActualIngredient_t[]
-) =>
-  ingredientIds.reduce((result, { refId }) => {
+const calcTotal = ({
+  bottomBun,
+  idToIngredientMap,
+  list,
+  topBun,
+}: {
+  bottomBun?: ActualIngredient_t;
+  idToIngredientMap: Map<string, Ingredient_t>;
+  list: ActualIngredient_t[];
+  topBun?: ActualIngredient_t;
+}) => {
+  const ingredientIds = list.map(({ refId }) => refId);
+
+  if (topBun) {
+    ingredientIds.unshift(topBun.refId);
+  }
+
+  if (bottomBun) {
+    ingredientIds.push(bottomBun.refId);
+  }
+
+  return ingredientIds.reduce((result, refId) => {
     const { price } = idToIngredientMap.get(refId)!;
 
     return result + price;
   }, 0);
+};
 
 const init = (actualIngredientIds: ActualIngredient_t[]): State => {
   return {
-    ingredientsMap: new Map(),
+    idToIngredientMap: new Map(),
     isOrderDetailsShown: false,
     list: actualIngredientIds,
-    orderDetails: {
-      id: '034536',
-      message: 'Дождитесь готовности на орбитальной станции',
-      status: OrderStatus_t.BEING_COOKED,
-    },
     total: 0,
   };
 };
 
 const reducer = (state: State, action: Action): State => {
   switch (action.type) {
-    case 'actualize-ingredients':
-      const timestamp = new Date().getTime();
-      const { ingredients } = action;
-
-      return {
-        ...state,
-        list: ingredients.map(({ _id }, ix, list) => {
-          const isItTop = ix === 0;
-          const isItBottom = ix === list.length - 1;
-          const result = {
-            id: `${timestamp}:${ix}`,
-            refId: _id,
-            isLocked: isItTop || isItBottom,
-            type: isItTop
-              ? 'top'
-              : isItBottom
-              ? 'bottom'
-              : (undefined as 'top' | 'bottom' | undefined),
-          };
-
-          if (isItTop || isItBottom) {
-            result.isLocked = true;
-          }
-
-          if (isItTop) {
-            result.type = 'top';
-          }
-
-          if (isItBottom) {
-            result.type = 'bottom';
-          }
-
-          return result;
-        }),
-      };
     case 'actualize-ingredients-map': {
       const { map } = action;
 
       return {
         ...state,
-        ingredientsMap: map,
-        total: calcTotal(map, state.list),
+        idToIngredientMap: map,
+        total: calcTotal({
+          bottomBun: state.bottomBun,
+          idToIngredientMap: state.idToIngredientMap,
+          list: state.list,
+          topBun: state.topBun,
+        }),
       };
     }
-    case 'actualize-order-details': {
-      const { orderDetails } = action;
+    case 'add-ingredient': {
+      const { _id, type } = action.ingredient;
+
+      if (type === IngredientType.bun) {
+        const bottomBun: ActualIngredient_t = {
+          id: generateIngredientId(),
+          isLocked: true,
+          type: 'bottom',
+          refId: _id,
+        };
+        const topBun: ActualIngredient_t = {
+          id: generateIngredientId(),
+          isLocked: true,
+          type: 'top',
+          refId: _id,
+        };
+
+        return {
+          ...state,
+          bottomBun,
+          topBun,
+          total: calcTotal({
+            bottomBun,
+            idToIngredientMap: state.idToIngredientMap,
+            list: state.list,
+            topBun,
+          }),
+        };
+      }
+
+      const list = [
+        ...state.list,
+        {
+          id: generateIngredientId(),
+          refId: _id,
+        },
+      ];
 
       return {
         ...state,
-        isOrderDetailsShown: state.isOrderDetailsShown && !!orderDetails,
-        orderDetails,
+        list,
+        total: calcTotal({
+          bottomBun: state.bottomBun,
+          idToIngredientMap: state.idToIngredientMap,
+          list,
+          topBun: state.topBun,
+        }),
       };
     }
     case 'hide-order-details':
@@ -122,30 +148,32 @@ const reducer = (state: State, action: Action): State => {
         isOrderDetailsShown: false,
       };
     case 'remove-ingredient': {
-      const filteredList = state.list.filter(({ id }) => id !== action.id);
+      const list = state.list.filter(({ id }) => id !== action.id);
 
       return {
         ...state,
-        list: filteredList,
-        total: calcTotal(state.ingredientsMap, filteredList),
+        list,
+        total: calcTotal({
+          bottomBun: state.bottomBun,
+          idToIngredientMap: state.idToIngredientMap,
+          list,
+          topBun: state.topBun,
+        }),
       };
     }
     case 'show-order-details':
-      if (state.orderDetails) {
-        return {
-          ...state,
-          isOrderDetailsShown: true,
-        };
-      }
-
-      return state;
+      return {
+        ...state,
+        isOrderDetailsShown: true,
+      };
   }
 };
 
 const BurgerConstructor = ({ className }: { className?: string }) => {
-  const { ingredients, idToIngredientMap } = useIngredientsContextValue();
+  const { ingredients, idToIngredientMap } = useIngredientContext();
+  const { orderDetails, placeAnOrder } = useOrderContext();
   const [
-    { isOrderDetailsShown, list, orderDetails, total },
+    { bottomBun, isOrderDetailsShown, list, topBun, total },
     dispatch,
   ] = useReducer(reducer, actualIngredientIds, init);
   const [detailedIngredient, setDetailedIngredient] = useState(
@@ -153,12 +181,30 @@ const BurgerConstructor = ({ className }: { className?: string }) => {
   );
 
   useEffect(() => {
-    dispatch({ type: 'actualize-ingredients', ingredients });
-    dispatch({ type: 'actualize-ingredients-map', map: idToIngredientMap });
+    if (ingredients && idToIngredientMap) {
+      dispatch({ type: 'actualize-ingredients-map', map: idToIngredientMap });
+
+      ingredients.forEach((ingredient) => {
+        dispatch({ type: 'add-ingredient', ingredient });
+      });
+    }
   }, [idToIngredientMap, ingredients]);
 
-  const top = list[0];
-  const bottom = list[list.length - 1];
+  const placeAnOrderClickHandler = useCallback(() => {
+    const orderIngredientsList = [...list];
+
+    if (topBun) {
+      orderIngredientsList.unshift(topBun);
+    }
+
+    if (bottomBun) {
+      orderIngredientsList.push(bottomBun);
+    }
+
+    placeAnOrder(orderIngredientsList.map(({ refId }) => refId))
+      .then(() => dispatch({ type: 'show-order-details' }))
+      .catch(console.error);
+  }, [list, topBun, bottomBun, placeAnOrder]);
 
   if (idToIngredientMap.size === 0) {
     return null;
@@ -167,10 +213,10 @@ const BurgerConstructor = ({ className }: { className?: string }) => {
   return (
     <div className={cs(style['burger-constructor'], 'pt-25 pb-5', className)}>
       <div className={style['burger-constructor__list']}>
-        {top && (
+        {topBun && (
           <>
             {(() => {
-              const { isLocked = false, refId, type } = top;
+              const { isLocked = false, refId, type } = topBun;
               const ingredient = idToIngredientMap.get(refId);
 
               return (
@@ -190,36 +236,34 @@ const BurgerConstructor = ({ className }: { className?: string }) => {
           </>
         )}
         <div className={style['burger-constructor__filling']}>
-          {list
-            .slice(1, -1)
-            .map(({ id, isLocked = false, refId, type }, ix, list) => {
-              const ingredient = idToIngredientMap.get(refId);
+          {list.map(({ id, isLocked = false, refId, type }, ix, list) => {
+            const ingredient = idToIngredientMap.get(refId);
 
-              return (
-                ingredient && (
-                  <React.Fragment key={id}>
-                    <BurgerConstructorItem
-                      ingredient={idToIngredientMap.get(refId)!}
-                      isLocked={isLocked}
-                      onShowIngredientInfo={() =>
-                        setDetailedIngredient(ingredient)
-                      }
-                      onDelete={() => {
-                        dispatch({ type: 'remove-ingredient', id });
-                      }}
-                      type={type}
-                    />
-                    {ix + 1 < list.length ? <div className={'pt-4'} /> : null}
-                  </React.Fragment>
-                )
-              );
-            })}
+            return (
+              ingredient && (
+                <React.Fragment key={id}>
+                  <BurgerConstructorItem
+                    ingredient={idToIngredientMap.get(refId)!}
+                    isLocked={isLocked}
+                    onShowIngredientInfo={() =>
+                      setDetailedIngredient(ingredient)
+                    }
+                    onDelete={() => {
+                      dispatch({ type: 'remove-ingredient', id });
+                    }}
+                    type={type}
+                  />
+                  {ix + 1 < list.length ? <div className={'pt-4'} /> : null}
+                </React.Fragment>
+              )
+            );
+          })}
         </div>
-        {bottom && (
+        {bottomBun && (
           <>
             <div className={'pt-4'} />
             {(() => {
-              const { isLocked = false, refId, type } = bottom;
+              const { isLocked = false, refId, type } = bottomBun;
               const ingredient = idToIngredientMap.get(refId);
 
               return (
@@ -246,7 +290,7 @@ const BurgerConstructor = ({ className }: { className?: string }) => {
         />
         <div className={'pl-10'} />
         <Button
-          onClick={() => dispatch({ type: 'show-order-details' })}
+          onClick={placeAnOrderClickHandler}
           size={'large'}
           type={'primary'}
         >

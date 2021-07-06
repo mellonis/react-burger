@@ -21,7 +21,7 @@ export enum OrderStatus_t {
 }
 
 export type OrderDetails_t = {
-  id: string;
+  id: number;
   status: OrderStatus_t;
   message: string;
 };

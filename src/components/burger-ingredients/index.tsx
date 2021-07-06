@@ -2,8 +2,8 @@ import React, { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import cs from 'classnames';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
-import { lexemes } from '../../consts';
-import { useIngredientsContextValue } from '../../contexts/ingredient-context';
+import { IngredientType, lexemes } from '../../consts';
+import { useIngredientContext } from '../../contexts';
 import BurgerIngredientType from './burger-ingredient-type';
 
 import style from './style.module.css';
@@ -18,7 +18,7 @@ const ingredientTypes = Object.keys(ingredientTypeTitles) as Array<
 >;
 
 const BurgerIngredients = ({ className }: { className?: string }) => {
-  const { ingredients } = useIngredientsContextValue();
+  const { ingredients } = useIngredientContext();
   const [selectedIngredientType, setSelectedIngredientType] = useState(
     ingredientTypes[0]
   );
@@ -81,7 +81,7 @@ const BurgerIngredients = ({ className }: { className?: string }) => {
           ([type, ingredients]) => (
             <BurgerIngredientType
               key={type}
-              title={ingredientTypeTitles[type as 'bun' | 'sauce' | 'main']}
+              title={ingredientTypeTitles[type as IngredientType]}
               ingredients={ingredients}
             />
           )

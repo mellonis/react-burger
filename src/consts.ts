@@ -2,6 +2,12 @@ import { OrderStatus_t } from './types';
 
 export const apiHostUrl = 'https://norma.nomoreparties.space';
 
+export enum IngredientType {
+  bun = 'bun',
+  sauce = 'sauce',
+  main = 'main',
+}
+
 export const orderStatusToStatusTitleMap: {
   [key in OrderStatus_t]: string;
 } = {
@@ -27,6 +33,8 @@ const allLexemes = {
     placeAnOrder: 'Оформиль заказ',
     profile: 'Личный кабинет',
     proteins: 'Белки, г',
+    top: 'верх',
+    bottom: 'низ',
   },
 };
 

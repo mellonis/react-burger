@@ -1,22 +1,27 @@
 import React from 'react';
 import {
   IngredientContext,
-  useIngredientsContextValue,
-} from '../../contexts/ingredient-context';
+  OrderContext,
+  useIngredientContextValue,
+  useOrderContextValue,
+} from '../../contexts';
 import AppHeader from '../app-header';
 import AppBody from '../app-body';
 
 import style from './style.module.css';
 
 const App = () => {
-  const ingredientsContextValue = useIngredientsContextValue();
+  const ingredientContextValue = useIngredientContextValue();
+  const orderContextValue = useOrderContextValue();
 
   return (
-    <IngredientContext.Provider value={ingredientsContextValue}>
-      <div className={style.app}>
-        <AppHeader />
-        <AppBody />
-      </div>
+    <IngredientContext.Provider value={ingredientContextValue}>
+      <OrderContext.Provider value={orderContextValue}>
+        <div className={style.app}>
+          <AppHeader />
+          <AppBody />
+        </div>
+      </OrderContext.Provider>
     </IngredientContext.Provider>
   );
 };
