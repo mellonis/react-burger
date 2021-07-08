@@ -2,16 +2,14 @@ import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import cs from 'classnames';
 import { Button } from '@ya.praktikum/react-developer-burger-ui-components';
-import { OrderStatus_t } from '../../types';
 import { useAppDispatch, useAppSelector } from '../../services/store';
-import { apiHostUrl, lexemes } from '../../consts';
+import { lexemes } from '../../consts';
 import {
   addIngredient,
+  placeAnOrder,
   removeIngredient,
   resetDetailedIngredient,
-  resetOrderDetails,
   setDetailedIngredient,
-  setOrderDetails,
 } from '../../services/reducers';
 import Amount from '../amount';
 import BurgerConstructorItem from './burger-constructor-item';
@@ -21,21 +19,6 @@ import OrderDetails from '../order-details';
 
 import style from './style.module.css';
 
-export const getNewOrderId = async (ingredients: string[]): Promise<number> => {
-  const response = await fetch(`${apiHostUrl}/api/orders`, {
-    body: JSON.stringify({ ingredients }),
-    headers: new Headers([['Content-Type', 'application/json']]),
-    method: 'POST',
-  });
-  const result = await response.json();
-
-  if (result.success === true) {
-    return result.order.number;
-  } else {
-    throw new Error("Can't get data from server");
-  }
-};
-
 const BurgerConstructor = ({ className }: { className?: string }) => {
   const {
     actualIngredients,
@@ -43,6 +26,7 @@ const BurgerConstructor = ({ className }: { className?: string }) => {
     ingredients,
     idToIngredientMap,
     orderDetails,
+    orderDetailsRequest,
     totalAmount,
   } = useAppSelector((state) => state.main);
   const dispatch = useAppDispatch();
@@ -63,31 +47,12 @@ const BurgerConstructor = ({ className }: { className?: string }) => {
 
   const topBun = actualIngredients.slice(0, 1)[0];
   const bottomBun = actualIngredients.slice(-1)[0];
-
-  const placeAnOrder = useCallback(
-    async (ingredients) => {
-      dispatch(resetOrderDetails());
-
-      getNewOrderId(ingredients)
-        .then((orderId) => {
-          dispatch(
-            setOrderDetails({
-              id: orderId,
-              message: 'Дождитесь готовности на орбитальной станции',
-              status: OrderStatus_t.BEING_COOKED,
-            })
-          );
-        })
-        .catch(console.error);
-    },
-    [dispatch]
-  );
-
   const placeAnOrderClickHandler = useCallback(() => {
-    placeAnOrder(actualIngredients.map(({ refId }) => refId))
-      .then(() => setIsOrderDetailsShown(true))
-      .catch(console.error);
-  }, [placeAnOrder, actualIngredients]);
+    if (!orderDetailsRequest) {
+      setIsOrderDetailsShown(true);
+      dispatch(placeAnOrder(actualIngredients.map(({ refId }) => refId)));
+    }
+  }, [actualIngredients, dispatch, orderDetailsRequest]);
 
   if (actualIngredients.length === 0) {
     return null;

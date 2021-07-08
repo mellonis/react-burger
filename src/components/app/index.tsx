@@ -1,40 +1,26 @@
 import React, { useEffect } from 'react';
-import { Ingredient_t } from '../../types';
-import { apiHostUrl } from '../../consts';
-import { setIngredients } from '../../services/reducers';
-import { useAppDispatch } from '../../services/store';
+import { useAppDispatch, useAppSelector } from '../../services/store';
+import { fetchIngredients } from '../../services/reducers';
 
 import AppHeader from '../app-header';
 import AppBody from '../app-body';
 
 import style from './style.module.css';
 
-export const fetchIngredients = async (): Promise<Ingredient_t[]> => {
-  const response = await fetch(`${apiHostUrl}/api/ingredients`);
-  const result = await response.json();
-
-  if (result.success === true) {
-    return result.data;
-  } else {
-    throw new Error("Can't get data from server");
-  }
-};
-
 const App = () => {
+  const { ingredientsError, ingredientsRequest } = useAppSelector(
+    (state) => state.main
+  );
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    fetchIngredients()
-      .then((ingredients) => {
-        dispatch(setIngredients(ingredients));
-      })
-      .catch(console.error);
+    dispatch(fetchIngredients());
   }, [dispatch]);
 
   return (
     <div className={style.main}>
       <AppHeader />
-      <AppBody />
+      {!ingredientsRequest && !ingredientsError && <AppBody />}
     </div>
   );
 };

@@ -1,4 +1,5 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { v4 as uuidV4 } from 'uuid';
 import {
   ActualIngredient_t,
   ActualIngredientType,
@@ -6,25 +7,36 @@ import {
   IngredientType,
   OrderDetails_t,
 } from '../../types';
-import { v4 as uuidv4 } from 'uuid';
+import {
+  fetchIngredients as apiFetchIngredients,
+  placeAnOrder as apiPlaceAnOrder,
+} from '../api';
 
-const generateIngredientId = () => uuidv4();
+const generateIngredientId = () => uuidV4();
 
-const initialState: {
+const initialState: Readonly<{
   actualIngredients: ActualIngredient_t[];
   detailedIngredient: Ingredient_t | null;
   idToIngredientMap: { [key: string]: Ingredient_t };
   idToActualIngredientsCountMap: { [key: string]: number };
   ingredients: Ingredient_t[];
+  ingredientsError: unknown | null;
+  ingredientsRequest: boolean;
   orderDetails: OrderDetails_t | null;
+  orderDetailsError: unknown | null;
+  orderDetailsRequest: boolean;
   totalAmount: number;
-} = {
+}> = {
   actualIngredients: [],
   detailedIngredient: null,
   idToActualIngredientsCountMap: {},
   idToIngredientMap: {},
   ingredients: [],
+  ingredientsError: null,
+  ingredientsRequest: false,
   orderDetails: null,
+  orderDetailsError: null,
+  orderDetailsRequest: false,
   totalAmount: 0,
 };
 
@@ -56,8 +68,18 @@ const buildIdToActualIngredientsCountMap = ({
     return map;
   }, {} as InitialState_t['idToActualIngredientsCountMap']);
 
+export const fetchIngredients = createAsyncThunk(
+  'main/fetchIngredients',
+  apiFetchIngredients
+);
+
+export const placeAnOrder = createAsyncThunk(
+  'main/placeAnOrder',
+  apiPlaceAnOrder
+);
+
 export const appSlice = createSlice({
-  name: 'app',
+  name: 'main',
   initialState,
   reducers: {
     addIngredient(state, { payload: ingredient }: PayloadAction<Ingredient_t>) {
@@ -118,25 +140,69 @@ export const appSlice = createSlice({
     resetDetailedIngredient(state) {
       state.detailedIngredient = null;
     },
-    resetOrderDetails(state) {
-      state.orderDetails = null;
-    },
     setDetailedIngredient(state, action: PayloadAction<Ingredient_t>) {
       state.detailedIngredient = action.payload;
     },
-    setIngredients(
-      state,
-      { payload: ingredients }: PayloadAction<Ingredient_t[]>
-    ) {
-      state.ingredients = ingredients;
-      state.idToIngredientMap = {};
-      ingredients.forEach((ingredient) => {
-        state.idToIngredientMap[ingredient._id] = ingredient;
-      });
-    },
-    setOrderDetails(state, action: PayloadAction<OrderDetails_t>) {
-      state.orderDetails = action.payload;
-    },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchIngredients.pending, (state) => {
+        Object.assign(state, {
+          ...initialState,
+          ingredientsRequest: true,
+        });
+      })
+      .addCase(
+        fetchIngredients.fulfilled,
+        (state, { payload: ingredients }: PayloadAction<Ingredient_t[]>) => {
+          const idToIngredientMap: InitialState_t['idToIngredientMap'] = {};
+
+          ingredients.forEach((ingredient) => {
+            idToIngredientMap[ingredient._id] = ingredient;
+          });
+
+          Object.assign(state, {
+            idToIngredientMap,
+            ingredients,
+            ingredientsRequest: false,
+          });
+        }
+      )
+      .addCase(
+        fetchIngredients.rejected,
+        (state, { payload: error }: PayloadAction<unknown>) => {
+          Object.assign(state, {
+            ingredientsError: error,
+            ingredientsRequest: false,
+          });
+        }
+      );
+    builder
+      .addCase(placeAnOrder.pending, (state) => {
+        Object.assign(state, {
+          orderDetails: null,
+          orderDetailsError: null,
+          orderDetailsRequest: true,
+        });
+      })
+      .addCase(
+        placeAnOrder.fulfilled,
+        (state, { payload: orderDetails }: PayloadAction<OrderDetails_t>) => {
+          Object.assign(state, {
+            orderDetails,
+            orderDetailsRequest: false,
+          });
+        }
+      )
+      .addCase(
+        placeAnOrder.rejected,
+        (state, { payload: error }: PayloadAction<unknown>) => {
+          Object.assign(state, {
+            orderDetailsError: error,
+            orderDetailsRequest: false,
+          });
+        }
+      );
   },
 });
 
@@ -144,9 +210,6 @@ export const {
   addIngredient,
   removeIngredient,
   resetDetailedIngredient,
-  resetOrderDetails,
   setDetailedIngredient,
-  setIngredients,
-  setOrderDetails,
 } = appSlice.actions;
 export default appSlice.reducer;

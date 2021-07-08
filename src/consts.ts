@@ -1,7 +1,5 @@
 import { OrderStatus_t } from './types';
 
-export const apiHostUrl = 'https://norma.nomoreparties.space';
-
 export const orderStatusToStatusTitleMap: {
   [key in OrderStatus_t]: string;
 } = {
