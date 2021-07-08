@@ -1,9 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import cs from 'classnames';
-import { useSelector } from 'react-redux';
 import { Ingredient_t } from '../../../types';
-import { RootState } from '../../../services/store';
+import { useAppSelector } from '../../../services/store';
 import Amount from '../../amount';
 import { Counter } from '@ya.praktikum/react-developer-burger-ui-components';
 
@@ -16,8 +15,8 @@ const BurgerIngredient = ({
   ingredient: Ingredient_t;
   onClick?: () => void;
 }) => {
-  const { idToActualIngredientsCountMap } = useSelector(
-    (state: RootState) => state.main
+  const { idToActualIngredientsCountMap } = useAppSelector(
+    (state) => state.main
   );
 
   return (

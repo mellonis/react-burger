@@ -1,10 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import cs from 'classnames';
-import { useDispatch, useSelector } from 'react-redux';
 import { Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import { OrderStatus_t } from '../../types';
-import { RootState } from '../../services/store';
+import { useAppDispatch, useAppSelector } from '../../services/store';
 import { apiHostUrl, lexemes } from '../../consts';
 import {
   addIngredient,
@@ -45,8 +44,8 @@ const BurgerConstructor = ({ className }: { className?: string }) => {
     idToIngredientMap,
     orderDetails,
     totalAmount,
-  } = useSelector((state: RootState) => state.main);
-  const dispatch = useDispatch();
+  } = useAppSelector((state) => state.main);
+  const dispatch = useAppDispatch();
   const [isIngredientDetailsShown, setIsIngredientDetailsShown] = useState(
     false
   );

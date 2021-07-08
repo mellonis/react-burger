@@ -1,10 +1,9 @@
 import React, { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import cs from 'classnames';
-import { useSelector } from 'react-redux';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import { IngredientType } from '../../types';
-import { RootState } from '../../services/store';
+import { useAppSelector } from '../../services/store';
 import { lexemes } from '../../consts';
 import BurgerIngredientType from './burger-ingredient-type';
 
@@ -20,7 +19,7 @@ const ingredientTypes = Object.keys(ingredientTypeTitles) as Array<
 >;
 
 const BurgerIngredients = ({ className }: { className?: string }) => {
-  const { ingredients } = useSelector((state: RootState) => state.main);
+  const { ingredients } = useAppSelector((state) => state.main);
   const [selectedIngredientType, setSelectedIngredientType] = useState(
     ingredientTypes[0]
   );

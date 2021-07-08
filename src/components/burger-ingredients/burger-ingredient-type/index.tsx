@@ -1,9 +1,8 @@
 import React, { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import cs from 'classnames';
-import { useDispatch, useSelector } from 'react-redux';
 import { Ingredient_t } from '../../../types';
-import { RootState } from '../../../services/store';
+import { useAppDispatch, useAppSelector } from '../../../services/store';
 import {
   resetDetailedIngredient,
   setDetailedIngredient,
@@ -22,11 +21,11 @@ const BurgerIngredientType = ({
   title: string;
   ingredients: Ingredient_t[];
 }) => {
-  const { detailedIngredient } = useSelector((state: RootState) => state.main);
+  const { detailedIngredient } = useAppSelector((state) => state.main);
   const [isIngredientDetailsShown, setIsIngredientDetailsShown] = useState(
     false
   );
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const onCloseHandler = useCallback(() => {
     dispatch(resetDetailedIngredient());
     setIsIngredientDetailsShown(false);

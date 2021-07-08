@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
 import { Ingredient_t } from '../../types';
 import { apiHostUrl } from '../../consts';
 import { setIngredients } from '../../services/reducers';
+import { useAppDispatch } from '../../services/store';
 
 import AppHeader from '../app-header';
 import AppBody from '../app-body';
@@ -21,7 +21,7 @@ export const fetchIngredients = async (): Promise<Ingredient_t[]> => {
 };
 
 const App = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     fetchIngredients()
