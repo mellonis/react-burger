@@ -5,8 +5,8 @@ import {
   ConstructorElement,
   DragIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
+import { ActualIngredientType, Ingredient_t } from '../../../types';
 import { lexemes } from '../../../consts';
-import { Ingredient_t } from '../../../types';
 
 import style from './style.module.css';
 
@@ -23,7 +23,7 @@ const BurgerConstructorItem = ({
   isLocked: boolean;
   onShowIngredientInfo?: () => void;
   onDelete?: () => void;
-  type?: 'top' | 'bottom';
+  type?: ActualIngredientType;
 }) => {
   return (
     <div
@@ -60,7 +60,13 @@ const BurgerConstructorItem = ({
           isLocked={isLocked}
           price={price}
           text={`${name}${
-            type ? ` (${type === 'top' ? lexemes.top : lexemes.bottom})` : ''
+            type
+              ? ` (${
+                  type === ActualIngredientType.top
+                    ? lexemes.top
+                    : lexemes.bottom
+                })`
+              : ''
           }`}
           thumbnail={image}
           type={type}
@@ -76,7 +82,10 @@ BurgerConstructorItem.propTypes = {
   isLocked: PropTypes.bool.isRequired,
   onShowIngredientInfo: PropTypes.func,
   onDelete: PropTypes.func,
-  type: PropTypes.oneOf(['top', 'bottom']),
+  type: PropTypes.oneOf([
+    ActualIngredientType.top,
+    ActualIngredientType.bottom,
+  ]),
 };
 
 export default BurgerConstructorItem;

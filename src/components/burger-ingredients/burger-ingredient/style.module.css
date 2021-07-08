@@ -6,6 +6,11 @@
     cursor: pointer;
 }
 
+.burger-ingredient__image-wrapper {
+    display: flex;
+    justify-content: center;
+}
+
 .burger-ingredient__price-wrapper {
     justify-content: center;
 }

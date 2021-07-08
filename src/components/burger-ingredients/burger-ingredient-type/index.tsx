@@ -1,7 +1,13 @@
 import React, { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import cs from 'classnames';
+import { useDispatch, useSelector } from 'react-redux';
 import { Ingredient_t } from '../../../types';
+import { RootState } from '../../../services/store';
+import {
+  resetDetailedIngredient,
+  setDetailedIngredient,
+} from '../../../services/reducers';
 import { lexemes } from '../../../consts';
 import BurgerIngredient from '../burger-ingredient';
 import IngredientDetails from '../../ingredient-details';
@@ -16,15 +22,15 @@ const BurgerIngredientType = ({
   title: string;
   ingredients: Ingredient_t[];
 }) => {
-  const [detailedIngredient, setDetailedIngredient] = useState(
-    null as Ingredient_t | null
+  const { detailedIngredient } = useSelector((state: RootState) => state.main);
+  const [isIngredientDetailsShown, setIsIngredientDetailsShown] = useState(
+    false
   );
-  const handleClick = useCallback(
-    (ix: number) => {
-      setDetailedIngredient(ingredients[ix]);
-    },
-    [ingredients]
-  );
+  const dispatch = useDispatch();
+  const onCloseHandler = useCallback(() => {
+    dispatch(resetDetailedIngredient());
+    setIsIngredientDetailsShown(false);
+  }, [dispatch]);
 
   return (
     <li className={'pt-10'}>
@@ -39,7 +45,10 @@ const BurgerIngredientType = ({
           <React.Fragment key={ingredient._id}>
             <BurgerIngredient
               ingredient={ingredient}
-              onClick={() => handleClick(ix)}
+              onClick={() => {
+                dispatch(setDetailedIngredient(ingredients[ix]));
+                setIsIngredientDetailsShown(true);
+              }}
             />
             <li
               className={cs({
@@ -50,11 +59,8 @@ const BurgerIngredientType = ({
           </React.Fragment>
         ))}
       </ul>
-      {detailedIngredient && (
-        <Modal
-          onClose={() => setDetailedIngredient(null)}
-          title={lexemes.ingredientDetails}
-        >
+      {isIngredientDetailsShown && detailedIngredient && (
+        <Modal onClose={onCloseHandler} title={lexemes.ingredientDetails}>
           <IngredientDetails
             className={style['burger-ingredient-type__ingredient-details']}
             ingredient={detailedIngredient}

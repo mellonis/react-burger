@@ -1,28 +1,41 @@
-import React from 'react';
-import {
-  IngredientContext,
-  OrderContext,
-  useIngredientContextValue,
-  useOrderContextValue,
-} from '../../contexts';
+import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { Ingredient_t } from '../../types';
+import { apiHostUrl } from '../../consts';
+import { setIngredients } from '../../services/reducers';
+
 import AppHeader from '../app-header';
 import AppBody from '../app-body';
 
 import style from './style.module.css';
 
+export const fetchIngredients = async (): Promise<Ingredient_t[]> => {
+  const response = await fetch(`${apiHostUrl}/api/ingredients`);
+  const result = await response.json();
+
+  if (result.success === true) {
+    return result.data;
+  } else {
+    throw new Error("Can't get data from server");
+  }
+};
+
 const App = () => {
-  const ingredientContextValue = useIngredientContextValue();
-  const orderContextValue = useOrderContextValue();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    fetchIngredients()
+      .then((ingredients) => {
+        dispatch(setIngredients(ingredients));
+      })
+      .catch(console.error);
+  }, [dispatch]);
 
   return (
-    <IngredientContext.Provider value={ingredientContextValue}>
-      <OrderContext.Provider value={orderContextValue}>
-        <div className={style.app}>
-          <AppHeader />
-          <AppBody />
-        </div>
-      </OrderContext.Provider>
-    </IngredientContext.Provider>
+    <div className={style.main}>
+      <AppHeader />
+      <AppBody />
+    </div>
   );
 };
 

@@ -1,19 +1,25 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import cs from 'classnames';
+import { useSelector } from 'react-redux';
 import { Ingredient_t } from '../../../types';
+import { RootState } from '../../../services/store';
 import Amount from '../../amount';
 import { Counter } from '@ya.praktikum/react-developer-burger-ui-components';
 
 import style from './style.module.css';
 
 const BurgerIngredient = ({
-  ingredient: { image, name: title, price },
+  ingredient: { _id, image, name: title, price },
   onClick,
 }: {
   ingredient: Ingredient_t;
   onClick?: () => void;
 }) => {
+  const { idToActualIngredientsCountMap } = useSelector(
+    (state: RootState) => state.main
+  );
+
   return (
     <li
       className={cs(style['burger-ingredient'], {
@@ -21,7 +27,9 @@ const BurgerIngredient = ({
       })}
       onClick={onClick}
     >
-      <Counter count={1} />
+      {idToActualIngredientsCountMap[_id] && (
+        <Counter count={idToActualIngredientsCountMap[_id]} />
+      )}
       <div
         className={cs(style['burger-ingredient__image-wrapper'], 'pl-4 pr-4')}
       >

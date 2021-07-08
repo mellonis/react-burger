@@ -1,7 +1,25 @@
+export enum ActualIngredientType {
+  top = 'top',
+  bottom = 'bottom',
+}
+
+export type ActualIngredient_t = {
+  id: string;
+  refId: string;
+  isLocked?: boolean;
+  type?: ActualIngredientType;
+};
+
+export enum IngredientType {
+  bun = 'bun',
+  sauce = 'sauce',
+  main = 'main',
+}
+
 export type Ingredient_t = {
   _id: string;
   name: string;
-  type: string;
+  type: IngredientType;
   proteins: number;
   fat: number;
   carbohydrates: number;
