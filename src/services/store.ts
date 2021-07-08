@@ -3,6 +3,7 @@ import mainReducer from './reducers';
 import { useDispatch, useSelector } from 'react-redux';
 
 const store = configureStore({
+  devTools: process.env.NODE_ENV === 'development',
   reducer: {
     main: mainReducer,
   },
