@@ -8,6 +8,11 @@
     outline: 1px dashed var(--colors-interface-accent);
 }
 
+.burger-constructor_is-empty button {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
 .burger-constructor_is-can-drop.burger-constructor_is-drag-over .burger-constructor__list {
     outline-style: solid;
 }
