@@ -15,11 +15,15 @@ import Modal from '../../modal';
 import style from './style.module.css';
 
 const BurgerIngredientType = ({
-  title,
+  className,
   ingredients,
+  title,
+  type,
 }: {
-  title: string;
+  className?: string;
   ingredients: Ingredient_t[];
+  title: string;
+  type: string;
 }) => {
   const { detailedIngredient } = useAppSelector((state) => state.main);
   const [isIngredientDetailsShown, setIsIngredientDetailsShown] = useState(
@@ -32,7 +36,7 @@ const BurgerIngredientType = ({
   }, [dispatch]);
 
   return (
-    <li className={'pt-10'}>
+    <li className={cs('pt-10', className)} data-type={type}>
       <div className={'text text_type_main-medium'}>{title}</div>
       <ul
         className={cs(
@@ -71,8 +75,10 @@ const BurgerIngredientType = ({
 };
 
 BurgerIngredientType.propTypes = {
-  title: PropTypes.string.isRequired,
+  className: PropTypes.string,
   ingredients: PropTypes.arrayOf(PropTypes.object).isRequired,
+  title: PropTypes.string.isRequired,
+  type: PropTypes.string.isRequired,
 };
 
 export default BurgerIngredientType;

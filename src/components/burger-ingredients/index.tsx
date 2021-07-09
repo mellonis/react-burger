@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import cs from 'classnames';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
@@ -50,6 +50,41 @@ const BurgerIngredients = ({ className }: { className?: string }) => {
 
     return result;
   }, [ingredients]);
+  const typeListElementRef = useRef<HTMLUListElement>(null);
+
+  useEffect(() => {
+    const { current: typeListElement } = typeListElementRef;
+    const items = typeListElement!.querySelectorAll(
+      `.${style['burger-ingredients__type-item']}`
+    );
+
+    if (items.length > 0) {
+      const intersectionObserver = new IntersectionObserver(
+        (intersectionObserverEntries) => {
+          const target = intersectionObserverEntries.find(
+            ({ isIntersecting }) => isIntersecting
+          )?.target as HTMLLIElement | null;
+
+          if (target) {
+            setSelectedIngredientType(target.dataset.type as IngredientType);
+          }
+        },
+        {
+          root: typeListElement,
+          rootMargin: '-50% 0px -50% 0px',
+          threshold: 0,
+        }
+      );
+
+      items.forEach((item) => {
+        intersectionObserver.observe(item);
+      });
+
+      return () => {
+        intersectionObserver.disconnect();
+      };
+    }
+  }, []);
 
   return (
     <div className={cs(style['burger-ingredients'], 'pb-5', className)}>
@@ -67,23 +102,38 @@ const BurgerIngredients = ({ className }: { className?: string }) => {
             key={type}
             active={selectedIngredientType === type}
             value={type}
-            onClick={(type) =>
-              setSelectedIngredientType(
-                type as keyof typeof ingredientTypeTitles
-              )
-            }
+            onClick={(type) => {
+              const { current: typeListElement } = typeListElementRef;
+
+              if (typeListElement) {
+                const currentListItemElement = typeListElement.querySelector(
+                  `.${style['burger-ingredients__type-item']}[data-type="${type}"]`
+                );
+
+                if (currentListItemElement) {
+                  currentListItemElement.scrollIntoView({ behavior: 'smooth' });
+                }
+              }
+
+              setSelectedIngredientType(type as IngredientType);
+            }}
           >
             {(ingredientTypeTitles as any)[type]}
           </Tab>
         ))}
       </div>
-      <ul className={style['burger-ingredients__type-list']}>
+      <ul
+        ref={typeListElementRef}
+        className={style['burger-ingredients__type-list']}
+      >
         {Array.from(ingredientTypeToIngredientsMap.entries()).map(
           ([type, ingredients]) => (
             <BurgerIngredientType
               key={type}
-              title={ingredientTypeTitles[type as IngredientType]}
+              className={style['burger-ingredients__type-item']}
               ingredients={ingredients}
+              title={ingredientTypeTitles[type as IngredientType]}
+              type={type}
             />
           )
         )}
