@@ -118,6 +118,21 @@ export const appSlice = createSlice({
         state
       );
     },
+    moveIngredient(
+      state,
+      { payload: [fromIndex, toIndex] }: PayloadAction<[number, number]>
+    ) {
+      const { actualIngredients: actualIngredientsFromState } = state;
+      const actualIngredients = [...actualIngredientsFromState];
+
+      actualIngredients.splice(
+        toIndex,
+        0,
+        actualIngredients.splice(fromIndex, 1)[0]
+      );
+
+      state.actualIngredients = actualIngredients;
+    },
     removeIngredient(
       state,
       { payload: idToRemove }: PayloadAction<ActualIngredient_t['id']>
@@ -208,6 +223,7 @@ export const appSlice = createSlice({
 
 export const {
   addIngredient,
+  moveIngredient,
   removeIngredient,
   resetDetailedIngredient,
   setDetailedIngredient,

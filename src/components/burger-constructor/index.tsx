@@ -4,7 +4,6 @@ import cs from 'classnames';
 import { useDrop } from 'react-dnd';
 import { Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import {
-  ActualIngredientDragItem,
   DraggableTypes,
   IngredientDragItem,
   IngredientType,
@@ -30,7 +29,6 @@ const BurgerConstructor = ({ className }: { className?: string }) => {
   const {
     actualIngredients,
     detailedIngredient,
-    ingredients,
     idToIngredientMap,
     orderDetails,
     orderDetailsRequest,
@@ -55,8 +53,8 @@ const BurgerConstructor = ({ className }: { className?: string }) => {
     }
   }, [actualIngredients, dispatch, orderDetailsRequest]);
 
-  const [{ isIngredientDragOver, isIngredientCanDrop }, dropRef] = useDrop({
-    accept: [DraggableTypes.ingredient, DraggableTypes.actualIngredient],
+  const [{ isCanDrop, isDragOver }, dropRef] = useDrop({
+    accept: DraggableTypes.ingredient,
     canDrop(item, monitor) {
       return !(
         actualIngredients.length === 0 &&
@@ -64,36 +62,15 @@ const BurgerConstructor = ({ className }: { className?: string }) => {
         (item as IngredientDragItem).type !== IngredientType.bun
       );
     },
-    drop(item, monitor) {
-      switch (monitor.getItemType()) {
-        case DraggableTypes.ingredient: {
-          const { refId } = item as IngredientDragItem;
+    drop(item) {
+      const { refId } = item as IngredientDragItem;
 
-          dispatch(addIngredient(idToIngredientMap[refId]));
-          break;
-        }
-        case DraggableTypes.actualIngredient: {
-          const { id } = item as ActualIngredientDragItem;
-          const refId = actualIngredients.find(
-            ({ id: actualIngredientId }) => actualIngredientId === id
-          )!.refId;
-
-          dispatch(
-            addIngredient(ingredients.find(({ _id }) => _id === refId)!)
-          );
-          dispatch(removeIngredient(id));
-          break;
-        }
-      }
+      dispatch(addIngredient(idToIngredientMap[refId]));
     },
     collect(monitor) {
       return {
-        isIngredientDragOver:
-          monitor.getItemType() === DraggableTypes.ingredient &&
-          monitor.isOver(),
-        isIngredientCanDrop:
-          monitor.getItemType() === DraggableTypes.ingredient &&
-          monitor.canDrop(),
+        isCanDrop: monitor.canDrop(),
+        isDragOver: monitor.isOver(),
       };
     },
   });
@@ -106,8 +83,8 @@ const BurgerConstructor = ({ className }: { className?: string }) => {
         {
           [style['burger-constructor_is-empty']]:
             actualIngredients.length === 0,
-          [style['burger-constructor_is-drag-over']]: isIngredientDragOver,
-          [style['burger-constructor_is-can-drop']]: isIngredientCanDrop,
+          [style['burger-constructor_is-can-drop']]: isCanDrop,
+          [style['burger-constructor_is-drag-over']]: isDragOver,
         },
         className
       )}
@@ -139,27 +116,26 @@ const BurgerConstructor = ({ className }: { className?: string }) => {
         <div className={style['burger-constructor__filling']}>
           {actualIngredients
             .slice(1, -1)
-            .map(({ id, isLocked = false, refId, type }, ix, list) => {
+            .map(({ id, isLocked = false, refId, type }, ix) => {
               const ingredient = idToIngredientMap[refId];
 
               return (
                 ingredient && (
-                  <React.Fragment key={id}>
-                    <BurgerConstructorItem
-                      id={id}
-                      ingredient={idToIngredientMap[refId]!}
-                      isLocked={isLocked}
-                      onShowIngredientInfo={() => {
-                        dispatch(setDetailedIngredient(ingredient));
-                        setIsIngredientDetailsShown(true);
-                      }}
-                      onDelete={() => {
-                        dispatch(removeIngredient(id));
-                      }}
-                      type={type}
-                    />
-                    {ix + 1 < list.length ? <div className={'pt-4'} /> : null}
-                  </React.Fragment>
+                  <BurgerConstructorItem
+                    key={id}
+                    id={id}
+                    index={ix + 1}
+                    ingredient={idToIngredientMap[refId]!}
+                    isLocked={isLocked}
+                    onShowIngredientInfo={() => {
+                      dispatch(setDetailedIngredient(ingredient));
+                      setIsIngredientDetailsShown(true);
+                    }}
+                    onDelete={() => {
+                      dispatch(removeIngredient(id));
+                    }}
+                    type={type}
+                  />
                 )
               );
             })}

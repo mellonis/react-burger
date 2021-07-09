@@ -25,7 +25,9 @@ const BurgerIngredient = ({
   );
   const [{ isItPicked }, dragRef, preview] = useDrag({
     type: DraggableTypes.ingredient,
-    options: {},
+    options: {
+      dropEffect: 'copy',
+    },
     item: {
       refId: _id,
       type,
