@@ -1,16 +1,10 @@
-import React, { useCallback, useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import cs from 'classnames';
 import { Ingredient_t } from '../../../types';
-import { useAppDispatch, useAppSelector } from '../../../services/store';
-import {
-  resetDetailedIngredient,
-  setDetailedIngredient,
-} from '../../../services/reducers';
-import { lexemes } from '../../../consts';
+import { useAppDispatch } from '../../../services/store';
+import { setDetailedIngredient } from '../../../services/reducers';
 import BurgerIngredient from '../burger-ingredient';
-import IngredientDetails from '../../ingredient-details';
-import Modal from '../../modal';
 
 import style from './style.module.css';
 
@@ -25,15 +19,7 @@ const BurgerIngredientType = ({
   title: string;
   type: string;
 }) => {
-  const { detailedIngredient } = useAppSelector((state) => state.main);
-  const [isIngredientDetailsShown, setIsIngredientDetailsShown] = useState(
-    false
-  );
   const dispatch = useAppDispatch();
-  const onCloseHandler = useCallback(() => {
-    dispatch(resetDetailedIngredient());
-    setIsIngredientDetailsShown(false);
-  }, [dispatch]);
 
   return (
     <li className={cs('pt-10', className)} data-type={type}>
@@ -50,7 +36,6 @@ const BurgerIngredientType = ({
               ingredient={ingredient}
               onClick={() => {
                 dispatch(setDetailedIngredient(ingredients[ix]));
-                setIsIngredientDetailsShown(true);
               }}
             />
             <li
@@ -62,14 +47,6 @@ const BurgerIngredientType = ({
           </React.Fragment>
         ))}
       </ul>
-      {isIngredientDetailsShown && detailedIngredient && (
-        <Modal onClose={onCloseHandler} title={lexemes.ingredientDetails}>
-          <IngredientDetails
-            className={style['burger-ingredient-type__ingredient-details']}
-            ingredient={detailedIngredient}
-          />
-        </Modal>
-      )}
     </li>
   );
 };

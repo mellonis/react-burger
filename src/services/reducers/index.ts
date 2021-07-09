@@ -155,6 +155,15 @@ export const appSlice = createSlice({
     resetDetailedIngredient(state) {
       state.detailedIngredient = null;
     },
+    resetOrderDetails(state) {
+      if (!state.orderDetailsRequest) {
+        Object.assign(state, {
+          orderDetails: null,
+          orderDetailsError: null,
+          orderDetailsRequest: false,
+        });
+      }
+    },
     setDetailedIngredient(state, action: PayloadAction<Ingredient_t>) {
       state.detailedIngredient = action.payload;
     },
@@ -226,6 +235,7 @@ export const {
   moveIngredient,
   removeIngredient,
   resetDetailedIngredient,
+  resetOrderDetails,
   setDetailedIngredient,
 } = appSlice.actions;
 export default appSlice.reducer;

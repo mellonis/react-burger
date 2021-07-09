@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import cs from 'classnames';
 import { useDrop } from 'react-dnd';
@@ -14,41 +14,26 @@ import {
   addIngredient,
   placeAnOrder,
   removeIngredient,
-  resetDetailedIngredient,
   setDetailedIngredient,
 } from '../../services/reducers';
 import Amount from '../amount';
 import BurgerConstructorItem from './burger-constructor-item';
-import IngredientDetails from '../ingredient-details';
-import Modal from '../modal';
-import OrderDetails from '../order-details';
 
 import style from './style.module.css';
 
 const BurgerConstructor = ({ className }: { className?: string }) => {
   const {
     actualIngredients,
-    detailedIngredient,
     idToIngredientMap,
-    orderDetails,
     orderDetailsRequest,
     totalAmount,
   } = useAppSelector((state) => state.main);
   const dispatch = useAppDispatch();
-  const [isIngredientDetailsShown, setIsIngredientDetailsShown] = useState(
-    false
-  );
-  const [isOrderDetailsShown, setIsOrderDetailsShown] = useState(false);
-  const onCloseHandler = useCallback(() => {
-    dispatch(resetDetailedIngredient());
-    setIsIngredientDetailsShown(false);
-  }, [dispatch]);
 
   const topBun = actualIngredients.slice(0, 1)[0];
   const bottomBun = actualIngredients.slice(-1)[0];
   const placeAnOrderClickHandler = useCallback(() => {
     if (!orderDetailsRequest) {
-      setIsOrderDetailsShown(true);
       dispatch(placeAnOrder(actualIngredients.map(({ refId }) => refId)));
     }
   }, [actualIngredients, dispatch, orderDetailsRequest]);
@@ -103,7 +88,6 @@ const BurgerConstructor = ({ className }: { className?: string }) => {
                     isLocked={isLocked}
                     onShowIngredientInfo={() => {
                       dispatch(setDetailedIngredient(ingredient));
-                      setIsIngredientDetailsShown(true);
                     }}
                     type={type}
                   />
@@ -129,7 +113,6 @@ const BurgerConstructor = ({ className }: { className?: string }) => {
                     isLocked={isLocked}
                     onShowIngredientInfo={() => {
                       dispatch(setDetailedIngredient(ingredient));
-                      setIsIngredientDetailsShown(true);
                     }}
                     onDelete={() => {
                       dispatch(removeIngredient(id));
@@ -154,7 +137,6 @@ const BurgerConstructor = ({ className }: { className?: string }) => {
                     isLocked={isLocked}
                     onShowIngredientInfo={() => {
                       dispatch(setDetailedIngredient(ingredient));
-                      setIsIngredientDetailsShown(true);
                     }}
                     type={type}
                   />
@@ -179,25 +161,6 @@ const BurgerConstructor = ({ className }: { className?: string }) => {
           {lexemes.placeAnOrder}
         </Button>
       </div>
-      {isOrderDetailsShown && orderDetails && (
-        <Modal onClose={() => setIsOrderDetailsShown(false)}>
-          <OrderDetails
-            className={cs(
-              style['burger-constructor__order-details'],
-              'mt-4 mb-20'
-            )}
-            orderDetails={orderDetails}
-          />
-        </Modal>
-      )}
-      {isIngredientDetailsShown && detailedIngredient && (
-        <Modal onClose={onCloseHandler} title={lexemes.ingredientDetails}>
-          <IngredientDetails
-            className={cs(style['burger-constructor__ingredient-details'])}
-            ingredient={detailedIngredient}
-          />
-        </Modal>
-      )}
     </div>
   );
 };
