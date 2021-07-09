@@ -1,9 +1,14 @@
 .burger-ingredient {
+    border-radius: 20px;
     position: relative;
 }
 
 .burger-ingredient_interactive {
     cursor: pointer;
+}
+
+.burger-ingredient_is-picked {
+    background-color: var(--colors-interface-accent);
 }
 
 .burger-ingredient__image-wrapper {

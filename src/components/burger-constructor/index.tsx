@@ -1,7 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import cs from 'classnames';
+import { useDrop } from 'react-dnd';
 import { Button } from '@ya.praktikum/react-developer-burger-ui-components';
+import { ActualIngredient_t, Ingredient_t } from '../../types';
 import { useAppDispatch, useAppSelector } from '../../services/store';
 import { lexemes } from '../../consts';
 import {
@@ -54,13 +56,53 @@ const BurgerConstructor = ({ className }: { className?: string }) => {
     }
   }, [actualIngredients, dispatch, orderDetailsRequest]);
 
+  const [{ isDragOver }, dropRef] = useDrop({
+    accept: ['ingredient', 'actual-ingredient'],
+    drop(item, monitor) {
+      switch (monitor.getItemType()) {
+        case 'ingredient': {
+          const { refId } = item as { refId: Ingredient_t['_id'] };
+
+          dispatch(addIngredient(idToIngredientMap[refId]));
+          break;
+        }
+        case 'actual-ingredient': {
+          const { id } = item as { id: ActualIngredient_t['id'] };
+          const refId = actualIngredients.find(
+            ({ id: actualIngredientId }) => actualIngredientId === id
+          )!.refId;
+
+          dispatch(
+            addIngredient(ingredients.find(({ _id }) => _id === refId)!)
+          );
+          dispatch(removeIngredient(id));
+          break;
+        }
+      }
+    },
+    collect(monitor) {
+      return {
+        isDragOver: monitor.isOver(),
+      };
+    },
+  });
+
   if (actualIngredients.length === 0) {
     return null;
   }
 
   return (
-    <div className={cs(style['burger-constructor'], 'pt-25 pb-5', className)}>
-      <div className={style['burger-constructor__list']}>
+    <div
+      className={cs(
+        style['burger-constructor'],
+        'pt-25 pb-5',
+        {
+          [style['burger-constructor_is-drag-over']]: isDragOver,
+        },
+        className
+      )}
+    >
+      <div ref={dropRef} className={style['burger-constructor__list']}>
         {topBun && (
           <>
             {(() => {
@@ -94,6 +136,7 @@ const BurgerConstructor = ({ className }: { className?: string }) => {
                 ingredient && (
                   <React.Fragment key={id}>
                     <BurgerConstructorItem
+                      id={id}
                       ingredient={idToIngredientMap[refId]!}
                       isLocked={isLocked}
                       onShowIngredientInfo={() => {

@@ -4,6 +4,10 @@
     grid-template-columns: 32px 24px 1fr;
 }
 
+:local .burger-constructor-item :global .constructor-element__image {
+    pointer-events: none;
+}
+
 .burger-constructor-item__constructor-element-wrapper {
     display: flex;
 }

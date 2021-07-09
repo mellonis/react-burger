@@ -1,30 +1,50 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import cs from 'classnames';
+import { DragPreviewImage, useDrag } from 'react-dnd';
 import {
   ConstructorElement,
   DragIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import { ActualIngredientType, Ingredient_t } from '../../../types';
+import {
+  ActualIngredient_t,
+  ActualIngredientType,
+  Ingredient_t,
+} from '../../../types';
 import { lexemes } from '../../../consts';
 
 import style from './style.module.css';
 
 const BurgerConstructorItem = ({
   className,
-  ingredient: { image, name, price },
+  id,
+  ingredient: { _id, image, name, price },
   isLocked,
   onShowIngredientInfo,
   onDelete,
   type,
 }: {
   className?: string;
+  id?: ActualIngredient_t['id'];
   ingredient: Ingredient_t;
   isLocked: boolean;
   onShowIngredientInfo?: () => void;
   onDelete?: () => void;
   type?: ActualIngredientType;
 }) => {
+  const [, dragRef, preview] = useDrag({
+    type: 'actual-ingredient',
+    canDrag: !isLocked,
+    item: {
+      id,
+    },
+    collect(monitor) {
+      return {
+        isItPicked: monitor.isDragging(),
+      };
+    },
+  });
+
   return (
     <div
       className={cs(
@@ -48,7 +68,14 @@ const BurgerConstructorItem = ({
         }
       }}
     >
-      {!isLocked ? <DragIcon type={'primary'} /> : <div className={'pl-8'} />}
+      {!isLocked ? (
+        <div ref={dragRef}>
+          <DragIcon type={'primary'} />
+        </div>
+      ) : (
+        <div className={'pl-8'} />
+      )}
+      <DragPreviewImage connect={preview} src={image} />
       <div className={'pl-6'} />
       <div
         className={
@@ -78,6 +105,7 @@ const BurgerConstructorItem = ({
 
 BurgerConstructorItem.propTypes = {
   className: PropTypes.string,
+  id: PropTypes.string,
   ingredient: PropTypes.object.isRequired,
   isLocked: PropTypes.bool.isRequired,
   onShowIngredientInfo: PropTypes.func,
