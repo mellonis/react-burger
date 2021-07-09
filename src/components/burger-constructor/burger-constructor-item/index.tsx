@@ -8,7 +8,9 @@ import {
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import {
   ActualIngredient_t,
+  ActualIngredientDragItem,
   ActualIngredientType,
+  DraggableTypes,
   Ingredient_t,
 } from '../../../types';
 import { lexemes } from '../../../consts';
@@ -33,11 +35,11 @@ const BurgerConstructorItem = ({
   type?: ActualIngredientType;
 }) => {
   const [, dragRef, preview] = useDrag({
-    type: 'actual-ingredient',
+    type: DraggableTypes.actualIngredient,
     canDrag: !isLocked,
     item: {
       id,
-    },
+    } as ActualIngredientDragItem,
     collect(monitor) {
       return {
         isItPicked: monitor.isDragging(),

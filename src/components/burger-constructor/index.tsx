@@ -1,9 +1,14 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import cs from 'classnames';
 import { useDrop } from 'react-dnd';
 import { Button } from '@ya.praktikum/react-developer-burger-ui-components';
-import { ActualIngredient_t, Ingredient_t } from '../../types';
+import {
+  ActualIngredientDragItem,
+  DraggableTypes,
+  IngredientDragItem,
+  IngredientType,
+} from '../../types';
 import { useAppDispatch, useAppSelector } from '../../services/store';
 import { lexemes } from '../../consts';
 import {
@@ -41,12 +46,6 @@ const BurgerConstructor = ({ className }: { className?: string }) => {
     setIsIngredientDetailsShown(false);
   }, [dispatch]);
 
-  useEffect(() => {
-    ingredients.forEach((ingredient) => {
-      dispatch(addIngredient(ingredient));
-    });
-  }, [dispatch, ingredients]);
-
   const topBun = actualIngredients.slice(0, 1)[0];
   const bottomBun = actualIngredients.slice(-1)[0];
   const placeAnOrderClickHandler = useCallback(() => {
@@ -56,18 +55,25 @@ const BurgerConstructor = ({ className }: { className?: string }) => {
     }
   }, [actualIngredients, dispatch, orderDetailsRequest]);
 
-  const [{ isDragOver }, dropRef] = useDrop({
-    accept: ['ingredient', 'actual-ingredient'],
+  const [{ isIngredientDragOver, isIngredientCanDrop }, dropRef] = useDrop({
+    accept: [DraggableTypes.ingredient, DraggableTypes.actualIngredient],
+    canDrop(item, monitor) {
+      return !(
+        actualIngredients.length === 0 &&
+        monitor.getItemType() === DraggableTypes.ingredient &&
+        (item as IngredientDragItem).type !== IngredientType.bun
+      );
+    },
     drop(item, monitor) {
       switch (monitor.getItemType()) {
-        case 'ingredient': {
-          const { refId } = item as { refId: Ingredient_t['_id'] };
+        case DraggableTypes.ingredient: {
+          const { refId } = item as IngredientDragItem;
 
           dispatch(addIngredient(idToIngredientMap[refId]));
           break;
         }
-        case 'actual-ingredient': {
-          const { id } = item as { id: ActualIngredient_t['id'] };
+        case DraggableTypes.actualIngredient: {
+          const { id } = item as ActualIngredientDragItem;
           const refId = actualIngredients.find(
             ({ id: actualIngredientId }) => actualIngredientId === id
           )!.refId;
@@ -82,14 +88,15 @@ const BurgerConstructor = ({ className }: { className?: string }) => {
     },
     collect(monitor) {
       return {
-        isDragOver: monitor.isOver(),
+        isIngredientDragOver:
+          monitor.getItemType() === DraggableTypes.ingredient &&
+          monitor.isOver(),
+        isIngredientCanDrop:
+          monitor.getItemType() === DraggableTypes.ingredient &&
+          monitor.canDrop(),
       };
     },
   });
-
-  if (actualIngredients.length === 0) {
-    return null;
-  }
 
   return (
     <div
@@ -97,7 +104,10 @@ const BurgerConstructor = ({ className }: { className?: string }) => {
         style['burger-constructor'],
         'pt-25 pb-5',
         {
-          [style['burger-constructor_is-drag-over']]: isDragOver,
+          [style['burger-constructor_is-empty']]:
+            actualIngredients.length === 0,
+          [style['burger-constructor_is-drag-over']]: isIngredientDragOver,
+          [style['burger-constructor_is-can-drop']]: isIngredientCanDrop,
         },
         className
       )}

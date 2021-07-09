@@ -10,6 +10,11 @@ export type ActualIngredient_t = {
   type?: ActualIngredientType;
 };
 
+export enum DraggableTypes {
+  ingredient = 'ingredient',
+  actualIngredient = 'actualIngredient',
+}
+
 export enum IngredientType {
   bun = 'bun',
   sauce = 'sauce',
@@ -29,6 +34,15 @@ export type Ingredient_t = {
   image_mobile: string;
   image_large: string;
   __v: number;
+};
+
+export type IngredientDragItem = {
+  refId: Ingredient_t['_id'];
+  type: IngredientType;
+};
+
+export type ActualIngredientDragItem = {
+  id: ActualIngredient_t['id'];
 };
 
 export enum OrderStatus_t {

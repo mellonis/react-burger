@@ -2,7 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import cs from 'classnames';
 import { DragPreviewImage, useDrag } from 'react-dnd';
-import { Ingredient_t } from '../../../types';
+import {
+  DraggableTypes,
+  Ingredient_t,
+  IngredientDragItem,
+} from '../../../types';
 import { useAppSelector } from '../../../services/store';
 import Amount from '../../amount';
 import { Counter } from '@ya.praktikum/react-developer-burger-ui-components';
@@ -10,7 +14,7 @@ import { Counter } from '@ya.praktikum/react-developer-burger-ui-components';
 import style from './style.module.css';
 
 const BurgerIngredient = ({
-  ingredient: { _id, image, name: title, price },
+  ingredient: { _id, image, name: title, price, type },
   onClick,
 }: {
   ingredient: Ingredient_t;
@@ -20,11 +24,12 @@ const BurgerIngredient = ({
     (state) => state.main
   );
   const [{ isItPicked }, dragRef, preview] = useDrag({
-    type: 'ingredient',
+    type: DraggableTypes.ingredient,
     options: {},
     item: {
       refId: _id,
-    },
+      type,
+    } as IngredientDragItem,
     collect(monitoring) {
       return {
         isItPicked: monitoring.isDragging(),
