@@ -14,7 +14,7 @@ export const fetchIngredients = async (): Promise<Ingredient_t[]> => {
 };
 
 export const placeAnOrder = async (
-  ingredients: string[]
+  ingredients: Ingredient_t['_id'][]
 ): Promise<OrderDetails_t> => {
   const response = await fetch(`${apiHostUrl}/api/orders`, {
     body: JSON.stringify({ ingredients }),

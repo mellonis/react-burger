@@ -75,7 +75,15 @@ export const fetchIngredients = createAsyncThunk(
 
 export const placeAnOrder = createAsyncThunk(
   'main/placeAnOrder',
-  apiPlaceAnOrder
+  async (ingredients: Ingredient_t['_id'][]) => {
+    if (ingredients.length === 0) {
+      throw new Error(
+        'Unable to place an order for the empty ingredients list'
+      );
+    }
+
+    return apiPlaceAnOrder(ingredients);
+  }
 );
 
 export const appSlice = createSlice({
@@ -194,7 +202,10 @@ export const appSlice = createSlice({
       )
       .addCase(
         fetchIngredients.rejected,
-        (state, { payload: error }: PayloadAction<unknown>) => {
+        (
+          state,
+          { error }: PayloadAction<unknown, string, unknown, unknown>
+        ) => {
           Object.assign(state, {
             ingredientsError: error,
             ingredientsRequest: false,
@@ -220,7 +231,10 @@ export const appSlice = createSlice({
       )
       .addCase(
         placeAnOrder.rejected,
-        (state, { payload: error }: PayloadAction<unknown>) => {
+        (
+          state,
+          { error }: PayloadAction<unknown, string, unknown, unknown>
+        ) => {
           Object.assign(state, {
             orderDetailsError: error,
             orderDetailsRequest: false,
