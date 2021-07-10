@@ -42,7 +42,6 @@ export type IngredientDragItem = {
 };
 
 export type ActualIngredientDragItem = {
-  id: ActualIngredient_t['id'];
   index: number;
 };
 

@@ -7,7 +7,6 @@ import {
   DragIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import {
-  ActualIngredient_t,
   ActualIngredientDragItem,
   ActualIngredientType,
   DraggableTypes,
@@ -21,7 +20,6 @@ import style from './style.module.css';
 
 const BurgerConstructorItem = ({
   className,
-  id,
   index,
   ingredient: { _id, image, name, price },
   isLocked,
@@ -30,7 +28,6 @@ const BurgerConstructorItem = ({
   type,
 }: {
   className?: string;
-  id?: ActualIngredient_t['id'];
   index?: number;
   ingredient: Ingredient_t;
   isLocked: boolean;
@@ -43,7 +40,6 @@ const BurgerConstructorItem = ({
     type: DraggableTypes.actualIngredient,
     canDrag: !isLocked,
     item: {
-      id,
       index,
     } as ActualIngredientDragItem,
     collect(monitor) {
