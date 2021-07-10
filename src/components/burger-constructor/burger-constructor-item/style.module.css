@@ -4,6 +4,10 @@
     grid-template-columns: 32px 24px 1fr;
 }
 
+.burger-constructor-item svg {
+    pointer-events: none;
+}
+
 .burger-constructor-item:first-child {
     padding-top: 0;
 }

@@ -71,7 +71,9 @@ const BurgerConstructorItem = ({
       if (index != null) {
         //mutate the item in order to prevent multiple dispatches
         (item as ActualIngredientDragItem).index = index;
-        dispatch(moveIngredient([draggableIndex, index]));
+        setImmediate(() => {
+          dispatch(moveIngredient([draggableIndex, index]));
+        });
       }
     },
   });
