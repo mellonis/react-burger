@@ -18,6 +18,14 @@ const ingredientTypes = Object.keys(ingredientTypeTitles) as Array<
   keyof typeof ingredientTypeTitles
 >;
 
+const thresholdsStepsCount = 50;
+const thresholds = [
+  ...Array.from({ length: thresholdsStepsCount - 1 }).map(
+    (_, ix) => ix / (thresholdsStepsCount - 1)
+  ),
+  1,
+];
+
 const BurgerIngredients = ({ className }: { className?: string }) => {
   const { ingredients } = useAppSelector((state) => state.main);
   const [selectedIngredientType, setSelectedIngredientType] = useState(
@@ -56,32 +64,46 @@ const BurgerIngredients = ({ className }: { className?: string }) => {
     const { current: typeListElement } = typeListElementRef;
     const items = typeListElement!.querySelectorAll(
       `.${style['burger-ingredients__type-item']}`
-    );
+    ) as NodeListOf<HTMLLIElement>;
 
     if (items.length > 0) {
+      const ingredientToIntersectionRatioMap = new Map();
+
       const intersectionObserver = new IntersectionObserver(
         (intersectionObserverEntries) => {
-          const target = intersectionObserverEntries.find(
-            ({ isIntersecting }) => isIntersecting
-          )?.target as HTMLLIElement | null;
+          intersectionObserverEntries.forEach(
+            ({ target, intersectionRatio }) => {
+              const {
+                dataset: { type },
+              } = target as HTMLLIElement;
 
-          if (target) {
-            setSelectedIngredientType(target.dataset.type as IngredientType);
-          }
+              if (type) {
+                ingredientToIntersectionRatioMap.set(type, intersectionRatio);
+              }
+            }
+          );
+
+          const mostVisibleType = [
+            // @ts-ignore
+            ...ingredientToIntersectionRatioMap.entries(),
+          ].sort(([, irA], [, irB]) => irB - irA)[0][0];
+
+          setSelectedIngredientType(mostVisibleType);
         },
         {
           root: typeListElement,
-          rootMargin: '-50% 0px -50% 0px',
-          threshold: 0,
+          threshold: thresholds,
         }
       );
 
       items.forEach((item) => {
+        ingredientToIntersectionRatioMap.set(item.dataset.type, 0);
         intersectionObserver.observe(item);
       });
 
       return () => {
         intersectionObserver.disconnect();
+        ingredientToIntersectionRatioMap.clear();
       };
     }
   }, []);
@@ -114,8 +136,6 @@ const BurgerIngredients = ({ className }: { className?: string }) => {
                   currentListItemElement.scrollIntoView({ behavior: 'smooth' });
                 }
               }
-
-              setSelectedIngredientType(type as IngredientType);
             }}
           >
             {(ingredientTypeTitles as any)[type]}
