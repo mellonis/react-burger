@@ -1,9 +1,10 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import cs from 'classnames';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
-import { IngredientType, lexemes } from '../../consts';
-import { useIngredientContext } from '../../contexts';
+import { IngredientType } from '../../types';
+import { useAppSelector } from '../../services/store';
+import { lexemes } from '../../consts';
 import BurgerIngredientType from './burger-ingredient-type';
 
 import style from './style.module.css';
@@ -17,8 +18,16 @@ const ingredientTypes = Object.keys(ingredientTypeTitles) as Array<
   keyof typeof ingredientTypeTitles
 >;
 
+const thresholdsStepsCount = 50;
+const thresholds = [
+  ...Array.from({ length: thresholdsStepsCount - 1 }).map(
+    (_, ix) => ix / (thresholdsStepsCount - 1)
+  ),
+  1,
+];
+
 const BurgerIngredients = ({ className }: { className?: string }) => {
-  const { ingredients } = useIngredientContext();
+  const { ingredients } = useAppSelector((state) => state.main);
   const [selectedIngredientType, setSelectedIngredientType] = useState(
     ingredientTypes[0]
   );
@@ -49,6 +58,55 @@ const BurgerIngredients = ({ className }: { className?: string }) => {
 
     return result;
   }, [ingredients]);
+  const typeListElementRef = useRef<HTMLUListElement>(null);
+
+  useEffect(() => {
+    const { current: typeListElement } = typeListElementRef;
+    const items = typeListElement!.querySelectorAll(
+      `.${style['burger-ingredients__type-item']}`
+    ) as NodeListOf<HTMLLIElement>;
+
+    if (items.length > 0) {
+      const ingredientToIntersectionRatioMap = new Map();
+
+      const intersectionObserver = new IntersectionObserver(
+        (intersectionObserverEntries) => {
+          intersectionObserverEntries.forEach(
+            ({ target, intersectionRatio }) => {
+              const {
+                dataset: { type },
+              } = target as HTMLLIElement;
+
+              if (type) {
+                ingredientToIntersectionRatioMap.set(type, intersectionRatio);
+              }
+            }
+          );
+
+          const mostVisibleType = [
+            // @ts-ignore
+            ...ingredientToIntersectionRatioMap.entries(),
+          ].sort(([, irA], [, irB]) => irB - irA)[0][0];
+
+          setSelectedIngredientType(mostVisibleType);
+        },
+        {
+          root: typeListElement,
+          threshold: thresholds,
+        }
+      );
+
+      items.forEach((item) => {
+        ingredientToIntersectionRatioMap.set(item.dataset.type, 0);
+        intersectionObserver.observe(item);
+      });
+
+      return () => {
+        intersectionObserver.disconnect();
+        ingredientToIntersectionRatioMap.clear();
+      };
+    }
+  }, []);
 
   return (
     <div className={cs(style['burger-ingredients'], 'pb-5', className)}>
@@ -66,23 +124,36 @@ const BurgerIngredients = ({ className }: { className?: string }) => {
             key={type}
             active={selectedIngredientType === type}
             value={type}
-            onClick={(type) =>
-              setSelectedIngredientType(
-                type as keyof typeof ingredientTypeTitles
-              )
-            }
+            onClick={(type) => {
+              const { current: typeListElement } = typeListElementRef;
+
+              if (typeListElement) {
+                const currentListItemElement = typeListElement.querySelector(
+                  `.${style['burger-ingredients__type-item']}[data-type="${type}"]`
+                );
+
+                if (currentListItemElement) {
+                  currentListItemElement.scrollIntoView({ behavior: 'smooth' });
+                }
+              }
+            }}
           >
             {(ingredientTypeTitles as any)[type]}
           </Tab>
         ))}
       </div>
-      <ul className={style['burger-ingredients__type-list']}>
+      <ul
+        ref={typeListElementRef}
+        className={style['burger-ingredients__type-list']}
+      >
         {Array.from(ingredientTypeToIngredientsMap.entries()).map(
           ([type, ingredients]) => (
             <BurgerIngredientType
               key={type}
-              title={ingredientTypeTitles[type as IngredientType]}
+              className={style['burger-ingredients__type-item']}
               ingredients={ingredients}
+              title={ingredientTypeTitles[type as IngredientType]}
+              type={type}
             />
           )
         )}

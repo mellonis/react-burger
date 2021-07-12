@@ -1,12 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import reportWebVitals from './reportWebVitals';
+import { Provider } from 'react-redux';
+import store from './services/store';
 import App from './components/app';
 import './index.css';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Provider store={store}>
+      <App />
+    </Provider>
     <div id="modal-container" />
   </React.StrictMode>,
   document.getElementById('root')

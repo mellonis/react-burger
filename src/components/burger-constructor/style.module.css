@@ -3,6 +3,24 @@
     grid-template-rows: minmax(0, 1fr) max-content;
 }
 
+.burger-constructor_is-empty .burger-constructor__list,
+.burger-constructor_is-can-drop .burger-constructor__list {
+    outline: 1px dashed var(--colors-interface-accent);
+}
+
+.burger-constructor_is-empty button {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.burger-constructor_is-can-drop.burger-constructor_is-drag-over .burger-constructor__list {
+    outline-style: solid;
+}
+
+.burger-constructor_is-drag-over:not(.burger-constructor_is-can-drop) .burger-constructor__list {
+    outline-color: var(--colors-interface-error);
+}
+
 .burger-constructor__list {
     display: grid;
     grid-template-rows: repeat(2, max-content) 1fr repeat(2, max-content);

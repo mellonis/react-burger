@@ -4,6 +4,42 @@
     grid-template-columns: 32px 24px 1fr;
 }
 
+.burger-constructor-item:first-child {
+    padding-top: 0;
+}
+
+.burger-constructor-item_is-drag-over {
+
+}
+
+:local .burger-constructor-item_is-can-drop :global .constructor-element {
+    box-shadow: 0 0 5px 1px var(--colors-interface-accent);
+}
+
+:local .burger-constructor-item_is-picked {
+    opacity: 0.5;
+}
+
+:local .burger-constructor-item_is-picked :global .constructor-element {
+    background-color: var(--colors-interface-accent);
+}
+
+:local .burger-constructor-item :global .constructor-element__image {
+    pointer-events: none;
+}
+
+.burger-constructor-item__constructor-element-wrapper {
+    display: flex;
+}
+
+.burger-constructor-item__constructor-element-wrapper > * {
+    flex-grow: 1;
+}
+
+:local .burger-constructor-item__constructor-element-wrapper :global .constructor-element__text {
+    flex-grow: 1;
+}
+
 .burger-constructor-item_interactive .burger-constructor-item__constructor-element-wrapper {
     cursor: pointer !important;
 }

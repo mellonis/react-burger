@@ -1,33 +1,28 @@
-import React, { useCallback, useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import cs from 'classnames';
 import { Ingredient_t } from '../../../types';
-import { lexemes } from '../../../consts';
+import { useAppDispatch } from '../../../services/store';
+import { setDetailedIngredient } from '../../../services/reducers';
 import BurgerIngredient from '../burger-ingredient';
-import IngredientDetails from '../../ingredient-details';
-import Modal from '../../modal';
 
 import style from './style.module.css';
 
 const BurgerIngredientType = ({
-  title,
+  className,
   ingredients,
+  title,
+  type,
 }: {
-  title: string;
+  className?: string;
   ingredients: Ingredient_t[];
+  title: string;
+  type: string;
 }) => {
-  const [detailedIngredient, setDetailedIngredient] = useState(
-    null as Ingredient_t | null
-  );
-  const handleClick = useCallback(
-    (ix: number) => {
-      setDetailedIngredient(ingredients[ix]);
-    },
-    [ingredients]
-  );
+  const dispatch = useAppDispatch();
 
   return (
-    <li className={'pt-10'}>
+    <li className={cs('pt-10', className)} data-type={type}>
       <div className={'text text_type_main-medium'}>{title}</div>
       <ul
         className={cs(
@@ -39,7 +34,9 @@ const BurgerIngredientType = ({
           <React.Fragment key={ingredient._id}>
             <BurgerIngredient
               ingredient={ingredient}
-              onClick={() => handleClick(ix)}
+              onClick={() => {
+                dispatch(setDetailedIngredient(ingredients[ix]));
+              }}
             />
             <li
               className={cs({
@@ -50,24 +47,15 @@ const BurgerIngredientType = ({
           </React.Fragment>
         ))}
       </ul>
-      {detailedIngredient && (
-        <Modal
-          onClose={() => setDetailedIngredient(null)}
-          title={lexemes.ingredientDetails}
-        >
-          <IngredientDetails
-            className={style['burger-ingredient-type__ingredient-details']}
-            ingredient={detailedIngredient}
-          />
-        </Modal>
-      )}
     </li>
   );
 };
 
 BurgerIngredientType.propTypes = {
-  title: PropTypes.string.isRequired,
+  className: PropTypes.string,
   ingredients: PropTypes.arrayOf(PropTypes.object).isRequired,
+  title: PropTypes.string.isRequired,
+  type: PropTypes.string.isRequired,
 };
 
 export default BurgerIngredientType;
