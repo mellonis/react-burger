@@ -19,4 +19,4 @@ jobs:
       - name: npm ci, then build
         run: |
           npm ci
-          npm run build
+          PUBLIC_URL=/react-burger/ npm run build
