@@ -50,10 +50,8 @@ const BurgerConstructorItem = ({
   });
   const [{ isCanDrop, isDragOver }, dropRef] = useDrop({
     accept: DraggableTypes.actualIngredient,
-    canDrop(item) {
-      const { index: draggableIndex } = item as ActualIngredientDragItem;
-
-      return !isLocked && index !== draggableIndex;
+    canDrop() {
+      return !isLocked;
     },
     collect(monitor) {
       return {
