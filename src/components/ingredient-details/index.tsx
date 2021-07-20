@@ -46,7 +46,12 @@ const IngredientDetails = ({
         {title}
       </div>
       <div className={'pt-8'} />
-      <div className={style['ingredient-details__nutritional-values']}>
+      <div
+        className={cs(
+          style['ingredient-details__nutritional-values'],
+          'text_color_inactive'
+        )}
+      >
         {Object.entries(nutritionalValues).map(([key, value], ix, list) => (
           <React.Fragment key={key}>
             <div className={style['ingredient-details__nutritional-value']}>

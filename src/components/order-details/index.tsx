@@ -38,7 +38,9 @@ const OrderDetails = ({
       {orderStatusToStatusTitleMap[status]}
     </div>
     <div className={'pt-2'} />
-    <div className={style['order-details__message']}>{message}</div>
+    <div className={cs(style['order-details__message'], 'text_color_inactive')}>
+      {message}
+    </div>
   </div>
 );
 

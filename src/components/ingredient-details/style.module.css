@@ -18,7 +18,6 @@
 }
 
 .ingredient-details__nutritional-values {
-    color: var(--text-inactive-color);
     display: grid;
     grid-auto-flow: column;
 }

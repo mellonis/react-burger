@@ -16,23 +16,6 @@
     margin: 0;
     overflow-y: scroll;
     padding: 0;
-    scrollbar-color: var(--background-element) var(--text-inactive-color);
-    scrollbar-width: thin;
-}
-
-.burger-ingredients__type-list::-webkit-scrollbar {
-    height: 12px;
-    width: 12px;
-}
-
-.burger-ingredients__type-list::-webkit-scrollbar-track {
-    background: var(--background-element);
-}
-
-.burger-ingredients__type-list::-webkit-scrollbar-thumb {
-    background: var(--text-inactive-color);
-    border: 3px solid var(--background-element);
-    border-radius: 6px;
 }
 
 .burger-ingredients__type-item {

@@ -144,7 +144,7 @@ const BurgerIngredients = ({ className }: { className?: string }) => {
       </div>
       <ul
         ref={typeListElementRef}
-        className={style['burger-ingredients__type-list']}
+        className={cs(style['burger-ingredients__type-list'], 'custom-scroll')}
       >
         {Array.from(ingredientTypeToIngredientsMap.entries()).map(
           ([type, ingredients]) => (

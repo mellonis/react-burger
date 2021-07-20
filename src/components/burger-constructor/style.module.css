@@ -32,23 +32,6 @@
 }
 
 .burger-constructor__filling {
-    scrollbar-color: var(--background-element) var(--text-inactive-color);
-    scrollbar-width: thin;
-}
-
-.burger-constructor__filling::-webkit-scrollbar {
-    height: 12px;
-    width: 12px;
-}
-
-.burger-constructor__filling::-webkit-scrollbar-track {
-    background: var(--background-element);
-}
-
-.burger-constructor__filling::-webkit-scrollbar-thumb {
-    background: var(--text-inactive-color);
-    border: 3px solid var(--background-element);
-    border-radius: 6px;
 }
 
 .burger-constructor__total-wrapper {

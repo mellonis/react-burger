@@ -97,7 +97,9 @@ const BurgerConstructor = ({ className }: { className?: string }) => {
             <div className={'pt-4'} />
           </>
         )}
-        <div className={style['burger-constructor__filling']}>
+        <div
+          className={cs(style['burger-constructor__filling'], 'custom-scroll')}
+        >
           {actualIngredients
             .slice(1, -1)
             .map(({ id, isLocked = false, refId, type }, ix) => {

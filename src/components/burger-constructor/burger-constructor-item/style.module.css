@@ -36,10 +36,6 @@
     flex-grow: 1;
 }
 
-:local .burger-constructor-item__constructor-element-wrapper :global .constructor-element__text {
-    flex-grow: 1;
-}
-
 .burger-constructor-item_interactive .burger-constructor-item__constructor-element-wrapper {
     cursor: pointer !important;
 }
