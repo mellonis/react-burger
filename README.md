@@ -14,7 +14,7 @@
 
 - TypeScript
 - CSS Modules
-- библиотека react-toolkit
+- библиотека redux-toolkit
 - библиотека react-dnd
 - библиотека uuid
 - Redux DevTools
