@@ -18,3 +18,4 @@
 - библиотека react-dnd
 - библиотека uuid
 - Redux DevTools
+- библиотека react-router-dom
