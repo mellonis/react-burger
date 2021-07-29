@@ -1,63 +1,52 @@
 import React from 'react';
+import { Route, Switch } from 'react-router-dom';
 import cs from 'classnames';
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend as Html5Backend } from 'react-dnd-html5-backend';
-import { BurgerIngredients } from '../burger-ingredients';
-import { BurgerConstructor } from '../burger-constructor';
-import styles from './style.module.css';
-import { lexemes } from '../../consts';
-import { useAppDispatch, useAppSelector } from '../../services/store';
-import {
-  resetDetailedIngredient,
-  resetOrderDetails,
-} from '../../services/reducers';
-import { IngredientDetails } from '../ingredient-details';
-import style from '../burger-constructor/style.module.css';
-import { Modal } from '../modal';
-import { OrderDetails } from '../order-details';
+import { FeedPage } from '../../pages/feed';
+import { ForgotPasswordPage } from '../../pages/forgot-password';
+import { IngredientsPage } from '../../pages/ingredients';
+import { LoginPage } from '../../pages/login';
+import { MainPage } from '../../pages/main';
+import { NotFoundPage } from '../../pages/not-found';
+import { ProfilePage } from '../../pages/profile';
+import { RegisterPage } from '../../pages/register';
+import { ResetPasswordPage } from '../../pages/reset-password';
 
-const AppBody = () => {
-  const { detailedIngredient, orderDetails } = useAppSelector(
-    (state) => state.main
-  );
-  const dispatch = useAppDispatch();
+import styles from '../../pages/main/style.module.css';
 
-  return (
-    <main
-      className={cs(
-        styles['app-body'],
-        'pl-5 pr-5 text text_type_main-default'
-      )}
-    >
-      <DndProvider backend={Html5Backend}>
-        <BurgerIngredients className={styles['app-body__ingredients']} />
-        <div className={cs(styles['app-body__space'], 'pl-10')} />
-        <BurgerConstructor className={styles['app-body__constructor']} />
-      </DndProvider>
-      {detailedIngredient && (
-        <Modal
-          onClose={() => dispatch(resetDetailedIngredient())}
-          title={lexemes.ingredientDetails}
-        >
-          <IngredientDetails
-            className={cs(style['burger-constructor__ingredient-details'])}
-            ingredient={detailedIngredient}
-          />
-        </Modal>
-      )}
-      {orderDetails && (
-        <Modal onClose={() => dispatch(resetOrderDetails())}>
-          <OrderDetails
-            className={cs(
-              style['burger-constructor__order-details'],
-              'mt-4 mb-20'
-            )}
-            orderDetails={orderDetails}
-          />
-        </Modal>
-      )}
-    </main>
-  );
-};
+const AppBody = () => (
+  <main
+    className={cs(styles['app-body'], 'pl-5 pr-5 text text_type_main-default')}
+  >
+    <Switch>
+      <Route exact path="/">
+        <MainPage />
+      </Route>
+      <Route exact path="/login">
+        <LoginPage />
+      </Route>
+      <Route exact path="/register">
+        <RegisterPage />
+      </Route>
+      <Route exact path="/forgot-password">
+        <ForgotPasswordPage />
+      </Route>
+      <Route exact path="/reset-password">
+        <ResetPasswordPage />
+      </Route>
+      <Route path="/feed">
+        <FeedPage />
+      </Route>
+      <Route path="/profile">
+        <ProfilePage />
+      </Route>
+      <Route path="/ingredients">
+        <IngredientsPage />
+      </Route>
+      <Route>
+        <NotFoundPage />
+      </Route>
+    </Switch>
+  </main>
+);
 
 export { AppBody };

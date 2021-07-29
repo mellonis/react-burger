@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { BrowserRouter as Router } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../services/store';
 import { fetchIngredients } from '../../services/reducers';
 
@@ -19,8 +20,10 @@ const App = () => {
 
   return (
     <div className={style.main}>
-      <AppHeader />
-      {!ingredientsRequest && !ingredientsError && <AppBody />}
+      <Router>
+        <AppHeader />
+        {!ingredientsRequest && !ingredientsError && <AppBody />}
+      </Router>
     </div>
   );
 };

@@ -1,4 +1,5 @@
 import React from 'react';
+import { useHistory, useRouteMatch } from 'react-router-dom';
 import cs from 'classnames';
 import {
   Logo,
@@ -12,6 +13,11 @@ import { MenuItem } from './menu-item';
 import styles from './style.module.css';
 
 const AppHeader = () => {
+  const history = useHistory();
+  const mainPageMatch = useRouteMatch('/');
+  const feedPageMatch = useRouteMatch('/feed');
+  const profilePageMatch = useRouteMatch('/profile');
+
   return (
     <header
       className={cs(
@@ -24,12 +30,23 @@ const AppHeader = () => {
           <MenuItem
             className={styles['app-header__menu-item']}
             Icon={BurgerIcon}
+            isActive={(mainPageMatch && mainPageMatch.isExact) ?? false}
+            onClick={() => {
+              history.push({
+                pathname: '/',
+              });
+            }}
             text={lexemes.constructor}
           />
           <MenuItem
             className={styles['app-header__menu-item']}
             Icon={ListIcon}
-            isActive={false}
+            isActive={Boolean(feedPageMatch)}
+            onClick={() => {
+              history.push({
+                pathname: '/feed',
+              });
+            }}
             text={lexemes.orderList}
           />
           <li className={styles['app-header__logo-wrapper']}>
@@ -38,7 +55,12 @@ const AppHeader = () => {
           <MenuItem
             className={styles['app-header__menu-item']}
             Icon={ProfileIcon}
-            isActive={false}
+            isActive={Boolean(profilePageMatch)}
+            onClick={() => {
+              history.push({
+                pathname: '/profile',
+              });
+            }}
             text={lexemes.profile}
           />
         </ul>
