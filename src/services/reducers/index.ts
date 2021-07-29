@@ -122,9 +122,8 @@ export const appSlice = createSlice({
       }
 
       state.totalAmount = calcTotal(state);
-      state.idToActualIngredientsCountMap = buildIdToActualIngredientsCountMap(
-        state
-      );
+      state.idToActualIngredientsCountMap =
+        buildIdToActualIngredientsCountMap(state);
     },
     moveIngredient(
       state,
@@ -155,9 +154,8 @@ export const appSlice = createSlice({
           actualIngredients[actualIngredients.length - 1],
         ];
         state.totalAmount = calcTotal(state);
-        state.idToActualIngredientsCountMap = buildIdToActualIngredientsCountMap(
-          state
-        );
+        state.idToActualIngredientsCountMap =
+          buildIdToActualIngredientsCountMap(state);
       }
     },
     resetDetailedIngredient(state) {
@@ -244,6 +242,8 @@ export const appSlice = createSlice({
   },
 });
 
+export const { reducer } = appSlice;
+
 export const {
   addIngredient,
   moveIngredient,
@@ -252,4 +252,3 @@ export const {
   resetOrderDetails,
   setDetailedIngredient,
 } = appSlice.actions;
-export default appSlice.reducer;

@@ -28,4 +28,4 @@ ModalOverlay.propTypes = {
   onClose: PropTypes.func,
 };
 
-export default ModalOverlay;
+export { ModalOverlay };

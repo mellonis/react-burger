@@ -4,7 +4,7 @@ import cs from 'classnames';
 import { Ingredient_t } from '../../../types';
 import { useAppDispatch } from '../../../services/store';
 import { setDetailedIngredient } from '../../../services/reducers';
-import BurgerIngredient from '../burger-ingredient';
+import { BurgerIngredient } from '../burger-ingredient';
 
 import style from './style.module.css';
 
@@ -58,4 +58,4 @@ BurgerIngredientType.propTypes = {
   type: PropTypes.string.isRequired,
 };
 
-export default BurgerIngredientType;
+export { BurgerIngredientType };

@@ -7,7 +7,7 @@ import {
   ProfileIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import { lexemes } from '../../consts';
-import MenuItem from './menu-item';
+import { MenuItem } from './menu-item';
 
 import styles from './style.module.css';
 
@@ -47,4 +47,4 @@ const AppHeader = () => {
   );
 };
 
-export default AppHeader;
+export { AppHeader };

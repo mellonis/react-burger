@@ -2,8 +2,8 @@ import React from 'react';
 import cs from 'classnames';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend as Html5Backend } from 'react-dnd-html5-backend';
-import BurgerIngredients from '../burger-ingredients';
-import BurgerConstructor from '../burger-constructor';
+import { BurgerIngredients } from '../burger-ingredients';
+import { BurgerConstructor } from '../burger-constructor';
 import styles from './style.module.css';
 import { lexemes } from '../../consts';
 import { useAppDispatch, useAppSelector } from '../../services/store';
@@ -11,10 +11,10 @@ import {
   resetDetailedIngredient,
   resetOrderDetails,
 } from '../../services/reducers';
-import IngredientDetails from '../ingredient-details';
+import { IngredientDetails } from '../ingredient-details';
 import style from '../burger-constructor/style.module.css';
-import Modal from '../modal';
-import OrderDetails from '../order-details';
+import { Modal } from '../modal';
+import { OrderDetails } from '../order-details';
 
 const AppBody = () => {
   const { detailedIngredient, orderDetails } = useAppSelector(
@@ -60,4 +60,4 @@ const AppBody = () => {
   );
 };
 
-export default AppBody;
+export { AppBody };

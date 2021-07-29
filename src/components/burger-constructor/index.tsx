@@ -16,8 +16,8 @@ import {
   removeIngredient,
   setDetailedIngredient,
 } from '../../services/reducers';
-import Amount from '../amount';
-import BurgerConstructorItem from './burger-constructor-item';
+import { Amount } from '../amount';
+import { BurgerConstructorItem } from './burger-constructor-item';
 
 import style from './style.module.css';
 
@@ -169,4 +169,4 @@ const BurgerConstructor = ({ className }: { className?: string }) => {
 
 BurgerConstructor.propTypes = { className: PropTypes.string };
 
-export default BurgerConstructor;
+export { BurgerConstructor };

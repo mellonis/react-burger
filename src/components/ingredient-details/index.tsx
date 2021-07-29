@@ -82,4 +82,4 @@ IngredientDetails.propTypes = {
   ingredient: PropTypes.object.isRequired,
 };
 
-export default IngredientDetails;
+export { IngredientDetails };

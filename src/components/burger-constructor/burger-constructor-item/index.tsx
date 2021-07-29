@@ -153,4 +153,4 @@ BurgerConstructorItem.propTypes = {
   ]),
 };
 
-export default BurgerConstructorItem;
+export { BurgerConstructorItem };

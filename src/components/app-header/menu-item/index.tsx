@@ -48,4 +48,4 @@ MenuItem.defaultProps = {
   isActive: true,
 };
 
-export default MenuItem;
+export { MenuItem };

@@ -2,8 +2,8 @@ import React, { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../services/store';
 import { fetchIngredients } from '../../services/reducers';
 
-import AppHeader from '../app-header';
-import AppBody from '../app-body';
+import { AppHeader } from '../app-header';
+import { AppBody } from '../app-body';
 
 import style from './style.module.css';
 
@@ -25,4 +25,4 @@ const App = () => {
   );
 };
 
-export default App;
+export { App };

@@ -9,7 +9,7 @@ import React, {
 import PropTypes from 'prop-types';
 import cs from 'classnames';
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import ModalOverlay from './modal-overlay';
+import { ModalOverlay } from './modal-overlay';
 
 import style from './style.module.css';
 
@@ -27,9 +27,8 @@ const Modal = ({
   const modalElementRef = useRef(null);
 
   useEffect(() => {
-    const {
-      current: modalElement,
-    } = modalElementRef as MutableRefObject<HTMLElement | null>;
+    const { current: modalElement } =
+      modalElementRef as MutableRefObject<HTMLElement | null>;
 
     if (modalElement) {
       modalElement.focus();
@@ -80,4 +79,4 @@ Modal.propTypes = {
   title: PropTypes.string,
 };
 
-export default Modal;
+export { Modal };

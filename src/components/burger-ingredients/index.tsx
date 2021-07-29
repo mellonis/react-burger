@@ -5,7 +5,7 @@ import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import { IngredientType } from '../../types';
 import { useAppSelector } from '../../services/store';
 import { lexemes } from '../../consts';
-import BurgerIngredientType from './burger-ingredient-type';
+import { BurgerIngredientType } from './burger-ingredient-type';
 
 import style from './style.module.css';
 
@@ -164,4 +164,4 @@ const BurgerIngredients = ({ className }: { className?: string }) => {
 
 BurgerIngredients.propTypes = { className: PropTypes.string };
 
-export default BurgerIngredients;
+export { BurgerIngredients };
