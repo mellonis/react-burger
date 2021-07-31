@@ -1,8 +1,10 @@
 import React from 'react';
 import cs from 'classnames';
+import { lexemes } from '../../consts';
+
+import { Form } from '../../components/form';
 
 import pageStyles from '../page-style.module.css';
-import fromStyles from '../form-style.module.css';
 
 const registerPageClassname = 'register-page';
 
@@ -14,7 +16,7 @@ const RegisterPage = () => (
       registerPageClassname
     )}
   >
-    <form className={cs(fromStyles['form'])}>Register Page</form>
+    <Form title={lexemes.forms.register.title}>Register Page</Form>
   </div>
 );
 

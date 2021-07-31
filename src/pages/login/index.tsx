@@ -1,8 +1,10 @@
 import React from 'react';
 import cs from 'classnames';
+import { lexemes } from '../../consts';
+
+import { Form } from '../../components/form';
 
 import pageStyles from '../page-style.module.css';
-import fromStyles from '../form-style.module.css';
 
 const loginPageClassname = 'login-page';
 
@@ -14,7 +16,7 @@ const LoginPage = () => (
       loginPageClassname
     )}
   >
-    <form className={cs(fromStyles['form'])}>Login Page</form>
+    <Form title={lexemes.forms.login.title}>Login Page</Form>
   </div>
 );
 

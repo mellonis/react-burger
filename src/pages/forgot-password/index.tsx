@@ -1,8 +1,10 @@
 import React from 'react';
 import cs from 'classnames';
+import { lexemes } from '../../consts';
+
+import { Form } from '../../components/form';
 
 import pageStyles from '../page-style.module.css';
-import fromStyles from '../form-style.module.css';
 
 const forgotPasswordPageClassname = 'forgot-password-page';
 
@@ -14,7 +16,7 @@ const ForgotPasswordPage = () => (
       forgotPasswordPageClassname
     )}
   >
-    <form className={cs(fromStyles['form'])}>Forgot Password Page</form>
+    <Form title={lexemes.forms.forgotPassword.title}>Forgot Password Page</Form>
   </div>
 );
 
