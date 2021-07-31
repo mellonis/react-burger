@@ -1,4 +1,5 @@
-import React, { ReactNode } from 'react';
+import cs from 'classnames';
+import React, { ReactNode, ReactNodeArray } from 'react';
 import fromStyles from './style.module.css';
 
 const Form = ({
@@ -7,7 +8,7 @@ const Form = ({
   button,
   title,
 }: {
-  additionalActions?: ReactNode;
+  additionalActions?: ReactNodeArray;
   children: ReactNode;
   button?: ReactNode;
   title?: string;
@@ -33,7 +34,14 @@ const Form = ({
       {additionalActions ? (
         <>
           <div className={'pt-20'} />
-          <div className={fromStyles['form__additionalActions']} />
+          <div
+            className={cs(
+              fromStyles['form__additional-actions'],
+              'text_color_inactive'
+            )}
+          >
+            {additionalActions}
+          </div>
         </>
       ) : null}
     </form>
