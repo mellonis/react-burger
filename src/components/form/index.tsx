@@ -27,7 +27,7 @@ const Form = ({
       {button ? (
         <>
           <div className={'pt-6'} />
-          <div className={fromStyles['form__button-wrapper']} />
+          <div className={fromStyles['form__button-wrapper']}>{button}</div>
         </>
       ) : null}
       {additionalActions ? (
