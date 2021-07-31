@@ -1,27 +1,24 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import cs from 'classnames';
 import { Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import { lexemes } from '../../consts';
 
-import { Form, produceAdditionalActionReactNode } from '../../components/form';
+import { Form } from '../../components/form';
+import { AdditionalAction } from '../../types';
 
 import pageStyles from '../page-style.module.css';
 
 const resetPasswordPageClassname = 'reset-password-page';
 
-const ResetPasswordPage = () => {
-  const additionalActions = useMemo(
-    () =>
-      [
-        {
-          title: lexemes.forms.__common__.haveYouRememberedYourPassword,
-          url: '/login',
-          urlTitle: lexemes.forms.__common__.doLogin,
-        },
-      ].map(produceAdditionalActionReactNode),
-    []
-  );
+const additionalActions: AdditionalAction[] = [
+  {
+    title: lexemes.forms.__common__.haveYouRememberedYourPassword,
+    url: '/login',
+    urlTitle: lexemes.forms.__common__.doLogin,
+  },
+];
 
+const ResetPasswordPage = () => {
   return (
     <div
       className={cs(

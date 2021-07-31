@@ -1,32 +1,29 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import cs from 'classnames';
 import { Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import { lexemes } from '../../consts';
 
-import { Form, produceAdditionalActionReactNode } from '../../components/form';
+import { Form } from '../../components/form';
+import { AdditionalAction } from '../../types';
 
 import pageStyles from '../page-style.module.css';
 
 const loginPageClassname = 'login-page';
 
-const LoginPage = () => {
-  const additionalActions = useMemo(
-    () =>
-      [
-        {
-          title: lexemes.forms.login.areYouTheNewUser,
-          url: '/register',
-          urlTitle: lexemes.forms.__common__.doRegister,
-        },
-        {
-          title: lexemes.forms.login.areYouForgetYourPassword,
-          url: '/forgot-password',
-          urlTitle: lexemes.forms.login.doResetYourPassword,
-        },
-      ].map(produceAdditionalActionReactNode),
-    []
-  );
+const additionalActions: AdditionalAction[] = [
+  {
+    title: lexemes.forms.login.areYouTheNewUser,
+    url: '/register',
+    urlTitle: lexemes.forms.__common__.doRegister,
+  },
+  {
+    title: lexemes.forms.login.areYouForgetYourPassword,
+    url: '/forgot-password',
+    urlTitle: lexemes.forms.login.doResetYourPassword,
+  },
+];
 
+const LoginPage = () => {
   return (
     <div
       className={cs(

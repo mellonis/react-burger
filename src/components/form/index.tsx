@@ -1,5 +1,7 @@
 import cs from 'classnames';
-import React, { ReactNode, ReactNodeArray } from 'react';
+import React, { ReactNode, useMemo } from 'react';
+import { AdditionalAction } from '../../types';
+import { produceAdditionalActionReactNode } from './helpers';
 import fromStyles from './style.module.css';
 
 const Form = ({
@@ -8,11 +10,19 @@ const Form = ({
   button,
   title,
 }: {
-  additionalActions?: ReactNodeArray;
+  additionalActions: AdditionalAction[];
   children: ReactNode;
   button?: ReactNode;
   title?: string;
 }) => {
+  const additionalActionReactNodes = useMemo(() => {
+    if (!additionalActions) {
+      return null;
+    }
+
+    return additionalActions.map(produceAdditionalActionReactNode);
+  }, [additionalActions]);
+
   return (
     <form className={fromStyles['form']}>
       {title ? (
@@ -31,7 +41,7 @@ const Form = ({
           <div className={fromStyles['form__button-wrapper']}>{button}</div>
         </>
       ) : null}
-      {additionalActions ? (
+      {additionalActionReactNodes ? (
         <>
           <div className={'pt-20'} />
           <div
@@ -40,7 +50,7 @@ const Form = ({
               'text_color_inactive'
             )}
           >
-            {additionalActions}
+            {additionalActionReactNodes}
           </div>
         </>
       ) : null}
@@ -49,4 +59,3 @@ const Form = ({
 };
 
 export { Form };
-export { produceAdditionalActionReactNode } from './helpers';
