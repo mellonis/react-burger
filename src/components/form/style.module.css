@@ -17,7 +17,8 @@
 }
 
 .form__button-wrapper {
-
+    display: flex;
+    justify-content: center;
 }
 
 .form__additional-actions {
