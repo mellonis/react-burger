@@ -1,14 +1,15 @@
 import React from 'react';
 import cs from 'classnames';
-import { pageClassname } from '../consts';
+
+import pageStyles from '../page-style.module.css';
 
 const resetPasswordPageClassname = 'reset-password-page';
 
 const ResetPasswordPage = () => (
   <div
     className={cs(
-      pageClassname,
-      `${pageClassname}_${resetPasswordPageClassname}`,
+      pageStyles['page'],
+      pageStyles[`page_${resetPasswordPageClassname}`], // for BEM methodology accomplishments
       resetPasswordPageClassname
     )}
   >

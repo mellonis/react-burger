@@ -1,14 +1,15 @@
 import React from 'react';
 import cs from 'classnames';
-import { pageClassname } from '../consts';
+
+import pageStyles from '../page-style.module.css';
 
 const notFoundPageClassname = 'not-found-page';
 
 const NotFoundPage = () => (
   <div
     className={cs(
-      pageClassname,
-      `${pageClassname}_${notFoundPageClassname}`,
+      pageStyles['page'],
+      pageStyles[`page_${notFoundPageClassname}`], // for BEM methodology accomplishments
       notFoundPageClassname
     )}
   >

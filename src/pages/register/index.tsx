@@ -1,14 +1,15 @@
 import React from 'react';
 import cs from 'classnames';
-import { pageClassname } from '../consts';
+
+import pageStyles from '../page-style.module.css';
 
 const registerPageClassname = 'register-page';
 
 const RegisterPage = () => (
   <div
     className={cs(
-      pageClassname,
-      `${pageClassname}_${registerPageClassname}`,
+      pageStyles['page'],
+      pageStyles[`page_${registerPageClassname}`], // for BEM methodology accomplishments
       registerPageClassname
     )}
   >

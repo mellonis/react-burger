@@ -13,10 +13,10 @@ import { BurgerIngredients } from '../../components/burger-ingredients';
 import { IngredientDetails } from '../../components/ingredient-details';
 import { Modal } from '../../components/modal';
 import { OrderDetails } from '../../components/order-details';
-import { pageClassname } from '../consts';
 
-import style from '../../components/burger-constructor/style.module.css';
-import styles from './style.module.css';
+import pageStyles from '../page-style.module.css';
+import mainPageStyles from './style.module.css';
+import burgerConstructorStyles from '../../components/burger-constructor/style.module.css';
 
 const mainPageClassName = 'main-page';
 
@@ -29,18 +29,20 @@ const MainPage = () => {
   return (
     <div
       className={cs(
-        pageClassname,
-        `${pageClassname}_${mainPageClassName}`,
-        styles[mainPageClassName]
+        pageStyles['page'],
+        pageStyles[`page_${mainPageClassName}`], // for BEM methodology accomplishments
+        mainPageStyles[mainPageClassName]
       )}
     >
       <DndProvider backend={Html5Backend}>
         <BurgerIngredients
-          className={styles[`${mainPageClassName}__ingredients`]}
+          className={mainPageStyles[`${mainPageClassName}__ingredients`]}
         />
-        <div className={cs(styles[`${mainPageClassName}__space`], 'pl-10')} />
+        <div
+          className={cs(mainPageStyles[`${mainPageClassName}__space`], 'pl-10')}
+        />
         <BurgerConstructor
-          className={styles[`${mainPageClassName}__constructor`]}
+          className={mainPageStyles[`${mainPageClassName}__constructor`]}
         />
       </DndProvider>
       {detailedIngredient && (
@@ -49,7 +51,9 @@ const MainPage = () => {
           title={lexemes.ingredientDetails}
         >
           <IngredientDetails
-            className={cs(style['burger-constructor__ingredient-details'])}
+            className={cs(
+              burgerConstructorStyles['burger-constructor__ingredient-details']
+            )}
             ingredient={detailedIngredient}
           />
         </Modal>
@@ -58,7 +62,7 @@ const MainPage = () => {
         <Modal onClose={() => dispatch(resetOrderDetails())}>
           <OrderDetails
             className={cs(
-              style['burger-constructor__order-details'],
+              burgerConstructorStyles['burger-constructor__order-details'],
               'mt-4 mb-20'
             )}
             orderDetails={orderDetails}

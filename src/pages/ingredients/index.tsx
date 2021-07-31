@@ -1,14 +1,15 @@
 import React from 'react';
 import cs from 'classnames';
-import { pageClassname } from '../consts';
+
+import pageStyles from '../page-style.module.css';
 
 const ingredientsPageClassname = 'ingredients-page';
 
 const IngredientsPage = () => (
   <div
     className={cs(
-      pageClassname,
-      `${pageClassname}_${ingredientsPageClassname}`,
+      pageStyles['page'],
+      pageStyles[`page_${ingredientsPageClassname}`], // for BEM methodology accomplishments
       ingredientsPageClassname
     )}
   >

@@ -1,14 +1,15 @@
 import React from 'react';
 import cs from 'classnames';
-import { pageClassname } from '../consts';
+
+import pageStyles from '../page-style.module.css';
 
 const feedPageClassname = 'feed-page';
 
 const FeedPage = () => (
   <div
     className={cs(
-      pageClassname,
-      `${pageClassname}_${feedPageClassname}`,
+      pageStyles['page'],
+      pageStyles[`page_${feedPageClassname}`], // for BEM methodology accomplishments
       feedPageClassname
     )}
   >
