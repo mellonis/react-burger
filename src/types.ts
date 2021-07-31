@@ -1,3 +1,9 @@
+export interface AdditionalAction {
+  title: string;
+  url: string;
+  urlTitle: string;
+}
+
 export enum ActualIngredientType {
   top = 'top',
   bottom = 'bottom',
