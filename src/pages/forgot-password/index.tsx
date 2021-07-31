@@ -2,6 +2,7 @@ import React from 'react';
 import cs from 'classnames';
 
 import pageStyles from '../page-style.module.css';
+import fromStyles from '../form-style.module.css';
 
 const forgotPasswordPageClassname = 'forgot-password-page';
 
@@ -13,7 +14,7 @@ const ForgotPasswordPage = () => (
       forgotPasswordPageClassname
     )}
   >
-    Forgot Password Page
+    <form className={cs(fromStyles['form'])}>Forgot Password Page</form>
   </div>
 );
 
