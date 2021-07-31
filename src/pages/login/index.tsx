@@ -1,3 +1,4 @@
+import { Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import React from 'react';
 import cs from 'classnames';
 import { lexemes } from '../../consts';
@@ -16,7 +17,14 @@ const LoginPage = () => (
       loginPageClassname
     )}
   >
-    <Form title={lexemes.forms.login.title}>Login Page</Form>
+    <Form
+      button={
+        <Button type={'primary'}>{lexemes.forms.__common__.doLogin}</Button>
+      }
+      title={lexemes.forms.login.title}
+    >
+      Login Page
+    </Form>
   </div>
 );
 

@@ -1,3 +1,4 @@
+import { Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import React from 'react';
 import cs from 'classnames';
 import { lexemes } from '../../consts';
@@ -16,7 +17,14 @@ const ResetPasswordPage = () => (
       resetPasswordPageClassname
     )}
   >
-    <Form title={lexemes.forms.resetPassword.title}>Reset Password Page</Form>
+    <Form
+      button={
+        <Button type={'primary'}>{lexemes.forms.resetPassword.doReset}</Button>
+      }
+      title={lexemes.forms.resetPassword.title}
+    >
+      Reset Password Page
+    </Form>
   </div>
 );
 
