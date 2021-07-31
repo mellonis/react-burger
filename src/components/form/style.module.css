@@ -1,8 +1,6 @@
 .form {
     display: grid;
     grid-template-columns: minmax(min-content, 480px);
-
-    outline: 1px red solid;
 }
 
 .form__header {
@@ -14,6 +12,14 @@
 
 .form__body {
 
+}
+
+.form__body :global .input__container {
+    width: 100%;
+}
+
+.form__body :global .input {
+    width: 100%;
 }
 
 .form__button-wrapper {

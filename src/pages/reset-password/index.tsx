@@ -1,10 +1,13 @@
 import React from 'react';
 import cs from 'classnames';
-import { Button } from '@ya.praktikum/react-developer-burger-ui-components';
-import { lexemes } from '../../consts';
 
-import { Form } from '../../components/form';
 import { AdditionalAction } from '../../types';
+import { lexemes } from '../../consts';
+import {
+  ComponentInputType,
+  Form,
+  InputDeclaration,
+} from '../../components/form';
 
 import pageStyles from '../page-style.module.css';
 
@@ -15,6 +18,18 @@ const additionalActions: AdditionalAction[] = [
     title: lexemes.forms.__common__.haveYouRememberedYourPassword,
     url: '/login',
     urlTitle: lexemes.forms.__common__.doLogin,
+  },
+];
+const inputDeclarations: InputDeclaration[] = [
+  {
+    componentType: ComponentInputType.passwordInput,
+    name: 'newPassword',
+  },
+  {
+    componentType: ComponentInputType.input,
+    name: 'approvalCode',
+    type: 'text',
+    placeholder: lexemes.forms.resetPassword.provideApprovalCode,
   },
 ];
 
@@ -29,15 +44,11 @@ const ResetPasswordPage = () => {
     >
       <Form
         additionalActions={additionalActions}
-        button={
-          <Button type={'primary'}>
-            {lexemes.forms.resetPassword.doReset}
-          </Button>
-        }
+        inputDeclarations={inputDeclarations}
+        buttonTitle={lexemes.forms.resetPassword.doReset}
+        onSubmit={(formData) => console.log(formData)}
         title={lexemes.forms.resetPassword.title}
-      >
-        Reset Password Page
-      </Form>
+      />
     </div>
   );
 };

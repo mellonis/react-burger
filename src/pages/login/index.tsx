@@ -1,10 +1,13 @@
 import React from 'react';
 import cs from 'classnames';
-import { Button } from '@ya.praktikum/react-developer-burger-ui-components';
-import { lexemes } from '../../consts';
 
-import { Form } from '../../components/form';
 import { AdditionalAction } from '../../types';
+import { lexemes } from '../../consts';
+import {
+  ComponentInputType,
+  Form,
+  InputDeclaration,
+} from '../../components/form';
 
 import pageStyles from '../page-style.module.css';
 
@@ -22,6 +25,18 @@ const additionalActions: AdditionalAction[] = [
     urlTitle: lexemes.forms.login.doResetYourPassword,
   },
 ];
+const inputDeclarations: InputDeclaration[] = [
+  {
+    componentType: ComponentInputType.input,
+    name: 'email',
+    placeholder: lexemes.forms.__common__.email,
+    type: 'email',
+  },
+  {
+    componentType: ComponentInputType.passwordInput,
+    name: 'password',
+  },
+];
 
 const LoginPage = () => {
   return (
@@ -34,13 +49,11 @@ const LoginPage = () => {
     >
       <Form
         additionalActions={additionalActions}
-        button={
-          <Button type={'primary'}>{lexemes.forms.__common__.doLogin}</Button>
-        }
+        inputDeclarations={inputDeclarations}
+        buttonTitle={lexemes.forms.__common__.doLogin}
+        onSubmit={(formData) => console.log(formData)}
         title={lexemes.forms.login.title}
-      >
-        Login Page
-      </Form>
+      />
     </div>
   );
 };
