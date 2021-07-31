@@ -11,7 +11,7 @@ import { ProfilePage } from '../../pages/profile';
 import { RegisterPage } from '../../pages/register';
 import { ResetPasswordPage } from '../../pages/reset-password';
 
-import styles from '../../pages/main/style.module.css';
+import styles from './style.module.css';
 
 const AppBody = () => (
   <main

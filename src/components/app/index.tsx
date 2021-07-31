@@ -19,7 +19,7 @@ const App = () => {
   }, [dispatch]);
 
   return (
-    <div className={style.main}>
+    <div className={style.app}>
       <Router>
         <AppHeader />
         {!ingredientsRequest && !ingredientsError && <AppBody />}
