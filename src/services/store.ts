@@ -1,11 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { reducer as mainReducer } from './reducers';
+import { burgerReducer } from './reducers';
 import { useDispatch, useSelector } from 'react-redux';
 
 const store = configureStore({
   devTools: process.env.NODE_ENV === 'development',
   reducer: {
-    main: mainReducer,
+    burger: burgerReducer,
   },
 });
 

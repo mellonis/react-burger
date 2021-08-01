@@ -27,7 +27,7 @@ const thresholds = [
 ];
 
 const BurgerIngredients = ({ className }: { className?: string }) => {
-  const { ingredients } = useAppSelector((state) => state.main);
+  const { ingredients } = useAppSelector((state) => state.burger);
   const [selectedIngredientType, setSelectedIngredientType] = useState(
     ingredientTypes[0]
   );

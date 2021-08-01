@@ -10,7 +10,7 @@ import style from './style.module.css';
 
 const App = () => {
   const { ingredientsError, ingredientsRequest } = useAppSelector(
-    (state) => state.main
+    (state) => state.burger
   );
   const dispatch = useAppDispatch();
 

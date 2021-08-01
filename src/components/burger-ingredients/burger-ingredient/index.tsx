@@ -21,7 +21,7 @@ const BurgerIngredient = ({
   onClick?: () => void;
 }) => {
   const { idToActualIngredientsCountMap } = useAppSelector(
-    (state) => state.main
+    (state) => state.burger
   );
   const [{ isItPicked }, dragRef, preview] = useDrag({
     type: DraggableTypes.ingredient,

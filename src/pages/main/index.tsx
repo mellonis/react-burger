@@ -22,7 +22,7 @@ const mainPageClassName = 'main-page';
 
 const MainPage = () => {
   const { detailedIngredient, orderDetails } = useAppSelector(
-    (state) => state.main
+    (state) => state.burger
   );
   const dispatch = useAppDispatch();
 

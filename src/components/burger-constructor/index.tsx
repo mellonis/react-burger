@@ -27,7 +27,7 @@ const BurgerConstructor = ({ className }: { className?: string }) => {
     idToIngredientMap,
     orderDetailsRequest,
     totalAmount,
-  } = useAppSelector((state) => state.main);
+  } = useAppSelector((state) => state.burger);
   const dispatch = useAppDispatch();
 
   const topBun = actualIngredients.slice(0, 1)[0];
