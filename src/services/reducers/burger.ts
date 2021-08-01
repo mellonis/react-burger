@@ -86,7 +86,7 @@ export const placeAnOrder = createAsyncThunk(
   }
 );
 
-export const slice = createSlice({
+const slice = createSlice({
   name: 'burger',
   initialState,
   reducers: {

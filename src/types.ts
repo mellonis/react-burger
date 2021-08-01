@@ -63,3 +63,15 @@ export type OrderDetails_t = {
   status: OrderStatus_t;
   message: string;
 };
+
+export interface User {
+  email: string;
+  name: string;
+}
+
+export interface AuthUserResponse {
+  accessSchema: string;
+  accessToken: string;
+  refreshToken: string;
+  user: User;
+}

@@ -1,13 +1,20 @@
-import React from 'react';
 import cs from 'classnames';
-
-import { AdditionalAction } from '../../types';
-import { lexemes } from '../../consts';
+import React from 'react';
+import { Redirect } from 'react-router-dom';
 import {
   ComponentInputType,
   Form,
   InputDeclaration,
 } from '../../components/form';
+import { lexemes } from '../../consts';
+import {
+  PasswordResettingPhase,
+  requestPasswordResettingForEmail,
+  UserLoginPhase,
+} from '../../services/reducers';
+import { useAppDispatch, useAppSelector } from '../../services/store';
+
+import { AdditionalAction } from '../../types';
 
 import pageStyles from '../page-style.module.css';
 
@@ -30,6 +37,25 @@ const inputDeclarations: InputDeclaration[] = [
 ];
 
 const ForgotPasswordPage = () => {
+  const { userLoginPhase, passwordResettingPhase } = useAppSelector(
+    (state) => state.user
+  );
+  const dispatch = useAppDispatch();
+
+  if ([UserLoginPhase.fulfilled].includes(userLoginPhase)) {
+    return <Redirect to={'/'} />;
+  }
+
+  if (
+    [
+      PasswordResettingPhase.requestingCredentialsFromUser,
+      PasswordResettingPhase.pendingResetting,
+      PasswordResettingPhase.fulfilled,
+    ].includes(passwordResettingPhase)
+  ) {
+    return <Redirect to={'/reset-password'} />;
+  }
+
   return (
     <div
       className={cs(
@@ -42,7 +68,11 @@ const ForgotPasswordPage = () => {
         additionalActions={additionalActions}
         buttonTitle={lexemes.forms.forgotPassword.doResetPassword}
         inputDeclarations={inputDeclarations}
-        onSubmit={(formData) => console.log(formData)}
+        onSubmit={({ email }) => {
+          if (passwordResettingPhase === PasswordResettingPhase.initial) {
+            dispatch(requestPasswordResettingForEmail(email));
+          }
+        }}
         title={lexemes.forms.forgotPassword.title}
       />
     </div>

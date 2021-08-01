@@ -1,13 +1,16 @@
-import React from 'react';
 import cs from 'classnames';
-
-import { AdditionalAction } from '../../types';
-import { lexemes } from '../../consts';
+import React from 'react';
+import { Redirect } from 'react-router-dom';
 import {
   ComponentInputType,
   Form,
   InputDeclaration,
 } from '../../components/form';
+import { lexemes } from '../../consts';
+import { login, UserLoginPhase } from '../../services/reducers';
+import { useAppDispatch, useAppSelector } from '../../services/store';
+
+import { AdditionalAction } from '../../types';
 
 import pageStyles from '../page-style.module.css';
 
@@ -39,6 +42,13 @@ const inputDeclarations: InputDeclaration[] = [
 ];
 
 const LoginPage = () => {
+  const { userLoginPhase } = useAppSelector((state) => state.user);
+  const dispatch = useAppDispatch();
+
+  if ([UserLoginPhase.fulfilled].includes(userLoginPhase)) {
+    return <Redirect to={'/'} />;
+  }
+
   return (
     <div
       className={cs(
@@ -51,7 +61,15 @@ const LoginPage = () => {
         additionalActions={additionalActions}
         inputDeclarations={inputDeclarations}
         buttonTitle={lexemes.forms.__common__.doLogin}
-        onSubmit={(formData) => console.log(formData)}
+        onSubmit={({ email, password }) => {
+          if (
+            [UserLoginPhase.initial, UserLoginPhase.rejected].includes(
+              userLoginPhase
+            )
+          ) {
+            dispatch(login({ email, password }));
+          }
+        }}
         title={lexemes.forms.login.title}
       />
     </div>

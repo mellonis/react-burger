@@ -1,11 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { burgerReducer } from './reducers';
 import { useDispatch, useSelector } from 'react-redux';
+import { burgerReducer, userReducer } from './reducers';
 
 const store = configureStore({
   devTools: process.env.NODE_ENV === 'development',
   reducer: {
     burger: burgerReducer,
+    user: userReducer,
   },
 });
 

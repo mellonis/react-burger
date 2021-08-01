@@ -1,13 +1,20 @@
-import React from 'react';
 import cs from 'classnames';
-
-import { AdditionalAction } from '../../types';
-import { lexemes } from '../../consts';
+import React, { useEffect } from 'react';
+import { Redirect } from 'react-router-dom';
 import {
   ComponentInputType,
   Form,
   InputDeclaration,
 } from '../../components/form';
+import { lexemes } from '../../consts';
+import {
+  interruptUserRegistration,
+  registerUser,
+  UserLoginPhase,
+  UserRegistrationPhase,
+} from '../../services/reducers';
+import { useAppDispatch, useAppSelector } from '../../services/store';
+import { AdditionalAction } from '../../types';
 
 import pageStyles from '../page-style.module.css';
 
@@ -39,6 +46,29 @@ const inputDeclarations: InputDeclaration[] = [
 ];
 
 const RegisterPage = () => {
+  const { userLoginPhase, userRegistrationPhase } = useAppSelector(
+    (state) => state.user
+  );
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    return () => {
+      dispatch(interruptUserRegistration());
+    };
+  }, [dispatch]);
+
+  if ([UserLoginPhase.fulfilled].includes(userLoginPhase)) {
+    return <Redirect to={'/login'} />;
+  }
+
+  if (
+    [UserRegistrationPhase.fulfilled, UserRegistrationPhase.rejected].includes(
+      userRegistrationPhase
+    )
+  ) {
+    return <Redirect to={'/login'} />;
+  }
+
   return (
     <div
       className={cs(
@@ -51,7 +81,17 @@ const RegisterPage = () => {
         additionalActions={additionalActions}
         inputDeclarations={inputDeclarations}
         buttonTitle={lexemes.forms.__common__.doRegister}
-        onSubmit={(formData) => console.log(formData)}
+        onSubmit={({ email, name, password }) => {
+          if (userRegistrationPhase === UserRegistrationPhase.initial) {
+            dispatch(
+              registerUser({
+                email,
+                name,
+                password,
+              })
+            );
+          }
+        }}
         title={lexemes.forms.register.title}
       />
     </div>

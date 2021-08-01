@@ -1,4 +1,9 @@
-import { Ingredient_t, OrderDetails_t, OrderStatus_t } from '../../types';
+import {
+  AuthUserResponse,
+  Ingredient_t,
+  OrderDetails_t,
+  OrderStatus_t,
+} from '../../types';
 
 export const apiHostUrl = 'https://norma.nomoreparties.space';
 
@@ -9,6 +14,58 @@ export const fetchIngredients = async (): Promise<Ingredient_t[]> => {
   if (result.success === true) {
     return result.data;
   } else {
+    throw new Error("Can't get data from server");
+  }
+};
+
+export const login = async ({
+  email,
+  password,
+}: {
+  email: string;
+  password: string;
+}): Promise<AuthUserResponse> => {
+  const response = await fetch(`${apiHostUrl}/api/auth/login`, {
+    body: JSON.stringify({ email, password }),
+    headers: new Headers([['Content-Type', 'application/json']]),
+    method: 'POST',
+  });
+  const result = await response.json();
+
+  if (result.success !== true) {
+    throw new Error("Can't get data from server");
+  }
+
+  const {
+    accessToken: accessTokenWithSchema,
+    refreshToken,
+    user: { email: userEmailFromServer, name: userNameFromServer },
+  } = result;
+
+  const [accessSchema, accessToken] = accessTokenWithSchema.split(' ');
+
+  return {
+    accessSchema,
+    accessToken,
+    refreshToken,
+    user: {
+      email: userEmailFromServer,
+      name: userNameFromServer,
+    },
+  };
+};
+
+export const logout = async ({
+  refreshToken,
+}: Pick<AuthUserResponse, 'refreshToken'>): Promise<void> => {
+  const response = await fetch(`${apiHostUrl}/api/auth/logout`, {
+    body: JSON.stringify({ token: refreshToken }),
+    headers: new Headers([['Content-Type', 'application/json']]),
+    method: 'POST',
+  });
+  const result = await response.json();
+
+  if (result.success !== true) {
     throw new Error("Can't get data from server");
   }
 };
@@ -30,6 +87,79 @@ export const placeAnOrder = async (
       status: OrderStatus_t.BEING_COOKED,
     };
   } else {
+    throw new Error("Can't get data from server");
+  }
+};
+
+export const registerUser = async ({
+  email,
+  name,
+  password,
+}: {
+  email: string;
+  name: string;
+  password: string;
+}): Promise<AuthUserResponse> => {
+  const response = await fetch(`${apiHostUrl}/api/auth/register`, {
+    body: JSON.stringify({ email, name, password }),
+    headers: new Headers([['Content-Type', 'application/json']]),
+    method: 'POST',
+  });
+  const result = await response.json();
+
+  if (result.success !== true) {
+    throw new Error("Can't get data from server");
+  }
+
+  const {
+    accessToken: accessTokenWithSchema,
+    refreshToken,
+    user: { email: userEmailFromServer, name: userNameFromServer },
+  } = result;
+
+  const [accessSchema, accessToken] = accessTokenWithSchema.split(' ');
+
+  return {
+    accessSchema,
+    accessToken,
+    refreshToken,
+    user: {
+      email: userEmailFromServer,
+      name: userNameFromServer,
+    },
+  };
+};
+
+export const requestPasswordResettingForEmail = async (
+  email: string
+): Promise<void> => {
+  const response = await fetch(`${apiHostUrl}/api/password-reset`, {
+    body: JSON.stringify({ email }),
+    headers: new Headers([['Content-Type', 'application/json']]),
+    method: 'POST',
+  });
+  const result = await response.json();
+
+  if (result.success !== true) {
+    throw new Error("Can't get data from server");
+  }
+};
+
+export const requestNewPasswordSetting = async ({
+  password,
+  token,
+}: {
+  password: string;
+  token: string;
+}): Promise<void> => {
+  const response = await fetch(`${apiHostUrl}/api/password-reset/reset`, {
+    body: JSON.stringify({ password, token }),
+    headers: new Headers([['Content-Type', 'application/json']]),
+    method: 'POST',
+  });
+  const result = await response.json();
+
+  if (result.success !== true) {
     throw new Error("Can't get data from server");
   }
 };

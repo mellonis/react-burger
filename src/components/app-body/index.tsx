@@ -1,15 +1,17 @@
+import cs from 'classnames';
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
-import cs from 'classnames';
 import { FeedPage } from '../../pages/feed';
 import { ForgotPasswordPage } from '../../pages/forgot-password';
 import { IngredientsPage } from '../../pages/ingredients';
 import { LoginPage } from '../../pages/login';
+import { LogoutPage } from '../../pages/logout';
 import { MainPage } from '../../pages/main';
 import { NotFoundPage } from '../../pages/not-found';
 import { ProfilePage } from '../../pages/profile';
 import { RegisterPage } from '../../pages/register';
 import { ResetPasswordPage } from '../../pages/reset-password';
+import { ProtectedRoute } from '../protected-route';
 
 import styles from './style.module.css';
 
@@ -36,11 +38,14 @@ const AppBody = () => (
       <Route path="/feed">
         <FeedPage />
       </Route>
-      <Route path="/profile">
+      <ProtectedRoute path="/profile">
         <ProfilePage />
-      </Route>
+      </ProtectedRoute>
       <Route path="/ingredients">
         <IngredientsPage />
+      </Route>
+      <Route path="/logout">
+        <LogoutPage />
       </Route>
       <Route>
         <NotFoundPage />
