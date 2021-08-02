@@ -37,6 +37,7 @@ const allLexemes = {
         haveYouRememberedYourPassword: 'Вспомнили пароль?',
         name: 'Имя',
         password: 'Пароль',
+        resetForm: 'Отмена',
       },
       forgotPassword: {
         doResetPassword: 'Восстановить',
