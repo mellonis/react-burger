@@ -1,4 +1,38 @@
 .profile-page {
-    height: calc(100vh - 88px);;
+    display: grid;
+    grid-template-columns: 320px min-content 1fr;
+    height: calc(100vh - 88px);
     width: 100%;
+}
+
+.profile-page__menu {
+    font-size: 24px;
+    line-height: 30px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.profile-page__content {
+
+}
+
+.profile-page__menu-item {
+    align-items: center;
+    display: flex;
+    min-height: 64px;
+}
+
+.profile-page__menu-item-active {
+    color: white;
+}
+
+.profile-page__link {
+    background: none;
+    border: none;
+    color: inherit;
+    font-size: inherit;
+    margin: 0;
+    padding: 0;
+    text-decoration: none;
 }
