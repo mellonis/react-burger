@@ -1,3 +1,4 @@
+import { TICons } from '@ya.praktikum/react-developer-burger-ui-components/dist/ui/icons';
 import React, { ReactNode } from 'react';
 import { Control, Controller } from 'react-hook-form';
 import {
@@ -39,6 +40,8 @@ export enum ComponentInputType {
 
 interface InputDeclaration {
   componentType: ComponentInputType.input;
+  icon?: keyof TICons;
+  initialValue?: string;
   name: string;
   placeholder?: string;
   type?: React.ComponentProps<typeof Input>['type'];
@@ -46,6 +49,7 @@ interface InputDeclaration {
 
 interface PasswordInputDeclaration1 {
   componentType: ComponentInputType.passwordInput;
+  initialValue?: string;
   name: string;
   placeholder?: string;
 }
@@ -63,7 +67,7 @@ export const produceInputReactNode: (
 
   switch (inputDeclaration.componentType) {
     case ComponentInputType.input: {
-      const { name, placeholder, type = 'text' } = inputDeclaration;
+      const { icon, name, placeholder, type = 'text' } = inputDeclaration;
 
       component = (
         <Controller
@@ -71,6 +75,7 @@ export const produceInputReactNode: (
           name={name as 'email' | 'name' | 'password'}
           render={({ field: { onChange, value } }) => (
             <Input
+              icon={icon}
               onChange={onChange}
               placeholder={placeholder}
               type={type}
