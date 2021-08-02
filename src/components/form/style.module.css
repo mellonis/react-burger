@@ -22,6 +22,11 @@
     width: 100%;
 }
 
+.form__errors {
+    margin: 0;
+    list-style: disc;
+}
+
 .form__buttons-container {
     display: grid;
     grid-template-columns: 1fr min-content 1fr;

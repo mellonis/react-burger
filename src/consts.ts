@@ -29,6 +29,10 @@ const allLexemes = {
     top: 'верх',
     forms: {
       __common__: {
+        __errors__: {
+          required: 'Заполните обязательное поле',
+          passwordLength: 'Пароль должен содержать как минимум 6 символов',
+        },
         doHidePassword: 'Скрыть пароль',
         doLogin: 'Войти',
         doRegister: 'Зарегистрироваться',
