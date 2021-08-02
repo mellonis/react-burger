@@ -63,6 +63,7 @@ const Profile = () => {
           console.log(formData);
         }}
         resetButtonTitle={lexemes.forms.__common__.resetForm}
+        showErrors={true}
       />
     </div>
   );

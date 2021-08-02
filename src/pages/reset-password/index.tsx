@@ -86,6 +86,7 @@ const ResetPasswordPage = () => {
             dispatch(requestNewPasswordSetting({ password, token }));
           }
         }}
+        showErrors={true}
         title={lexemes.forms.resetPassword.title}
       />
     </div>

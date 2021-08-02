@@ -92,6 +92,7 @@ const RegisterPage = () => {
             );
           }
         }}
+        showErrors={true}
         title={lexemes.forms.register.title}
       />
     </div>
