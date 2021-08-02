@@ -3,9 +3,24 @@ import {
   Ingredient_t,
   OrderDetails_t,
   OrderStatus_t,
+  RefreshTokensResponse,
+  UserResponse,
 } from '../../types';
 
 export const apiHostUrl = 'https://norma.nomoreparties.space';
+
+const getAccessSchemaAndTokenAndRefreshToken = (
+  response: any
+): RefreshTokensResponse => {
+  const { accessToken: accessTokenWithSchema, refreshToken } = response;
+  const [accessSchema, accessToken] = accessTokenWithSchema.split(' ');
+
+  return {
+    accessSchema,
+    accessToken,
+    refreshToken,
+  };
+};
 
 export const fetchIngredients = async (): Promise<Ingredient_t[]> => {
   const response = await fetch(`${apiHostUrl}/api/ingredients`);
@@ -37,17 +52,11 @@ export const login = async ({
   }
 
   const {
-    accessToken: accessTokenWithSchema,
-    refreshToken,
     user: { email: userEmailFromServer, name: userNameFromServer },
   } = result;
 
-  const [accessSchema, accessToken] = accessTokenWithSchema.split(' ');
-
   return {
-    accessSchema,
-    accessToken,
-    refreshToken,
+    ...getAccessSchemaAndTokenAndRefreshToken(result),
     user: {
       email: userEmailFromServer,
       name: userNameFromServer,
@@ -57,7 +66,7 @@ export const login = async ({
 
 export const logout = async ({
   refreshToken,
-}: Pick<AuthUserResponse, 'refreshToken'>): Promise<void> => {
+}: Pick<RefreshTokensResponse, 'refreshToken'>): Promise<void> => {
   const response = await fetch(`${apiHostUrl}/api/auth/logout`, {
     body: JSON.stringify({ token: refreshToken }),
     headers: new Headers([['Content-Type', 'application/json']]),
@@ -86,6 +95,26 @@ export const placeAnOrder = async (
       message: 'Дождитесь готовности на орбитальной станции',
       status: OrderStatus_t.BEING_COOKED,
     };
+  } else {
+    throw new Error("Can't get data from server");
+  }
+};
+
+export const refreshTokens = async ({
+  refreshToken,
+}: Pick<
+  RefreshTokensResponse,
+  'refreshToken'
+>): Promise<RefreshTokensResponse> => {
+  const response = await fetch(`${apiHostUrl}/api/auth/token`, {
+    body: JSON.stringify({ refreshToken }),
+    headers: new Headers([['Content-Type', 'application/json']]),
+    method: 'POST',
+  });
+  const result = await response.json();
+
+  if (result.success === true) {
+    return getAccessSchemaAndTokenAndRefreshToken(result);
   } else {
     throw new Error("Can't get data from server");
   }
@@ -162,4 +191,36 @@ export const requestNewPasswordSetting = async ({
   if (result.success !== true) {
     throw new Error("Can't get data from server");
   }
+};
+
+export const updateUserData = async ({
+  accessToken,
+  accessSchema,
+  email,
+  name,
+  password,
+}: {
+  accessToken: string;
+  accessSchema: string;
+  email: string;
+  name: string;
+  password: string;
+}): Promise<UserResponse> => {
+  const response = await fetch(`${apiHostUrl}/api/auth/user`, {
+    body: JSON.stringify({ name, email, password }),
+    headers: new Headers([
+      ['Content-Type', 'application/json'],
+      ['Authorization', `${accessSchema} ${accessToken}`],
+    ]),
+    method: 'PATCH',
+  });
+  const result = await response.json();
+
+  if (result.success !== true) {
+    throw new Error("Can't get data from server");
+  }
+
+  return {
+    user: result.user,
+  };
 };

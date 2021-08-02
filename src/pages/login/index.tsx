@@ -1,5 +1,5 @@
 import cs from 'classnames';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Redirect } from 'react-router-dom';
 import {
   ComponentInputType,
@@ -7,7 +7,11 @@ import {
   InputDeclaration,
 } from '../../components/form';
 import { lexemes } from '../../consts';
-import { login, UserLoginPhase } from '../../services/reducers';
+import {
+  interruptUserLogin,
+  login,
+  UserLoginPhase,
+} from '../../services/reducers';
 import { useAppDispatch, useAppSelector } from '../../services/store';
 
 import { AdditionalAction } from '../../types';
@@ -44,6 +48,14 @@ const inputDeclarations: InputDeclaration[] = [
 const LoginPage = () => {
   const { userLoginPhase } = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    return () => {
+      if ([UserLoginPhase.rejected].includes(userLoginPhase)) {
+        dispatch(interruptUserLogin());
+      }
+    };
+  }, [dispatch, userLoginPhase]);
 
   if ([UserLoginPhase.fulfilled].includes(userLoginPhase)) {
     return <Redirect to={'/'} />;

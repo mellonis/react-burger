@@ -1,16 +1,26 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { AuthUserResponse, User } from '../../types';
+import {
+  AuthUserResponse,
+  RefreshTokensResponse,
+  User,
+  UserResponse,
+} from '../../types';
 import {
   login as apiLogin,
   logout as apiLogout,
+  refreshTokens as apiRefreshTokens,
   registerUser as apiRegisterUser,
   requestNewPasswordSetting as apiRequestNewPasswordSetting,
   requestPasswordResettingForEmail as apiRequestPasswordResettingForEmail,
+  updateUserData as apiUpdateUserData,
 } from '../api';
 import {
   authenticationSideEffect,
   cleanUpAuthenticationSideEffect,
+  getAccessSchemaAndToken,
   getRefreshToken,
+  resetUser,
+  setUser,
 } from '../helpers';
 
 export enum PasswordResettingPhase {
@@ -36,6 +46,13 @@ export enum UserLoginPhase {
   rejected = 'rejected',
 }
 
+export enum UpdateUserDataPhase {
+  initial = 'initial',
+  pending = 'pending',
+  fulfilled = 'fulfilled',
+  rejected = 'rejected',
+}
+
 const initialState: Readonly<{
   accessToken?: string;
   passwordResettingPhase: PasswordResettingPhase;
@@ -43,10 +60,13 @@ const initialState: Readonly<{
   user?: User;
   userLoginPhase: UserLoginPhase;
   userRegistrationPhase: UserRegistrationPhase;
+  userTimeStamp?: number;
+  updateUserDataPhase: UpdateUserDataPhase;
 }> = {
   passwordResettingPhase: PasswordResettingPhase.initial,
   userLoginPhase: UserLoginPhase.initial,
   userRegistrationPhase: UserRegistrationPhase.initial,
+  updateUserDataPhase: UpdateUserDataPhase.initial,
 };
 
 export const login = createAsyncThunk('user/login', apiLogin);
@@ -73,12 +93,76 @@ export const requestPasswordResettingForEmail = createAsyncThunk(
   apiRequestPasswordResettingForEmail
 );
 
+export const updateUserData = createAsyncThunk(
+  'user/updateUserData',
+  async ({
+    email,
+    name,
+    password,
+  }: {
+    email: string;
+    name: string;
+    password: string;
+  }) => {
+    const { accessSchema, accessToken } = getAccessSchemaAndToken();
+
+    if (!accessSchema || !accessToken) {
+      throw new Error('Action cannot be handled');
+    }
+
+    try {
+      return apiUpdateUserData({
+        accessSchema,
+        accessToken,
+        email,
+        name,
+        password,
+      });
+    } catch (error) {
+      console.log(error);
+
+      if (error.message !== 'jwt expired') {
+        throw error;
+      }
+
+      const refreshToken = getRefreshToken();
+
+      if (!refreshToken) {
+        throw error;
+      }
+
+      const payload = await apiRefreshTokens({ refreshToken });
+
+      authenticationSideEffect(payload);
+
+      const { accessSchema, accessToken } = getAccessSchemaAndToken() as Pick<
+        RefreshTokensResponse,
+        'accessSchema' | 'accessToken'
+      >;
+
+      return apiUpdateUserData({
+        accessSchema,
+        accessToken,
+        email,
+        name,
+        password,
+      });
+    }
+  }
+);
+
 const slice = createSlice({
   name: 'user',
   initialState,
   reducers: {
     interruptPasswordResettingWorkflow(state) {
       state.passwordResettingPhase = PasswordResettingPhase.initial;
+    },
+    interruptUpdateUserData(state) {
+      state.updateUserDataPhase = UpdateUserDataPhase.initial;
+    },
+    interruptUserLogin(state) {
+      state.userLoginPhase = UserLoginPhase.initial;
     },
     interruptUserRegistration(state) {
       state.userRegistrationPhase = UserRegistrationPhase.initial;
@@ -97,6 +181,7 @@ const slice = createSlice({
       .addCase(requestPasswordResettingForEmail.rejected, (state) => {
         state.passwordResettingPhase = PasswordResettingPhase.initial;
       });
+
     builder
       .addCase(requestNewPasswordSetting.pending, (state) => {
         state.passwordResettingPhase = PasswordResettingPhase.pendingResetting;
@@ -107,6 +192,7 @@ const slice = createSlice({
       .addCase(requestNewPasswordSetting.rejected, (state) => {
         state.passwordResettingPhase = PasswordResettingPhase.rejected;
       });
+
     builder
       .addCase(registerUser.pending, (state) => {
         state.userRegistrationPhase = UserRegistrationPhase.pending;
@@ -116,12 +202,13 @@ const slice = createSlice({
         (state, { payload }: PayloadAction<AuthUserResponse>) => {
           authenticationSideEffect(payload);
           state.userRegistrationPhase = UserRegistrationPhase.fulfilled;
-          state.user = payload.user;
+          setUser(state, payload.user);
         }
       )
       .addCase(registerUser.rejected, (state) => {
         state.userRegistrationPhase = UserRegistrationPhase.rejected;
       });
+
     builder
       .addCase(login.pending, (state) => {
         state.userLoginPhase = UserLoginPhase.pending;
@@ -131,20 +218,36 @@ const slice = createSlice({
         (state, { payload }: PayloadAction<AuthUserResponse>) => {
           authenticationSideEffect(payload);
           state.userLoginPhase = UserLoginPhase.fulfilled;
-          state.user = payload.user;
+          setUser(state, payload.user);
         }
       )
       .addCase(login.rejected, (state) => {
         state.userLoginPhase = UserLoginPhase.rejected;
       });
+
     builder
       .addCase(logout.pending, () => {})
       .addCase(logout.fulfilled, (state) => {
         cleanUpAuthenticationSideEffect();
-        delete state.user;
+        resetUser(state);
         state.userLoginPhase = UserLoginPhase.initial;
       })
       .addCase(logout.rejected, () => {});
+
+    builder
+      .addCase(updateUserData.pending, (state) => {
+        state.updateUserDataPhase = UpdateUserDataPhase.pending;
+      })
+      .addCase(
+        updateUserData.fulfilled,
+        (state, { payload }: PayloadAction<UserResponse>) => {
+          setUser(state, payload.user);
+          state.updateUserDataPhase = UpdateUserDataPhase.fulfilled;
+        }
+      )
+      .addCase(updateUserData.rejected, (state) => {
+        state.updateUserDataPhase = UpdateUserDataPhase.rejected;
+      });
   },
 });
 
@@ -152,5 +255,9 @@ const { reducer } = slice;
 
 export { reducer as userReducer };
 
-export const { interruptPasswordResettingWorkflow, interruptUserRegistration } =
-  slice.actions;
+export const {
+  interruptPasswordResettingWorkflow,
+  interruptUpdateUserData,
+  interruptUserLogin,
+  interruptUserRegistration,
+} = slice.actions;

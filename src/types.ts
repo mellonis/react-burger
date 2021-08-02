@@ -69,9 +69,14 @@ export interface User {
   name: string;
 }
 
-export interface AuthUserResponse {
+export interface RefreshTokensResponse {
   accessSchema: string;
   accessToken: string;
   refreshToken: string;
+}
+
+export interface UserResponse {
   user: User;
 }
+
+export type AuthUserResponse = RefreshTokensResponse & UserResponse;

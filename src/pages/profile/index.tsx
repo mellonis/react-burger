@@ -1,6 +1,7 @@
 import cs from 'classnames';
 import React from 'react';
 import { Link, Redirect, Route, Switch, useRouteMatch } from 'react-router-dom';
+import { useAppSelector } from '../../services/store';
 
 import pageStyles from '../page-style.module.css';
 import { Orders } from './orders';
@@ -10,6 +11,7 @@ import profilePageStyle from './style.module.css';
 const profilePageClassname = 'profile-page';
 
 const ProfilePage = () => {
+  const { userTimeStamp } = useAppSelector((state) => state.user);
   const { path } = useRouteMatch();
   const match = useRouteMatch({ path, exact: true });
 
@@ -65,7 +67,7 @@ const ProfilePage = () => {
       <div className={profilePageStyle[`${profilePageClassname}__content`]}>
         <Switch>
           <Route exact path={`${path}`}>
-            <Profile />
+            <Profile key={userTimeStamp} />
           </Route>
           <Route path={`${path}/orders`}>
             <Orders />

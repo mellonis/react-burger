@@ -1,4 +1,4 @@
-import { AuthUserResponse } from '../../types';
+import { AuthUserResponse, RefreshTokensResponse } from '../../types';
 
 // setCookie function implementation origin https://praktikum.yandex.ru/learn/react/courses/9c61cfa4-7d8c-4632-a5a1-f54d998a3cbe/sprints/6763/topics/c86f1ac6-c774-4f52-ba9e-9bf4581507bf/lessons/4b5d818d-d8e8-4446-a400-016eced40add/
 export function getCookie(name: string) {
@@ -55,14 +55,14 @@ export const authenticationSideEffect = ({
   accessSchema,
   accessToken,
   refreshToken,
-}: AuthUserResponse) => {
+}: RefreshTokensResponse) => {
   const cookies = {
     accessSchema,
     accessToken,
   };
 
   Object.entries(cookies).forEach(([cookieName, cookieValue]) =>
-    setCookie(cookieName, cookieValue)
+    setCookie(cookieName, cookieValue, { path: '/' })
   );
   localStorage.setItem(authRefreshTokenKey, refreshToken);
 };
@@ -75,7 +75,7 @@ export const cleanUpAuthenticationSideEffect = () => {
 };
 
 export const getAccessSchemaAndToken = (): Partial<
-  Pick<AuthUserResponse, 'accessSchema' | 'accessToken'>
+  Pick<RefreshTokensResponse, 'accessSchema' | 'accessToken'>
 > => {
   return ['accessSchema', 'accessToken'].reduce(
     (result, cookieName) =>
@@ -86,7 +86,9 @@ export const getAccessSchemaAndToken = (): Partial<
   );
 };
 
-export const getRefreshToken = (): AuthUserResponse['refreshToken'] => {
+export const getRefreshToken = ():
+  | AuthUserResponse['refreshToken']
+  | undefined => {
   return localStorage.authRefreshToken;
 };
 
@@ -96,4 +98,14 @@ export const getAuthHeaderValue = (): string | undefined => {
   if (accessSchema && accessToken) {
     return `${accessSchema} ${accessToken}`;
   }
+};
+
+export const setUser = (state: any, user: any) => {
+  state.user = user;
+  state.userTimeStamp = new Date().getTime();
+};
+
+export const resetUser = (state: any) => {
+  delete state.user;
+  delete state.userTimeStamp;
 };

@@ -1,11 +1,16 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import {
   ComponentInputType,
   Form,
   InputDeclaration,
 } from '../../../components/form';
 import { lexemes } from '../../../consts';
-import { useAppSelector } from '../../../services/store';
+import {
+  interruptUpdateUserData,
+  updateUserData,
+  UpdateUserDataPhase,
+} from '../../../services/reducers';
+import { useAppDispatch, useAppSelector } from '../../../services/store';
 
 const inputDeclarations: Readonly<InputDeclaration>[] = [
   {
@@ -32,7 +37,14 @@ const inputDeclarations: Readonly<InputDeclaration>[] = [
 ];
 
 const Profile = () => {
-  const { user } = useAppSelector((state) => state.user);
+  const { user, updateUserDataPhase } = useAppSelector((state) => state.user);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    return () => {
+      dispatch(interruptUpdateUserData());
+    };
+  }, [dispatch]);
 
   const actualInputDeclarations = useMemo(() => {
     if (!user) {
@@ -59,8 +71,10 @@ const Profile = () => {
         inputDeclarations={actualInputDeclarations}
         isButtonHiddenOnNotModifiedForm={true}
         buttonTitle={lexemes.forms.profile.doEdit}
-        onSubmit={(formData) => {
-          console.log(formData);
+        onSubmit={({ email, name, password }) => {
+          if (updateUserDataPhase === UpdateUserDataPhase.initial) {
+            dispatch(updateUserData({ email, name, password }));
+          }
         }}
         resetButtonTitle={lexemes.forms.__common__.resetForm}
         showErrors={true}
