@@ -41,10 +41,11 @@ const MainPage = () => {
 
     return () => {
       if (detailedIngredient) {
+        dispatch(resetDetailedIngredient());
         window.history.replaceState(null, '', path);
       }
     };
-  }, [detailedIngredient, path]);
+  }, [detailedIngredient, dispatch, path]);
 
   return (
     <div
