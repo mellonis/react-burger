@@ -41,7 +41,7 @@ const AppBody = () => (
       <ProtectedRoute path="/profile">
         <ProfilePage />
       </ProtectedRoute>
-      <Route path="/ingredients">
+      <Route path="/ingredients/:id">
         <IngredientsPage />
       </Route>
       <Route path="/logout">

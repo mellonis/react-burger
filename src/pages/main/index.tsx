@@ -1,30 +1,48 @@
-import React from 'react';
 import cs from 'classnames';
+import React, { useEffect } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend as Html5Backend } from 'react-dnd-html5-backend';
-import { lexemes } from '../../consts';
-import { useAppDispatch, useAppSelector } from '../../services/store';
-import {
-  resetDetailedIngredient,
-  resetOrderDetails,
-} from '../../services/reducers';
+import { useRouteMatch } from 'react-router-dom';
 import { BurgerConstructor } from '../../components/burger-constructor';
+import burgerConstructorStyles from '../../components/burger-constructor/style.module.css';
 import { BurgerIngredients } from '../../components/burger-ingredients';
 import { IngredientDetails } from '../../components/ingredient-details';
 import { Modal } from '../../components/modal';
 import { OrderDetails } from '../../components/order-details';
+import { lexemes } from '../../consts';
+import {
+  resetDetailedIngredient,
+  resetOrderDetails,
+} from '../../services/reducers';
+import { useAppDispatch, useAppSelector } from '../../services/store';
 
 import pageStyles from '../page-style.module.css';
 import mainPageStyles from './style.module.css';
-import burgerConstructorStyles from '../../components/burger-constructor/style.module.css';
 
 const mainPageClassName = 'main-page';
 
 const MainPage = () => {
+  const { path } = useRouteMatch();
   const { detailedIngredient, orderDetails } = useAppSelector(
     (state) => state.burger
   );
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (detailedIngredient) {
+      window.history.replaceState(
+        null,
+        '',
+        `/ingredients/${detailedIngredient._id}`
+      );
+    } else {
+      window.history.replaceState(null, '', path);
+    }
+
+    return () => {
+      window.history.replaceState(null, '', path);
+    };
+  }, [detailedIngredient, path]);
 
   return (
     <div

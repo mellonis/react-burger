@@ -33,7 +33,7 @@ const initialState: Readonly<{
   idToIngredientMap: {},
   ingredients: [],
   ingredientsError: null,
-  ingredientsRequest: false,
+  ingredientsRequest: true,
   orderDetails: null,
   orderDetailsError: null,
   orderDetailsRequest: false,
