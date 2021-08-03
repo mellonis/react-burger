@@ -70,7 +70,7 @@ const ForgotPasswordPage = () => {
         inputDeclarations={inputDeclarations}
         onSubmit={({ email }) => {
           if (passwordResettingPhase === PasswordResettingPhase.initial) {
-            dispatch(requestPasswordResettingForEmail(email));
+            dispatch(requestPasswordResettingForEmail({ email }));
           }
         }}
         title={lexemes.forms.forgotPassword.title}
