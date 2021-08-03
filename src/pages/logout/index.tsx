@@ -20,7 +20,7 @@ const LogoutPage = () => {
       UserLoginPhase.rejected,
     ].includes(userLoginPhase)
   ) {
-    return <Redirect to={'/'} />;
+    return <Redirect to={'/login'} />;
   }
 
   return null;
