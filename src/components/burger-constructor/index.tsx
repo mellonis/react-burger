@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import cs from 'classnames';
 import { useDrop } from 'react-dnd';
 import { Button } from '@ya.praktikum/react-developer-burger-ui-components';
+import { useHistory } from 'react-router-dom';
 import {
   DraggableTypes,
   IngredientDragItem,
@@ -28,15 +29,21 @@ const BurgerConstructor = ({ className }: { className?: string }) => {
     orderDetailsRequest,
     totalAmount,
   } = useAppSelector((state) => state.burger);
+  const { user } = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
+  const history = useHistory();
 
   const topBun = actualIngredients.slice(0, 1)[0];
   const bottomBun = actualIngredients.slice(-1)[0];
   const placeAnOrderClickHandler = useCallback(() => {
-    if (!orderDetailsRequest) {
-      dispatch(placeAnOrder(actualIngredients.map(({ refId }) => refId)));
+    if (!user) {
+      history.replace('/login');
+    } else {
+      if (!orderDetailsRequest) {
+        dispatch(placeAnOrder(actualIngredients.map(({ refId }) => refId)));
+      }
     }
-  }, [actualIngredients, dispatch, orderDetailsRequest]);
+  }, [actualIngredients, dispatch, history, orderDetailsRequest, user]);
 
   const [{ isCanDrop, isDragOver }, dropRef] = useDrop({
     accept: DraggableTypes.ingredient,
