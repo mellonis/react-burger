@@ -13,7 +13,8 @@ const profilePageClassname = 'profile-page';
 const ProfilePage = () => {
   const { userTimeStamp } = useAppSelector((state) => state.user);
   const { path } = useRouteMatch();
-  const match = useRouteMatch({ path, exact: true });
+  const isProfileSubpageMatched = useRouteMatch({ path, exact: true });
+  const isOrdersSubpageMatched = useRouteMatch({ path: `${path}/orders` });
 
   return (
     <div
@@ -35,7 +36,7 @@ const ProfilePage = () => {
             profilePageStyle[`${profilePageClassname}__menu-item`],
             {
               [profilePageStyle[`${profilePageClassname}__menu-item-active`]]:
-                match,
+                isProfileSubpageMatched,
             }
           )}
         >
@@ -46,7 +47,15 @@ const ProfilePage = () => {
             Профиль
           </Link>
         </li>
-        <li className={profilePageStyle[`${profilePageClassname}__menu-item`]}>
+        <li
+          className={cs(
+            profilePageStyle[`${profilePageClassname}__menu-item`],
+            {
+              [profilePageStyle[`${profilePageClassname}__menu-item-active`]]:
+                isOrdersSubpageMatched,
+            }
+          )}
+        >
           <Link
             className={profilePageStyle[`${profilePageClassname}__link`]}
             to={`${path}/orders`}
