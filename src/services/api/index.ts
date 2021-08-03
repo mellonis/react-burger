@@ -4,6 +4,7 @@ import {
   OrderDetails_t,
   OrderStatus_t,
   RefreshTokensResponse,
+  User,
   UserResponse,
 } from '../../types';
 
@@ -33,13 +34,15 @@ export const fetchIngredients = async (): Promise<Ingredient_t[]> => {
   }
 };
 
+interface LoginRequestParams {
+  email: string;
+  password: string;
+}
+
 export const login = async ({
   email,
   password,
-}: {
-  email: string;
-  password: string;
-}): Promise<AuthUserResponse> => {
+}: LoginRequestParams): Promise<AuthUserResponse> => {
   const response = await fetch(`${apiHostUrl}/api/auth/login`, {
     body: JSON.stringify({ email, password }),
     headers: new Headers([['Content-Type', 'application/json']]),
@@ -101,13 +104,13 @@ export const placeAnOrder = async (
 };
 
 export const refreshTokens = async ({
-  refreshToken,
+  refreshToken: token,
 }: Pick<
   RefreshTokensResponse,
   'refreshToken'
 >): Promise<RefreshTokensResponse> => {
   const response = await fetch(`${apiHostUrl}/api/auth/token`, {
-    body: JSON.stringify({ refreshToken }),
+    body: JSON.stringify({ token }),
     headers: new Headers([['Content-Type', 'application/json']]),
     method: 'POST',
   });
@@ -120,15 +123,17 @@ export const refreshTokens = async ({
   }
 };
 
+interface RegisterUserRequestParams {
+  email: string;
+  name: string;
+  password: string;
+}
+
 export const registerUser = async ({
   email,
   name,
   password,
-}: {
-  email: string;
-  name: string;
-  password: string;
-}): Promise<AuthUserResponse> => {
+}: RegisterUserRequestParams): Promise<AuthUserResponse> => {
   const response = await fetch(`${apiHostUrl}/api/auth/register`, {
     body: JSON.stringify({ email, name, password }),
     headers: new Headers([['Content-Type', 'application/json']]),
@@ -159,9 +164,13 @@ export const registerUser = async ({
   };
 };
 
-export const requestPasswordResettingForEmail = async (
-  email: string
-): Promise<void> => {
+interface RequestPasswordResettingForEmailParams {
+  email: string;
+}
+
+export const requestPasswordResettingForEmail = async ({
+  email,
+}: RequestPasswordResettingForEmailParams): Promise<void> => {
   const response = await fetch(`${apiHostUrl}/api/password-reset`, {
     body: JSON.stringify({ email }),
     headers: new Headers([['Content-Type', 'application/json']]),
@@ -174,13 +183,15 @@ export const requestPasswordResettingForEmail = async (
   }
 };
 
+interface RequestNewPasswordSettingParams {
+  password: string;
+  token: string;
+}
+
 export const requestNewPasswordSetting = async ({
   password,
   token,
-}: {
-  password: string;
-  token: string;
-}): Promise<void> => {
+}: RequestNewPasswordSettingParams): Promise<void> => {
   const response = await fetch(`${apiHostUrl}/api/password-reset/reset`, {
     body: JSON.stringify({ password, token }),
     headers: new Headers([['Content-Type', 'application/json']]),
@@ -193,19 +204,47 @@ export const requestNewPasswordSetting = async ({
   }
 };
 
+type AccessSchemaWithToken = Pick<
+  RefreshTokensResponse,
+  'accessSchema' | 'accessToken'
+>;
+
+type GetUserDataParams = {
+  auth: AccessSchemaWithToken;
+};
+
+export const getUserData = async ({
+  auth: { accessSchema, accessToken },
+}: GetUserDataParams): Promise<User> => {
+  const response = await fetch(`${apiHostUrl}/api/auth/user`, {
+    headers: new Headers([
+      ['Content-Type', 'application/json'],
+      ['Authorization', `${accessSchema} ${accessToken}`],
+    ]),
+    method: 'GET',
+  });
+  const result = await response.json();
+
+  if (result.success !== true) {
+    throw new Error("Can't get data from server");
+  }
+
+  return result.user;
+};
+
+type UpdateUserDataParams = {
+  auth: AccessSchemaWithToken;
+  data: {
+    email: string;
+    name: string;
+    password: string;
+  };
+};
+
 export const updateUserData = async ({
-  accessToken,
-  accessSchema,
-  email,
-  name,
-  password,
-}: {
-  accessToken: string;
-  accessSchema: string;
-  email: string;
-  name: string;
-  password: string;
-}): Promise<UserResponse> => {
+  auth: { accessSchema, accessToken },
+  data: { email, name, password },
+}: UpdateUserDataParams): Promise<UserResponse> => {
   const response = await fetch(`${apiHostUrl}/api/auth/user`, {
     body: JSON.stringify({ name, email, password }),
     headers: new Headers([

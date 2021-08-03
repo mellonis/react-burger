@@ -6,6 +6,7 @@ import {
   UserResponse,
 } from '../../types';
 import {
+  getUserData as apiGetUserData,
   login as apiLogin,
   logout as apiLogout,
   refreshTokens as apiRefreshTokens,
@@ -53,8 +54,16 @@ export enum UpdateUserDataPhase {
   rejected = 'rejected',
 }
 
+export enum AutoLoginPhase {
+  initial = 'initial',
+  pending = 'pending',
+  fulfilled = 'fulfilled',
+  rejected = 'rejected',
+}
+
 const initialState: Readonly<{
   accessToken?: string;
+  autoLoginPhase: AutoLoginPhase;
   passwordResettingPhase: PasswordResettingPhase;
   refreshToken?: string;
   user?: User;
@@ -63,13 +72,53 @@ const initialState: Readonly<{
   userTimeStamp?: number;
   updateUserDataPhase: UpdateUserDataPhase;
 }> = {
+  autoLoginPhase: AutoLoginPhase.initial,
   passwordResettingPhase: PasswordResettingPhase.initial,
   userLoginPhase: UserLoginPhase.initial,
   userRegistrationPhase: UserRegistrationPhase.initial,
   updateUserDataPhase: UpdateUserDataPhase.initial,
 };
 
+export const doAutoLogin = createAsyncThunk('user/doAutoLogin', async () => {
+  const { accessSchema, accessToken } = getAccessSchemaAndToken();
+
+  if (!accessSchema || !accessToken) {
+    throw new Error('Action cannot be handled');
+  }
+
+  try {
+    return await apiGetUserData({ auth: { accessSchema, accessToken } });
+  } catch (error) {
+    if (error.message !== 'jwt expired') {
+      throw error;
+    }
+
+    const refreshToken = getRefreshToken();
+
+    if (!refreshToken) {
+      throw error;
+    }
+
+    const payload = await apiRefreshTokens({ refreshToken });
+
+    authenticationSideEffect(payload);
+
+    const { accessSchema, accessToken } = getAccessSchemaAndToken() as Pick<
+      RefreshTokensResponse,
+      'accessSchema' | 'accessToken'
+    >;
+
+    return apiGetUserData({
+      auth: {
+        accessSchema,
+        accessToken,
+      },
+    });
+  }
+});
+
 export const login = createAsyncThunk('user/login', apiLogin);
+
 export const logout = createAsyncThunk('user/logout', async () => {
   const refreshToken = getRefreshToken();
 
@@ -111,16 +160,18 @@ export const updateUserData = createAsyncThunk(
     }
 
     try {
-      return apiUpdateUserData({
-        accessSchema,
-        accessToken,
-        email,
-        name,
-        password,
+      return await apiUpdateUserData({
+        auth: {
+          accessSchema,
+          accessToken,
+        },
+        data: {
+          email,
+          name,
+          password,
+        },
       });
     } catch (error) {
-      console.log(error);
-
       if (error.message !== 'jwt expired') {
         throw error;
       }
@@ -141,11 +192,8 @@ export const updateUserData = createAsyncThunk(
       >;
 
       return apiUpdateUserData({
-        accessSchema,
-        accessToken,
-        email,
-        name,
-        password,
+        auth: { accessSchema, accessToken },
+        data: { email, name, password },
       });
     }
   }
@@ -247,6 +295,22 @@ const slice = createSlice({
       )
       .addCase(updateUserData.rejected, (state) => {
         state.updateUserDataPhase = UpdateUserDataPhase.rejected;
+      });
+
+    builder
+      .addCase(doAutoLogin.pending, (state) => {
+        state.autoLoginPhase = AutoLoginPhase.pending;
+      })
+      .addCase(
+        doAutoLogin.fulfilled,
+        (state, { payload }: PayloadAction<User>) => {
+          state.autoLoginPhase = AutoLoginPhase.fulfilled;
+          state.userLoginPhase = UserLoginPhase.fulfilled;
+          setUser(state, payload);
+        }
+      )
+      .addCase(doAutoLogin.rejected, (state) => {
+        state.autoLoginPhase = AutoLoginPhase.rejected;
       });
   },
 });
