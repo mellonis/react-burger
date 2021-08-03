@@ -22,7 +22,7 @@ const allLexemes = {
     ingredientDetails: 'Детали ингредиента',
     orderId: 'Идентификатор заказа',
     orderList: 'Лента заказов',
-    placeAnOrder: 'Оформиль заказ',
+    placeAnOrder: 'Оформить заказ',
     profile: 'Личный кабинет',
     proteins: 'Белки, г',
     sauces: 'Соусы',

@@ -1,16 +1,18 @@
 import cs from 'classnames';
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
-import { FeedPage } from '../../pages/feed';
-import { ForgotPasswordPage } from '../../pages/forgot-password';
-import { IngredientsPage } from '../../pages/ingredients';
-import { LoginPage } from '../../pages/login';
-import { LogoutPage } from '../../pages/logout';
-import { MainPage } from '../../pages/main';
-import { NotFoundPage } from '../../pages/not-found';
-import { ProfilePage } from '../../pages/profile';
-import { RegisterPage } from '../../pages/register';
-import { ResetPasswordPage } from '../../pages/reset-password';
+import {
+  FeedPage,
+  ForgotPasswordPage,
+  IngredientsPage,
+  LoginPage,
+  LogoutPage,
+  MainPage,
+  NotFoundPage,
+  ProfilePage,
+  RegisterPage,
+  ResetPasswordPage,
+} from '../../pages';
 import { ProtectedRoute } from '../protected-route';
 
 import styles from './style.module.css';
