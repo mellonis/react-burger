@@ -40,7 +40,9 @@ const MainPage = () => {
     }
 
     return () => {
-      window.history.replaceState(null, '', path);
+      if (detailedIngredient) {
+        window.history.replaceState(null, '', path);
+      }
     };
   }, [detailedIngredient, path]);
 
