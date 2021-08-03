@@ -1,6 +1,6 @@
 import cs from 'classnames';
 import React, { useEffect } from 'react';
-import { Redirect } from 'react-router-dom';
+import { Redirect, useLocation } from 'react-router-dom';
 import {
   ComponentInputType,
   Form,
@@ -48,6 +48,9 @@ const inputDeclarations: InputDeclaration[] = [
 const LoginPage = () => {
   const { userLoginPhase } = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
+  const { state: { redirectedFrom = '/' } = {} } = useLocation() as {
+    state: { redirectedFrom?: string };
+  };
 
   useEffect(() => {
     return () => {
@@ -58,7 +61,7 @@ const LoginPage = () => {
   }, [dispatch, userLoginPhase]);
 
   if ([UserLoginPhase.fulfilled].includes(userLoginPhase)) {
-    return <Redirect to={'/'} />;
+    return <Redirect to={redirectedFrom} />;
   }
 
   return (

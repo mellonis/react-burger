@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import { Redirect, Route } from 'react-router-dom';
+import { Redirect, Route, useLocation } from 'react-router-dom';
 import { UserLoginPhase } from '../../services/reducers';
 import { useAppSelector } from '../../services/store';
 
@@ -11,6 +11,7 @@ const ProtectedRoute = ({
   [key: string]: any;
 }) => {
   const { userLoginPhase } = useAppSelector((state) => state.user);
+  const { pathname } = useLocation();
 
   return (
     <Route
@@ -19,7 +20,14 @@ const ProtectedRoute = ({
         userLoginPhase === UserLoginPhase.fulfilled ? (
           children
         ) : (
-          <Redirect to={'/login'} />
+          <Redirect
+            to={{
+              pathname: '/login',
+              state: {
+                redirectedFrom: pathname,
+              },
+            }}
+          />
         )
       }
     />
