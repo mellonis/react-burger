@@ -7,7 +7,6 @@ import {
 } from '../../services/reducers';
 import { useAppDispatch, useAppSelector } from '../../services/store';
 import { AppBody } from '../app-body';
-
 import { AppHeader } from '../app-header';
 
 import style from './style.module.css';

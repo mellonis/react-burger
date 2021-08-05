@@ -34,7 +34,7 @@ const IngredientsPage = () => {
         ingredientsPageClassname
       )}
     >
-      <IngredientDetails ingredient={ingredient} />
+      <IngredientDetails />
     </div>
   );
 };

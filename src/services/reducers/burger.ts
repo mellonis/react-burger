@@ -16,7 +16,6 @@ const generateIngredientId = () => uuidV4();
 
 const initialState: Readonly<{
   actualIngredients: ActualIngredient_t[];
-  detailedIngredient: Ingredient_t | null;
   idToIngredientMap: { [key: string]: Ingredient_t };
   idToActualIngredientsCountMap: { [key: string]: number };
   ingredients: Ingredient_t[];
@@ -28,7 +27,6 @@ const initialState: Readonly<{
   totalAmount: number;
 }> = {
   actualIngredients: [],
-  detailedIngredient: null,
   idToActualIngredientsCountMap: {},
   idToIngredientMap: {},
   ingredients: [],
@@ -158,9 +156,6 @@ const slice = createSlice({
           buildIdToActualIngredientsCountMap(state);
       }
     },
-    resetDetailedIngredient(state) {
-      state.detailedIngredient = null;
-    },
     resetOrderDetails(state) {
       if (!state.orderDetailsRequest) {
         Object.assign(state, {
@@ -169,9 +164,6 @@ const slice = createSlice({
           orderDetailsRequest: false,
         });
       }
-    },
-    setDetailedIngredient(state, action: PayloadAction<Ingredient_t>) {
-      state.detailedIngredient = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -252,7 +244,5 @@ export const {
   addIngredient,
   moveIngredient,
   removeIngredient,
-  resetDetailedIngredient,
   resetOrderDetails,
-  setDetailedIngredient,
 } = slice.actions;
