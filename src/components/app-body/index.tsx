@@ -28,8 +28,6 @@ const AppBody = () => {
   };
   const history = useHistory();
 
-  console.log({ backgroundPageLocation });
-
   if (backgroundPageLocation) {
     location = backgroundPageLocation;
   }
