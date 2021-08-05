@@ -3,6 +3,6 @@
   grid-template-columns: repeat(2, max-content);
 }
 
-.menu-item_active {
+.menu-item {
   cursor: pointer;
 }

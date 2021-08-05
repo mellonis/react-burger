@@ -1,5 +1,5 @@
 import React from 'react';
-import { useHistory, useRouteMatch } from 'react-router-dom';
+import { Link, useHistory, useRouteMatch } from 'react-router-dom';
 import cs from 'classnames';
 import {
   Logo,
@@ -50,7 +50,9 @@ const AppHeader = () => {
             text={lexemes.orderList}
           />
           <li className={styles['app-header__logo-wrapper']}>
-            <Logo />
+            <Link to={'/'}>
+              <Logo />
+            </Link>
           </li>
           <MenuItem
             className={styles['app-header__menu-item']}

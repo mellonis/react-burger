@@ -33,6 +33,7 @@ const MenuItem = ({
         }
       )}
       onClick={onClick}
+      role="button"
     >
       <Icon type={isActive ? 'primary' : 'secondary'} />
       <span className="ml-2">{text}</span>
