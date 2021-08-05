@@ -221,10 +221,12 @@ const slice = createSlice({
       .addCase(
         placeAnOrder.fulfilled,
         (state, { payload: orderDetails }: PayloadAction<OrderDetails_t>) => {
-          Object.assign(state, {
-            orderDetails,
-            orderDetailsRequest: false,
-          });
+          state.orderDetailsRequest = false;
+          state.orderDetails = orderDetails;
+          state.actualIngredients = [];
+          state.totalAmount = calcTotal(state);
+          state.idToActualIngredientsCountMap =
+            buildIdToActualIngredientsCountMap(state);
         }
       )
       .addCase(
