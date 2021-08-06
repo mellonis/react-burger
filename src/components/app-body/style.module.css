@@ -1,10 +1,7 @@
 .app-body {
-    display: grid;
-    grid-template-columns: 1fr min-content 1fr;
-}
-
-.app-body__ingredients,
-.app-body__constructor,
-.app-body__space {
-    max-height: calc(100vh - 88px);
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    justify-content: center;
 }

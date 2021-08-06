@@ -1,26 +1,37 @@
-import React from 'react';
 import cs from 'classnames';
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend as Html5Backend } from 'react-dnd-html5-backend';
-import BurgerIngredients from '../burger-ingredients';
-import BurgerConstructor from '../burger-constructor';
-import styles from './style.module.css';
+import React from 'react';
+import { Route, Switch, useHistory, useLocation } from 'react-router-dom';
 import { lexemes } from '../../consts';
-import { useAppDispatch, useAppSelector } from '../../services/store';
 import {
-  resetDetailedIngredient,
-  resetOrderDetails,
-} from '../../services/reducers';
-import IngredientDetails from '../ingredient-details';
-import style from '../burger-constructor/style.module.css';
-import Modal from '../modal';
-import OrderDetails from '../order-details';
+  FeedPage,
+  ForgotPasswordPage,
+  IngredientsPage,
+  LoginPage,
+  LogoutPage,
+  MainPage,
+  NotFoundPage,
+  ProfilePage,
+  RegisterPage,
+  ResetPasswordPage,
+} from '../../pages';
+import burgerConstructorStyles from '../burger-constructor/style.module.css';
+import { IngredientDetails } from '../ingredient-details';
+import { Modal } from '../modal';
+import { ProtectedRoute } from '../protected-route';
+
+import styles from './style.module.css';
 
 const AppBody = () => {
-  const { detailedIngredient, orderDetails } = useAppSelector(
-    (state) => state.main
-  );
-  const dispatch = useAppDispatch();
+  let location = useLocation();
+  const { state: locationState } = useLocation() as {
+    state: { backgroundPageLocation?: typeof location } | null;
+  };
+  const { backgroundPageLocation } = locationState ?? {};
+  const history = useHistory();
+
+  if (backgroundPageLocation) {
+    location = backgroundPageLocation;
+  }
 
   return (
     <main
@@ -29,35 +40,56 @@ const AppBody = () => {
         'pl-5 pr-5 text text_type_main-default'
       )}
     >
-      <DndProvider backend={Html5Backend}>
-        <BurgerIngredients className={styles['app-body__ingredients']} />
-        <div className={cs(styles['app-body__space'], 'pl-10')} />
-        <BurgerConstructor className={styles['app-body__constructor']} />
-      </DndProvider>
-      {detailedIngredient && (
-        <Modal
-          onClose={() => dispatch(resetDetailedIngredient())}
-          title={lexemes.ingredientDetails}
-        >
-          <IngredientDetails
-            className={cs(style['burger-constructor__ingredient-details'])}
-            ingredient={detailedIngredient}
-          />
-        </Modal>
-      )}
-      {orderDetails && (
-        <Modal onClose={() => dispatch(resetOrderDetails())}>
-          <OrderDetails
-            className={cs(
-              style['burger-constructor__order-details'],
-              'mt-4 mb-20'
-            )}
-            orderDetails={orderDetails}
-          />
-        </Modal>
-      )}
+      <Switch location={location}>
+        <Route exact path="/">
+          <MainPage />
+        </Route>
+        <Route exact path="/login">
+          <LoginPage />
+        </Route>
+        <Route exact path="/register">
+          <RegisterPage />
+        </Route>
+        <Route exact path="/forgot-password">
+          <ForgotPasswordPage />
+        </Route>
+        <Route exact path="/reset-password">
+          <ResetPasswordPage />
+        </Route>
+        <Route path="/feed">
+          <FeedPage />
+        </Route>
+        <ProtectedRoute path="/profile">
+          <ProfilePage />
+        </ProtectedRoute>
+        <Route path="/ingredients/:id">
+          <IngredientsPage />
+        </Route>
+        <Route path="/logout">
+          <LogoutPage />
+        </Route>
+        <Route>
+          <NotFoundPage />
+        </Route>
+      </Switch>
+      {backgroundPageLocation ? (
+        <Route path="/ingredients/:id">
+          <Modal
+            onClose={() => history.goBack()}
+            title={lexemes.ingredientDetails}
+          >
+            <IngredientDetails
+              className={cs(
+                burgerConstructorStyles[
+                  'burger-constructor__ingredient-details'
+                ]
+              )}
+            />
+          </Modal>
+        </Route>
+      ) : null}
     </main>
   );
 };
 
-export default AppBody;
+export { AppBody };

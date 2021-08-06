@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link, useHistory, useRouteMatch } from 'react-router-dom';
 import cs from 'classnames';
 import {
   Logo,
@@ -7,11 +8,16 @@ import {
   ProfileIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import { lexemes } from '../../consts';
-import MenuItem from './menu-item';
+import { MenuItem } from './menu-item';
 
 import styles from './style.module.css';
 
 const AppHeader = () => {
+  const history = useHistory();
+  const mainPageMatch = useRouteMatch('/');
+  const feedPageMatch = useRouteMatch('/feed');
+  const profilePageMatch = useRouteMatch('/profile');
+
   return (
     <header
       className={cs(
@@ -24,21 +30,39 @@ const AppHeader = () => {
           <MenuItem
             className={styles['app-header__menu-item']}
             Icon={BurgerIcon}
+            isActive={(mainPageMatch && mainPageMatch.isExact) ?? false}
+            onClick={() => {
+              history.push({
+                pathname: '/',
+              });
+            }}
             text={lexemes.constructor}
           />
           <MenuItem
             className={styles['app-header__menu-item']}
             Icon={ListIcon}
-            isActive={false}
+            isActive={Boolean(feedPageMatch)}
+            onClick={() => {
+              history.push({
+                pathname: '/feed',
+              });
+            }}
             text={lexemes.orderList}
           />
           <li className={styles['app-header__logo-wrapper']}>
-            <Logo />
+            <Link to={'/'}>
+              <Logo />
+            </Link>
           </li>
           <MenuItem
             className={styles['app-header__menu-item']}
             Icon={ProfileIcon}
-            isActive={false}
+            isActive={Boolean(profilePageMatch)}
+            onClick={() => {
+              history.push({
+                pathname: '/profile',
+              });
+            }}
             text={lexemes.profile}
           />
         </ul>
@@ -47,4 +71,4 @@ const AppHeader = () => {
   );
 };
 
-export default AppHeader;
+export { AppHeader };

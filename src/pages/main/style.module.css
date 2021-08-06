@@ -1,0 +1,10 @@
+.main-page {
+    display: grid;
+    grid-template-columns: 1fr min-content 1fr;
+}
+
+.main-page__ingredients,
+.main-page__constructor,
+.main-page__space {
+    max-height: calc(100vh - 88px);
+}

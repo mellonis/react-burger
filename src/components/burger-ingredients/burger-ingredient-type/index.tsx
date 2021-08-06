@@ -1,10 +1,9 @@
-import React from 'react';
-import PropTypes from 'prop-types';
 import cs from 'classnames';
+import PropTypes from 'prop-types';
+import React from 'react';
+import { useHistory, useLocation } from 'react-router-dom';
 import { Ingredient_t } from '../../../types';
-import { useAppDispatch } from '../../../services/store';
-import { setDetailedIngredient } from '../../../services/reducers';
-import BurgerIngredient from '../burger-ingredient';
+import { BurgerIngredient } from '../burger-ingredient';
 
 import style from './style.module.css';
 
@@ -19,7 +18,8 @@ const BurgerIngredientType = ({
   title: string;
   type: string;
 }) => {
-  const dispatch = useAppDispatch();
+  const location = useLocation();
+  const history = useHistory();
 
   return (
     <li className={cs('pt-10', className)} data-type={type}>
@@ -35,7 +35,12 @@ const BurgerIngredientType = ({
             <BurgerIngredient
               ingredient={ingredient}
               onClick={() => {
-                dispatch(setDetailedIngredient(ingredients[ix]));
+                history.push({
+                  pathname: `/ingredients/${ingredient._id}`,
+                  state: {
+                    backgroundPageLocation: location,
+                  },
+                });
               }}
             />
             <li
@@ -58,4 +63,4 @@ BurgerIngredientType.propTypes = {
   type: PropTypes.string.isRequired,
 };
 
-export default BurgerIngredientType;
+export { BurgerIngredientType };

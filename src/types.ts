@@ -1,3 +1,9 @@
+export interface AdditionalAction {
+  title: string;
+  url: string;
+  urlTitle: string;
+}
+
 export enum ActualIngredientType {
   top = 'top',
   bottom = 'bottom',
@@ -57,3 +63,20 @@ export type OrderDetails_t = {
   status: OrderStatus_t;
   message: string;
 };
+
+export interface User {
+  email: string;
+  name: string;
+}
+
+export interface RefreshTokensResponse {
+  accessSchema: string;
+  accessToken: string;
+  refreshToken: string;
+}
+
+export interface UserResponse {
+  user: User;
+}
+
+export type AuthUserResponse = RefreshTokensResponse & UserResponse;

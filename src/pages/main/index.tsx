@@ -1,0 +1,56 @@
+import cs from 'classnames';
+import React from 'react';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend as Html5Backend } from 'react-dnd-html5-backend';
+import { BurgerConstructor } from '../../components/burger-constructor';
+import burgerConstructorStyles from '../../components/burger-constructor/style.module.css';
+import { BurgerIngredients } from '../../components/burger-ingredients';
+import { Modal } from '../../components/modal';
+import { OrderDetails } from '../../components/order-details';
+import { resetOrderDetails } from '../../services/reducers';
+import { useAppDispatch, useAppSelector } from '../../services/store';
+
+import pageStyles from '../page-style.module.css';
+import mainPageStyles from './style.module.css';
+
+const mainPageClassName = 'main-page';
+
+const MainPage = () => {
+  const { orderDetails } = useAppSelector((state) => state.burger);
+  const dispatch = useAppDispatch();
+
+  return (
+    <div
+      className={cs(
+        pageStyles['page'],
+        pageStyles[`page_${mainPageClassName}`], // for BEM methodology accomplishments
+        mainPageStyles[mainPageClassName]
+      )}
+    >
+      <DndProvider backend={Html5Backend}>
+        <BurgerIngredients
+          className={mainPageStyles[`${mainPageClassName}__ingredients`]}
+        />
+        <div
+          className={cs(mainPageStyles[`${mainPageClassName}__space`], 'pl-10')}
+        />
+        <BurgerConstructor
+          className={mainPageStyles[`${mainPageClassName}__constructor`]}
+        />
+      </DndProvider>
+      {orderDetails && (
+        <Modal onClose={() => dispatch(resetOrderDetails())}>
+          <OrderDetails
+            className={cs(
+              burgerConstructorStyles['burger-constructor__order-details'],
+              'mt-4 mb-20'
+            )}
+            orderDetails={orderDetails}
+          />
+        </Modal>
+      )}
+    </div>
+  );
+};
+
+export { MainPage };

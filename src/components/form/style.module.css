@@ -1,0 +1,44 @@
+.form {
+    display: grid;
+    grid-template-columns: minmax(min-content, 480px);
+}
+
+.form__header {
+    font-weight: bold;
+    font-size: 24px;
+    line-height: 30px;
+    text-align: center;
+}
+
+.form__body {
+
+}
+
+.form__body :global .input__container {
+    width: 100%;
+}
+
+.form__body :global .input {
+    width: 100%;
+}
+
+.form__errors {
+    margin: 0;
+    list-style: disc;
+}
+
+.form__buttons-container {
+    display: grid;
+    grid-template-columns: 1fr min-content 1fr;
+    margin: 0 auto;
+    width: min-content;
+}
+
+.form__button-wrapper {
+    display: flex;
+    justify-content: center;
+}
+
+.form__additional-actions {
+    text-align: center;
+}

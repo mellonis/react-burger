@@ -1,11 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit';
-import mainReducer from './reducers';
 import { useDispatch, useSelector } from 'react-redux';
+import { burgerReducer, userReducer } from './reducers';
 
 const store = configureStore({
   devTools: process.env.NODE_ENV === 'development',
   reducer: {
-    main: mainReducer,
+    burger: burgerReducer,
+    user: userReducer,
   },
 });
 
@@ -16,4 +17,4 @@ export const useAppDispatch = () => useDispatch<AppDispatch>();
 export const useAppSelector = <T>(func: (state: RootState) => T): T =>
   useSelector(func);
 
-export default store;
+export { store };

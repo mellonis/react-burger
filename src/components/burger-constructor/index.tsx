@@ -1,23 +1,23 @@
-import React, { useCallback } from 'react';
-import PropTypes from 'prop-types';
-import cs from 'classnames';
-import { useDrop } from 'react-dnd';
 import { Button } from '@ya.praktikum/react-developer-burger-ui-components';
-import {
-  DraggableTypes,
-  IngredientDragItem,
-  IngredientType,
-} from '../../types';
-import { useAppDispatch, useAppSelector } from '../../services/store';
+import cs from 'classnames';
+import PropTypes from 'prop-types';
+import React, { useCallback } from 'react';
+import { useDrop } from 'react-dnd';
+import { useHistory, useLocation } from 'react-router-dom';
 import { lexemes } from '../../consts';
 import {
   addIngredient,
   placeAnOrder,
   removeIngredient,
-  setDetailedIngredient,
 } from '../../services/reducers';
-import Amount from '../amount';
-import BurgerConstructorItem from './burger-constructor-item';
+import { useAppDispatch, useAppSelector } from '../../services/store';
+import {
+  DraggableTypes,
+  IngredientDragItem,
+  IngredientType,
+} from '../../types';
+import { Amount } from '../amount';
+import { BurgerConstructorItem } from './burger-constructor-item';
 
 import style from './style.module.css';
 
@@ -27,16 +27,23 @@ const BurgerConstructor = ({ className }: { className?: string }) => {
     idToIngredientMap,
     orderDetailsRequest,
     totalAmount,
-  } = useAppSelector((state) => state.main);
+  } = useAppSelector((state) => state.burger);
+  const { user } = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
+  const location = useLocation();
+  const history = useHistory();
 
   const topBun = actualIngredients.slice(0, 1)[0];
   const bottomBun = actualIngredients.slice(-1)[0];
   const placeAnOrderClickHandler = useCallback(() => {
-    if (!orderDetailsRequest) {
-      dispatch(placeAnOrder(actualIngredients.map(({ refId }) => refId)));
+    if (!user) {
+      history.replace('/login');
+    } else {
+      if (!orderDetailsRequest) {
+        dispatch(placeAnOrder(actualIngredients.map(({ refId }) => refId)));
+      }
     }
-  }, [actualIngredients, dispatch, orderDetailsRequest]);
+  }, [actualIngredients, dispatch, history, orderDetailsRequest, user]);
 
   const [{ isCanDrop, isDragOver }, dropRef] = useDrop({
     accept: DraggableTypes.ingredient,
@@ -87,7 +94,12 @@ const BurgerConstructor = ({ className }: { className?: string }) => {
                     ingredient={idToIngredientMap[refId]!}
                     isLocked={isLocked}
                     onShowIngredientInfo={() => {
-                      dispatch(setDetailedIngredient(ingredient));
+                      history.push({
+                        pathname: `/ingredients/${ingredient._id}`,
+                        state: {
+                          backgroundPageLocation: location,
+                        },
+                      });
                     }}
                     type={type}
                   />
@@ -114,7 +126,12 @@ const BurgerConstructor = ({ className }: { className?: string }) => {
                     ingredient={idToIngredientMap[refId]!}
                     isLocked={isLocked}
                     onShowIngredientInfo={() => {
-                      dispatch(setDetailedIngredient(ingredient));
+                      history.push({
+                        pathname: `/ingredients/${ingredient._id}`,
+                        state: {
+                          backgroundPageLocation: location,
+                        },
+                      });
                     }}
                     onDelete={() => {
                       dispatch(removeIngredient(id));
@@ -138,7 +155,12 @@ const BurgerConstructor = ({ className }: { className?: string }) => {
                     ingredient={idToIngredientMap[refId]!}
                     isLocked={isLocked}
                     onShowIngredientInfo={() => {
-                      dispatch(setDetailedIngredient(ingredient));
+                      history.push({
+                        pathname: `/ingredients/${ingredient._id}`,
+                        state: {
+                          backgroundPageLocation: location,
+                        },
+                      });
                     }}
                     type={type}
                   />
@@ -169,4 +191,4 @@ const BurgerConstructor = ({ className }: { className?: string }) => {
 
 BurgerConstructor.propTypes = { className: PropTypes.string };
 
-export default BurgerConstructor;
+export { BurgerConstructor };

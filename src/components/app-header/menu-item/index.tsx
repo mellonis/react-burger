@@ -10,11 +10,13 @@ const MenuItem = ({
   className,
   Icon,
   isActive,
+  onClick,
   text,
 }: {
   className?: string;
   Icon: Icon_t;
   isActive?: boolean;
+  onClick?: (...a: any[]) => void;
   text: string;
 }) => {
   return (
@@ -30,6 +32,8 @@ const MenuItem = ({
           text_color_inactive: !isActive,
         }
       )}
+      onClick={onClick}
+      role="button"
     >
       <Icon type={isActive ? 'primary' : 'secondary'} />
       <span className="ml-2">{text}</span>
@@ -41,6 +45,7 @@ MenuItem.propTypes = {
   className: PropTypes.string,
   Icon: PropTypes.elementType.isRequired,
   isActive: PropTypes.bool,
+  onClick: PropTypes.func,
   text: PropTypes.string.isRequired,
 };
 
@@ -48,4 +53,4 @@ MenuItem.defaultProps = {
   isActive: true,
 };
 
-export default MenuItem;
+export { MenuItem };

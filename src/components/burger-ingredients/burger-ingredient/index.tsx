@@ -8,7 +8,7 @@ import {
   IngredientDragItem,
 } from '../../../types';
 import { useAppSelector } from '../../../services/store';
-import Amount from '../../amount';
+import { Amount } from '../../amount';
 import { Counter } from '@ya.praktikum/react-developer-burger-ui-components';
 
 import style from './style.module.css';
@@ -21,7 +21,7 @@ const BurgerIngredient = ({
   onClick?: () => void;
 }) => {
   const { idToActualIngredientsCountMap } = useAppSelector(
-    (state) => state.main
+    (state) => state.burger
   );
   const [{ isItPicked }, dragRef, preview] = useDrag({
     type: DraggableTypes.ingredient,
@@ -77,4 +77,4 @@ BurgerIngredient.propTypes = {
   onClick: PropTypes.func,
 };
 
-export default BurgerIngredient;
+export { BurgerIngredient };
