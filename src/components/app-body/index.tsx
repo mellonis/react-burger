@@ -23,9 +23,10 @@ import styles from './style.module.css';
 
 const AppBody = () => {
   let location = useLocation();
-  const { state: { backgroundPageLocation } = {} } = useLocation() as {
-    state?: { backgroundPageLocation?: typeof location };
+  const { state: locationState } = useLocation() as {
+    state: { backgroundPageLocation?: typeof location } | null;
   };
+  const { backgroundPageLocation } = locationState ?? {};
   const history = useHistory();
 
   if (backgroundPageLocation) {
