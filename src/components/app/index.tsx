@@ -36,7 +36,7 @@ const App = () => {
 
   return (
     <div className={style.app}>
-      <Router>
+      <Router basename={process.env.PUBLIC_URL}>
         <AppHeader />
         {!ingredientsRequest && !ingredientsError && <AppBody />}
       </Router>
