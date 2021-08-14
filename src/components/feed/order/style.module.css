@@ -1,0 +1,27 @@
+.order {
+    background-color: var(--background);
+    border-radius: 40px;
+}
+
+.order__number-and-date-wrapper {
+    display: grid;
+    grid-template-columns: min-content 1fr;
+}
+
+.order__number {
+}
+
+.order__date {
+    text-align: right;
+}
+
+.order__title {
+}
+
+.order__status {
+
+}
+
+.order__status_done {
+    color: var(--colors-interface-success);
+}

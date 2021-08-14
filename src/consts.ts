@@ -7,6 +7,7 @@ export const orderStatusToStatusTitleMap: {
   [OrderStatus_t.COOKED]: 'Заказ приготовлен',
   [OrderStatus_t.BEING_DELIVERED]: 'Ваш заказ доставляется',
   [OrderStatus_t.DELIVERED]: 'Заказ доставлен',
+  [OrderStatus_t.DONE]: 'Выполнен',
 };
 
 const allLexemes = {

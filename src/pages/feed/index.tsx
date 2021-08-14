@@ -1,20 +1,21 @@
 import React from 'react';
-import cs from 'classnames';
+import { Redirect, Route, Switch, useRouteMatch } from 'react-router-dom';
+import { FeedPage } from './feed';
 
-import pageStyles from '../page-style.module.css';
+const FeedPageSwitcher = () => {
+  const { path } = useRouteMatch();
 
-const feedPageClassname = 'feed-page';
+  return (
+    <Switch>
+      <Route exact path={`${path}`}>
+        <FeedPage />
+      </Route>
+      <Route path={`${path}/:id`}>Feed Page / orderId</Route>
+      <Route>
+        <Redirect to={path} />
+      </Route>
+    </Switch>
+  );
+};
 
-const FeedPage = () => (
-  <div
-    className={cs(
-      pageStyles['page'],
-      pageStyles[`page_${feedPageClassname}`], // for BEM methodology accomplishments
-      feedPageClassname
-    )}
-  >
-    Feed Page
-  </div>
-);
-
-export { FeedPage };
+export { FeedPageSwitcher };

@@ -3,7 +3,7 @@ import React from 'react';
 import { Route, Switch, useHistory, useLocation } from 'react-router-dom';
 import { lexemes } from '../../consts';
 import {
-  FeedPage,
+  FeedPageSwitcher,
   ForgotPasswordPage,
   IngredientsPage,
   LoginPage,
@@ -57,7 +57,7 @@ const AppBody = () => {
           <ResetPasswordPage />
         </Route>
         <Route path="/feed">
-          <FeedPage />
+          <FeedPageSwitcher />
         </Route>
         <ProtectedRoute path="/profile">
           <ProfilePage />

@@ -13,7 +13,7 @@ import { useAppDispatch, useAppSelector } from '../../services/store';
 import pageStyles from '../page-style.module.css';
 import mainPageStyles from './style.module.css';
 
-const mainPageClassName = 'main-page';
+const mainPageClassname = 'main-page';
 
 const MainPage = () => {
   const { orderDetails } = useAppSelector((state) => state.burger);
@@ -23,19 +23,19 @@ const MainPage = () => {
     <div
       className={cs(
         pageStyles['page'],
-        pageStyles[`page_${mainPageClassName}`], // for BEM methodology accomplishments
-        mainPageStyles[mainPageClassName]
+        pageStyles[`page_${mainPageClassname}`], // for BEM methodology accomplishments
+        mainPageStyles[mainPageClassname]
       )}
     >
       <DndProvider backend={Html5Backend}>
         <BurgerIngredients
-          className={mainPageStyles[`${mainPageClassName}__ingredients`]}
+          className={mainPageStyles[`${mainPageClassname}__ingredients`]}
         />
         <div
-          className={cs(mainPageStyles[`${mainPageClassName}__space`], 'pl-10')}
+          className={cs(mainPageStyles[`${mainPageClassname}__space`], 'pl-10')}
         />
         <BurgerConstructor
-          className={mainPageStyles[`${mainPageClassName}__constructor`]}
+          className={mainPageStyles[`${mainPageClassname}__constructor`]}
         />
       </DndProvider>
       {orderDetails && (
