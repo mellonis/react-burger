@@ -6,7 +6,7 @@ import { BurgerConstructor } from '../../components/burger-constructor';
 import burgerConstructorStyles from '../../components/burger-constructor/style.module.css';
 import { BurgerIngredients } from '../../components/burger-ingredients';
 import { Modal } from '../../components/modal';
-import { OrderDetails } from '../../components/order-details';
+import { PlacedOrderDetails } from '../../components/placed-order-details';
 import { resetOrderDetails } from '../../services/reducers';
 import { useAppDispatch, useAppSelector } from '../../services/store';
 
@@ -40,7 +40,7 @@ const MainPage = () => {
       </DndProvider>
       {orderDetails && (
         <Modal onClose={() => dispatch(resetOrderDetails())}>
-          <OrderDetails
+          <PlacedOrderDetails
             className={cs(
               burgerConstructorStyles['burger-constructor__order-details'],
               'mt-4 mb-20'
