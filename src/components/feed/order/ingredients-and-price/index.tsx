@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
-import React, { useMemo } from 'react';
-import { useAppSelector } from '../../../../services/store';
-import { IngredientType, Order } from '../../../../types';
+import React from 'react';
+import { useOrderIngredients } from '../../../../hooks';
+import { Order } from '../../../../types';
 import { Amount } from '../../../amount';
 import {
   IngredientIcon,
@@ -13,35 +13,11 @@ const ingredientsAndPriceClassname = 'ingredients-and-price';
 const ingredientsToRenderLimit = 6;
 
 const IngredientsAndPrice = ({ order }: { order: Order }) => {
-  const idToIngredientMap = useAppSelector(
-    (state) => state.burger.idToIngredientMap
-  );
-  const { ingredientsToRender, moreIngredientsCount, price } = useMemo(() => {
-    const ingredients = order.ingredients.map(
-      (ingredientId) => idToIngredientMap[ingredientId]
-    );
-    const bun = ingredients.find(({ type }) => type === IngredientType.bun);
-    const bunPrice = bun?.price ?? 0;
-    const ingredientsWithoutABun = ingredients.filter(
-      ({ type }) => type !== IngredientType.bun
-    );
-    const ingredientsToRender = bun
-      ? [bun, ...ingredientsWithoutABun]
-      : ingredientsWithoutABun;
-    const price =
-      bunPrice * 2 +
-      ingredientsWithoutABun.reduce((result, { price }) => result + price, 0);
-
-    return {
-      ingredientsToRender: ingredientsToRender.slice(
-        0,
-        ingredientsToRenderLimit
-      ),
-      moreIngredientsCount:
-        ingredientsToRender.length - ingredientsToRenderLimit,
-      price,
-    };
-  }, [idToIngredientMap, order]);
+  const { ingredientsToRender, moreIngredientsCount, price } =
+    useOrderIngredients({
+      limit: 6,
+      order,
+    });
 
   return (
     <div className={ingredientsAndPriceStyles[ingredientsAndPriceClassname]}>
