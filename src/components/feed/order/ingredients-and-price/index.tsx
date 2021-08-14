@@ -1,9 +1,12 @@
-import cs from 'classnames';
 import PropTypes from 'prop-types';
 import React, { useMemo } from 'react';
 import { useAppSelector } from '../../../../services/store';
 import { IngredientType, Order } from '../../../../types';
 import { Amount } from '../../../amount';
+import {
+  IngredientIcon,
+  IngredientIconRenderType,
+} from '../../../ingredient-icon';
 import ingredientsAndPriceStyles from './style.module.css';
 
 const ingredientsAndPriceClassname = 'ingredients-and-price';
@@ -50,28 +53,21 @@ const IngredientsAndPrice = ({ order }: { order: Order }) => {
         }
       >
         {ingredientsToRender.map((ingredient, ix) => (
-          <li
+          <IngredientIcon
             key={ix}
             className={
               ingredientsAndPriceStyles[
                 `${ingredientsAndPriceClassname}__ingredient`
               ]
             }
-          >
-            <img alt={ingredient.name} src={ingredient.image} />
-            {moreIngredientsCount > 0 && ix + 1 === ingredientsToRenderLimit ? (
-              <div
-                className={cs(
-                  ingredientsAndPriceStyles[
-                    `${ingredientsAndPriceClassname}__more-ingredients-count`
-                  ],
-                  'text text_type_digits-default text_type_main-medium'
-                )}
-              >
-                +{moreIngredientsCount}
-              </div>
-            ) : null}
-          </li>
+            ingredient={ingredient}
+            moreIngredientsCount={
+              moreIngredientsCount > 0 && ix + 1 === ingredientsToRenderLimit
+                ? moreIngredientsCount
+                : undefined
+            }
+            tag={IngredientIconRenderType.li}
+          />
         ))}
       </ul>
       <div className={'pl-6'} />
