@@ -25,7 +25,7 @@ export const authenticationSideEffect = ({
 export const cleanUpAuthenticationSideEffect = () => {
   localStorage.removeItem(authRefreshTokenKey);
   ['accessSchema', 'accessToken'].forEach((cookieName) =>
-    cookiesCtrl.remove(cookieName)
+    cookiesCtrl.remove(cookieName, { path: '/' })
   );
 };
 
