@@ -3,6 +3,7 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import { lexemes } from '../../consts';
 import { useOrderIngredients } from '../../hooks';
+import { formatOrderDate } from '../../hrlpers';
 import { useAppSelector } from '../../services/store';
 import { Amount } from '../amount';
 import { OrderStatus } from '../order-status';
@@ -72,7 +73,7 @@ const OrderDetails = () => {
             'text text_color_inactive'
           )}
         >
-          {order.createdAt}
+          {formatOrderDate(order.createdAt)}
         </div>
         <div className={orderDetailsStyles[`${orderDetailsClassname}__price`]}>
           <Amount amount={totalPrice} />
