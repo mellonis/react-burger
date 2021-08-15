@@ -28,7 +28,7 @@
 }
 
 .burger-constructor__filling {
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 .burger-constructor__filling {

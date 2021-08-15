@@ -17,6 +17,7 @@ import {
 import burgerConstructorStyles from '../burger-constructor/style.module.css';
 import { IngredientDetails } from '../ingredient-details';
 import { Modal } from '../modal';
+import { OrderDetails } from '../order-details';
 import { ProtectedRoute } from '../protected-route';
 
 import styles from './style.module.css';
@@ -73,20 +74,31 @@ const AppBody = () => {
         </Route>
       </Switch>
       {backgroundPageLocation ? (
-        <Route path="/ingredients/:id">
-          <Modal
-            onClose={() => history.goBack()}
-            title={lexemes.ingredientDetails}
-          >
-            <IngredientDetails
-              className={cs(
-                burgerConstructorStyles[
-                  'burger-constructor__ingredient-details'
-                ]
-              )}
-            />
-          </Modal>
-        </Route>
+        <>
+          <Route path="/ingredients/:id">
+            <Modal
+              onClose={() => history.goBack()}
+              title={lexemes.ingredientDetails}
+            >
+              <IngredientDetails
+                className={cs(
+                  burgerConstructorStyles[
+                    'burger-constructor__ingredient-details'
+                  ]
+                )}
+              />
+            </Modal>
+          </Route>
+          <Route path="/feed/:id">
+            <Modal
+              className={cs()}
+              onClose={() => history.goBack()}
+              title={lexemes.orderDetails}
+            >
+              <OrderDetails />
+            </Modal>
+          </Route>
+        </>
       ) : null}
     </main>
   );

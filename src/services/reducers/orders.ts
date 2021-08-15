@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Order } from '../../types';
 import { generateActionTypes } from '../helpers';
 import { WsActionTypes } from '../middleware';
@@ -40,19 +40,19 @@ const chunkCodeToChunkWsDataMap: ChunkCodeToChunkWsDataMap = Object.entries(
   return result;
 }, {} as ChunkCodeToChunkWsDataMap);
 
-export const urlAndWaActionTypesPairs = Object.values(
-  chunkCodeToChunkWsDataMap
-).map(({ url, wsActionTypes }): [string, WsActionTypes] => [
-  url,
-  wsActionTypes,
-]);
-
 const slice = createSlice({
   name: 'orders',
   initialState,
   reducers: {
-    [chunkCodeToChunkWsDataMap.orders.wsActionTypes.wsGetMessage]() {
-      console.log('qq');
+    [chunkCodeToChunkWsDataMap.orders.wsActionTypes.wsGetMessage](
+      state,
+      {
+        payload: { success, orders },
+      }: PayloadAction<{ success: boolean; orders?: Order[] }>
+    ) {
+      if (success) {
+        state.orders = orders!;
+      }
     },
   },
   extraReducers(builder) {
@@ -61,6 +61,25 @@ const slice = createSlice({
 });
 
 const { reducer } = slice;
+
+export const urlAndWaActionTypesPairs = Object.values(chunkCodeToChunkWsDataMap)
+  .map((chunkWsData) => ({
+    ...chunkWsData,
+    wsActionTypes: Object.fromEntries(
+      Object.entries(chunkWsData.wsActionTypes).map(
+        ([waActionType, actionType]) => [
+          waActionType,
+          slice.actions[actionType]
+            ? slice.actions[actionType].type
+            : actionType,
+        ]
+      )
+    ) as WsActionTypes,
+  }))
+  .map(({ url, wsActionTypes }): [string, WsActionTypes] => [
+    url,
+    wsActionTypes,
+  ]);
 
 export { reducer as ordersReducer };
 

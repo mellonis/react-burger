@@ -1,6 +1,7 @@
 .order {
     background-color: var(--background);
     border-radius: 40px;
+    cursor: pointer;
 }
 
 .order__number-and-date-wrapper {

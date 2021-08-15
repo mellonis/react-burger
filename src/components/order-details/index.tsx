@@ -1,8 +1,9 @@
 import cs from 'classnames';
 import React from 'react';
 import { useParams } from 'react-router-dom';
+import { lexemes } from '../../consts';
 import { useOrderIngredients } from '../../hooks';
-import { Order } from '../../types';
+import { useAppSelector } from '../../services/store';
 import { Amount } from '../amount';
 import { OrderStatus } from '../order-status';
 import { IngredientAndPrice } from './ingredients-and-price';
@@ -12,7 +13,7 @@ const orderDetailsClassname = 'order-details';
 
 const OrderDetails = () => {
   const { id } = useParams() as { id: string };
-  const orders: Order[] = [];
+  const orders = useAppSelector((state) => state.orders.orders);
   const order = orders.find(({ _id }) => id === _id)!;
   const { ingredientQuantityPairs, totalPrice } = useOrderIngredients({
     order,
@@ -37,7 +38,9 @@ const OrderDetails = () => {
       <div className={'pt-3'} />
       <OrderStatus status={order.status} />
       <div className={'pt-15'} />
-      <div className={'text text_type_main-medium'}>Состав:</div>
+      <div className={'text text_type_main-medium'}>
+        {lexemes.orderIngredients}:
+      </div>
       <div className={'pt-6'} />
       <ul
         className={cs(
@@ -56,9 +59,12 @@ const OrderDetails = () => {
       </ul>
       <div className={'pt-10'} />
       <div
-        className={
-          orderDetailsStyles[`${orderDetailsClassname}__date-and-price-wrapper`]
-        }
+        className={cs(
+          orderDetailsStyles[
+            `${orderDetailsClassname}__date-and-price-wrapper`
+          ],
+          'mr-6'
+        )}
       >
         <div
           className={cs(
