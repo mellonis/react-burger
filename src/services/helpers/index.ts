@@ -33,11 +33,12 @@ export const generateActionTypes = (): WsActionTypes => {
   const id = uuidV4();
 
   return {
-    wsConnectionStart: `${WsActionType.wsConnectionStart}_${id}`,
+    wsCloseConnection: `${WsActionType.wsCloseConnection}_${id}`,
     wsConnectionSuccess: `${WsActionType.wsConnectionSuccess}_${id}`,
     wsConnectionError: `${WsActionType.wsConnectionError}_${id}`,
     wsConnectionClose: `${WsActionType.wsConnectionClose}_${id}`,
     wsGetMessage: `${WsActionType.wsGetMessage}_${id}`,
+    wsOpenConnection: `${WsActionType.wsOpenConnection}_${id}`,
     wsSendMessage: `${WsActionType.wsSendMessage}_${id}`,
   };
 };

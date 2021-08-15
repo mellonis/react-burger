@@ -8,15 +8,17 @@ import feedStyles from './style.module.css';
 const Feed = ({
   className,
   orders,
+  renderStatus,
 }: {
   className?: string;
   orders: Order[];
+  renderStatus?: boolean;
 }) => {
   return (
     <ul className={cs(feedStyles['feed'], 'custom-scroll', className)}>
       {orders.map((order, ix) => (
         <React.Fragment key={order._id}>
-          <OrderComponent order={order} />
+          <OrderComponent order={order} renderStatus={renderStatus} />
           {ix + 1 < orders.length ? <div className={'pt-4'} /> : null}
         </React.Fragment>
       ))}
@@ -26,7 +28,12 @@ const Feed = ({
 
 Feed.propTypes = {
   className: PropTypes.string,
-  orders: PropTypes.array,
+  orders: PropTypes.array.isRequired,
+  renderStatus: PropTypes.bool,
+};
+
+Feed.defaultProps = {
+  renderStatus: false,
 };
 
 export { Feed };

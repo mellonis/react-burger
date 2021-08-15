@@ -1,16 +1,18 @@
 import { Dispatch, MiddlewareAPI, PayloadAction } from '@reduxjs/toolkit';
 import { Action, Middleware } from 'redux';
+import { AccessSchemaWithToken } from '../api';
 
 interface WsGeneralActionPayload {
   message?: {};
 }
 
 export enum WsActionType {
-  wsConnectionStart = 'wsConnectionStart',
+  wsCloseConnection = 'wsCloseConnection',
   wsConnectionSuccess = 'wsConnectionSuccess',
   wsConnectionError = 'wsConnectionError',
   wsConnectionClose = 'wsConnectionClose',
   wsGetMessage = 'wsGetMessage',
+  wsOpenConnection = 'wsOpenConnection',
   wsSendMessage = 'wsSendMessage',
 }
 
@@ -25,7 +27,7 @@ export const socketMiddlewareFabric = (
   return (
     store: MiddlewareAPI<Dispatch<Action<WsActionTypes[keyof WsActionTypes]>>>
   ) => {
-    let socket: WebSocket;
+    let socket: WebSocket | undefined;
 
     return (next) =>
       (
@@ -38,8 +40,15 @@ export const socketMiddlewareFabric = (
         const { type, payload } = action;
 
         switch (type) {
-          case wsActionTypes.wsConnectionStart:
-            socket = new WebSocket(url);
+          case wsActionTypes.wsOpenConnection: {
+            const { auth } = (payload ?? {}) as {
+              auth?: AccessSchemaWithToken;
+            };
+            const { accessToken } = (auth ?? {}) as AccessSchemaWithToken;
+
+            socket = new WebSocket(
+              `${url}${accessToken ? `?token=${accessToken}` : ''}`
+            );
             socket.onopen = () => {
               dispatch({
                 type: wsActionTypes.wsConnectionSuccess,
@@ -65,10 +74,15 @@ export const socketMiddlewareFabric = (
               });
             };
             break;
+          }
+          case wsActionTypes.wsCloseConnection:
+            socket?.close();
+            socket = undefined;
+            break;
           case wsActionTypes.wsSendMessage: {
             const { message } = payload;
 
-            socket.send(JSON.stringify(message));
+            socket?.send(JSON.stringify(message));
             break;
           }
         }

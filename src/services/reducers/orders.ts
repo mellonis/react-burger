@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Order } from '../../types';
-import { generateActionTypes } from '../helpers';
+import { generateActionTypes, getAccessSchemaAndToken } from '../helpers';
 import { WsActionTypes } from '../middleware';
 
 const initialState: Readonly<{
@@ -18,14 +18,15 @@ const chunkCodeToUrlMap: {
   userOrders: string;
 } = {
   orders: '/orders/all',
-  userOrders: '/orders/all',
+  userOrders: '/orders',
 };
 
 type ChunkCodeToChunkWsDataMap = {
   [key in keyof typeof chunkCodeToUrlMap]: {
+    subscribe: any;
+    unsubscribe: any;
     url: string;
     wsActionTypes: WsActionTypes;
-    init: any;
   };
 };
 
@@ -35,8 +36,33 @@ const chunkCodeToChunkWsDataMap: ChunkCodeToChunkWsDataMap = Object.entries(
   const wsActionTypes = generateActionTypes();
 
   result[key as keyof typeof chunkCodeToUrlMap] = {
-    init: createAsyncThunk(`orders/${key}/init`, (a, { dispatch }) =>
-      dispatch({ type: wsActionTypes.wsConnectionStart })
+    subscribe: createAsyncThunk(
+      `orders/${key}/subscribe`,
+      (_, { dispatch }) => {
+        if (key === 'orders') {
+          dispatch({ type: wsActionTypes.wsOpenConnection });
+        }
+        if (key === 'userOrders') {
+          const { accessSchema, accessToken } = getAccessSchemaAndToken();
+
+          if (!accessSchema || !accessToken) {
+            throw new Error('Action cannot be handled');
+          }
+
+          dispatch({
+            type: wsActionTypes.wsOpenConnection,
+            payload: { auth: { accessSchema, accessToken } },
+          });
+        }
+      }
+    ),
+    unsubscribe: createAsyncThunk(
+      `orders/${key}/unsubscribe`,
+      (_, { dispatch }) => {
+        dispatch({
+          type: wsActionTypes.wsCloseConnection,
+        });
+      }
     ),
     url,
     wsActionTypes,
@@ -66,9 +92,31 @@ const slice = createSlice({
         state.totalToday = totalToday!;
       }
     },
+    [chunkCodeToChunkWsDataMap.userOrders.wsActionTypes.wsGetMessage](
+      state,
+      {
+        payload: { success, orders },
+      }: PayloadAction<{
+        success: boolean;
+        orders?: Order[];
+        total?: number;
+        totalToday?: number;
+      }>
+    ) {
+      if (success) {
+        state.userOrders = orders!;
+      }
+    },
   },
   extraReducers(builder) {
-    builder.addCase(chunkCodeToChunkWsDataMap.orders.init.pending, () => {});
+    builder.addCase(
+      chunkCodeToChunkWsDataMap.orders.subscribe.pending,
+      () => {}
+    );
+    builder.addCase(
+      chunkCodeToChunkWsDataMap.userOrders.subscribe.pending,
+      () => {}
+    );
   },
 });
 
@@ -95,4 +143,8 @@ export const urlAndWaActionTypesPairs = Object.values(chunkCodeToChunkWsDataMap)
 
 export { reducer as ordersReducer };
 
-export const subscribeForOrders = chunkCodeToChunkWsDataMap.orders.init;
+export const subscribeForOrders = chunkCodeToChunkWsDataMap.orders.subscribe;
+export const subscribeForUserOrders =
+  chunkCodeToChunkWsDataMap.userOrders.subscribe;
+export const unsubscribeForUserOrders =
+  chunkCodeToChunkWsDataMap.userOrders.unsubscribe;

@@ -209,7 +209,7 @@ export const requestNewPasswordSetting = async ({
   }
 };
 
-type AccessSchemaWithToken = Pick<
+export type AccessSchemaWithToken = Pick<
   RefreshTokensResponse,
   'accessSchema' | 'accessToken'
 >;
