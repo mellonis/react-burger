@@ -81,12 +81,18 @@ export const logout = async ({
   }
 };
 
-export const placeAnOrder = async (
-  ingredients: Ingredient_t['_id'][]
-): Promise<OrderDetails_t> => {
+export const placeAnOrder = async ({
+  ingredients,
+  auth: { accessSchema, accessToken },
+}: {
+  ingredients: Ingredient_t['_id'][];
+} & GetUserDataParams): Promise<OrderDetails_t> => {
   const response = await fetch(`${apiHostUrl}/api/orders`, {
     body: JSON.stringify({ ingredients }),
-    headers: new Headers([['Content-Type', 'application/json']]),
+    headers: new Headers([
+      ['Content-Type', 'application/json'],
+      ['Authorization', `${accessSchema} ${accessToken}`],
+    ]),
     method: 'POST',
   });
   const result = await response.json();
