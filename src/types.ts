@@ -52,10 +52,8 @@ export type ActualIngredientDragItem = {
 };
 
 export enum OrderStatus_t {
-  beingCooked = 'being-cooked',
-  cooked = 'cooked',
-  beingDelivered = 'being-delivered',
-  delivered = 'delivered',
+  created = 'created',
+  pending = 'pending',
   done = 'done',
 }
 

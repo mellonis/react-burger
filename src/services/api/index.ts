@@ -101,7 +101,7 @@ export const placeAnOrder = async ({
     return {
       id: result.order.number,
       message: 'Дождитесь готовности на орбитальной станции',
-      status: OrderStatus_t.beingCooked,
+      status: OrderStatus_t.pending,
     };
   } else {
     throw new Error("Can't get data from server");

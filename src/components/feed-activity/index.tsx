@@ -37,10 +37,8 @@ const FeedActivity = ({
     );
   }, [orders]);
   const statusToStatusUlsMap = [
-    OrderStatus_t.beingCooked,
-    OrderStatus_t.cooked,
-    OrderStatus_t.beingDelivered,
-    OrderStatus_t.delivered,
+    OrderStatus_t.created,
+    OrderStatus_t.pending,
     OrderStatus_t.done,
   ].reduce((result, status) => {
     const orders = statusToOrdersMap[status];
@@ -95,7 +93,7 @@ const FeedActivity = ({
           feedActivityStyles[`${feedActivityClassname}__orders-by-status`]
         }
       >
-        {[OrderStatus_t.done, OrderStatus_t.beingCooked].map((status) => (
+        {[OrderStatus_t.done, OrderStatus_t.pending].map((status) => (
           <div
             key={status}
             className={cs(

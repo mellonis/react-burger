@@ -3,10 +3,8 @@ import { OrderStatus_t } from './types';
 export const orderStatusToStatusTitleMap: {
   [key in OrderStatus_t]: string;
 } = {
-  [OrderStatus_t.beingCooked]: 'Готовится',
-  [OrderStatus_t.cooked]: 'Приготовлен',
-  [OrderStatus_t.beingDelivered]: 'Доставляется',
-  [OrderStatus_t.delivered]: 'Доставлен',
+  [OrderStatus_t.created]: 'Создан',
+  [OrderStatus_t.pending]: 'В работе',
   [OrderStatus_t.done]: 'Готов',
 };
 
