@@ -13,7 +13,7 @@ const ingredientsAndPriceClassname = 'ingredients-and-price';
 const ingredientsToRenderLimit = 6;
 
 const IngredientsAndPrice = ({ order }: { order: Order }) => {
-  const { ingredientsToRender, moreIngredientsCount, price } =
+  const { ingredientQuantityPairs, moreIngredientsCount, totalPrice } =
     useOrderIngredients({
       limit: 6,
       order,
@@ -28,9 +28,9 @@ const IngredientsAndPrice = ({ order }: { order: Order }) => {
           ]
         }
       >
-        {ingredientsToRender.map((ingredient, ix) => (
+        {ingredientQuantityPairs.map(([ingredient], ix) => (
           <IngredientIcon
-            key={ix}
+            key={ingredient._id}
             className={
               ingredientsAndPriceStyles[
                 `${ingredientsAndPriceClassname}__ingredient`
@@ -52,7 +52,7 @@ const IngredientsAndPrice = ({ order }: { order: Order }) => {
           ingredientsAndPriceStyles[`${ingredientsAndPriceClassname}__price`]
         }
       >
-        <Amount amount={price} />
+        <Amount amount={totalPrice} />
       </div>
     </div>
   );

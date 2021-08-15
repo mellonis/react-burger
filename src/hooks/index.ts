@@ -1,12 +1,36 @@
 import { useMemo } from 'react';
 import { useAppSelector } from '../services/store';
-import { IngredientType, Order } from '../types';
+import { Ingredient_t, IngredientType, Order } from '../types';
+
+const getOrderIngredientEntries = (ingredients: Ingredient_t[]) => {
+  const bun = ingredients.find(({ type }) => type === IngredientType.bun);
+  const ingredientsWithoutABun = ingredients.filter(
+    ({ type }) => type !== IngredientType.bun
+  );
+  const ingredientToQuantityMap: Map<Ingredient_t, number> = new Map();
+
+  if (bun) {
+    ingredientToQuantityMap.set(bun, 2);
+  }
+
+  ingredientsWithoutABun.forEach((ingredient) => {
+    if (!ingredientToQuantityMap.has(ingredient)) {
+      ingredientToQuantityMap.set(ingredient, 0);
+    }
+
+    const currentQuantity = ingredientToQuantityMap.get(ingredient)!;
+
+    ingredientToQuantityMap.set(ingredient, currentQuantity + 1);
+  });
+
+  return [...ingredientToQuantityMap.entries()];
+};
 
 export const useOrderIngredients = ({
-  limit,
+  limit = Infinity,
   order,
 }: {
-  limit: number;
+  limit?: number;
   order: Order;
 }) => {
   const idToIngredientMap = useAppSelector(
@@ -16,22 +40,18 @@ export const useOrderIngredients = ({
     const ingredients = order.ingredients.map(
       (ingredientId) => idToIngredientMap[ingredientId]
     );
-    const bun = ingredients.find(({ type }) => type === IngredientType.bun);
-    const bunPrice = bun?.price ?? 0;
-    const ingredientsWithoutABun = ingredients.filter(
-      ({ type }) => type !== IngredientType.bun
-    );
-    const ingredientsToRender = bun
-      ? [bun, ...ingredientsWithoutABun]
-      : ingredientsWithoutABun;
-    const price =
-      bunPrice * 2 +
-      ingredientsWithoutABun.reduce((result, { price }) => result + price, 0);
+    const ingredientQuantityPairs = getOrderIngredientEntries(ingredients);
 
     return {
-      ingredientsToRender: ingredientsToRender.slice(0, limit),
-      moreIngredientsCount: ingredientsToRender.length - limit,
-      price,
+      ingredientQuantityPairs: ingredientQuantityPairs.slice(0, limit),
+      moreIngredientsCount:
+        limit < ingredientQuantityPairs.length
+          ? ingredientQuantityPairs.length - limit
+          : 0,
+      totalPrice: ingredientQuantityPairs.reduce(
+        (result, [{ price }, quantity]) => result + price * quantity,
+        0
+      ),
     };
   }, [idToIngredientMap, limit, order]);
 };
