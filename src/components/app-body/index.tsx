@@ -29,8 +29,9 @@ const AppBody = () => {
   };
   const { backgroundPageLocation } = locationState ?? {};
   const history = useHistory();
+  const isItPageRefresh = history.action === 'POP';
 
-  if (backgroundPageLocation) {
+  if (backgroundPageLocation && !isItPageRefresh) {
     location = backgroundPageLocation;
   }
 
@@ -73,7 +74,7 @@ const AppBody = () => {
           <NotFoundPage />
         </Route>
       </Switch>
-      {backgroundPageLocation ? (
+      {backgroundPageLocation && !isItPageRefresh ? (
         <>
           <Route path="/ingredients/:id">
             <Modal
