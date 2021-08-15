@@ -37,6 +37,14 @@ export const useOrderIngredients = ({
     (state) => state.burger.idToIngredientMap
   );
   return useMemo(() => {
+    if (!order) {
+      return {
+        ingredientQuantityPairs: [],
+        moreIngredientsCount: 0,
+        totalPrice: 0,
+      };
+    }
+
     const ingredients = order.ingredients.map(
       (ingredientId) => idToIngredientMap[ingredientId]
     );

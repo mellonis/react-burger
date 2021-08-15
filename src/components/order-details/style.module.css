@@ -1,0 +1,29 @@
+.order-details {
+    max-height: calc(min(620px, 100vh - 88px));
+    max-width: 640px;
+    display: flex;
+    flex-direction: column;
+}
+
+.order-details__number {
+    text-align: center;
+}
+
+.order-details__ingredients {
+    list-style: none;
+    min-height: 312px;
+    margin: 0;
+    overflow-y: scroll;
+    padding: 0;
+}
+
+.order-details__date-and-price-wrapper {
+    display: grid;
+    grid-template-columns: 1fr min-content;
+}
+
+.order-details__date {
+}
+
+.order-details__price {
+}

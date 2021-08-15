@@ -1,0 +1,79 @@
+import cs from 'classnames';
+import React from 'react';
+import { useParams } from 'react-router-dom';
+import { useOrderIngredients } from '../../hooks';
+import { Order } from '../../types';
+import { Amount } from '../amount';
+import { OrderStatus } from '../order-status';
+import { IngredientAndPrice } from './ingredients-and-price';
+import orderDetailsStyles from './style.module.css';
+
+const orderDetailsClassname = 'order-details';
+
+const OrderDetails = () => {
+  const { id } = useParams() as { id: string };
+  const orders: Order[] = [];
+  const order = orders.find(({ _id }) => id === _id)!;
+  const { ingredientQuantityPairs, totalPrice } = useOrderIngredients({
+    order,
+  });
+
+  if (!order) {
+    return null;
+  }
+
+  return (
+    <div className={orderDetailsStyles[orderDetailsClassname]}>
+      <div
+        className={cs(
+          orderDetailsStyles[`${orderDetailsClassname}__number`],
+          'text text_type_digits-default'
+        )}
+      >
+        #{order.number}
+      </div>
+      <div className={'pt-10'} />
+      <div className={'text text_type_main-medium'}>{order.name}</div>
+      <div className={'pt-3'} />
+      <OrderStatus status={order.status} />
+      <div className={'pt-15'} />
+      <div className={'text text_type_main-medium'}>Состав:</div>
+      <div className={'pt-6'} />
+      <ul
+        className={cs(
+          orderDetailsStyles[`${orderDetailsClassname}__ingredients`],
+          'custom-scroll'
+        )}
+      >
+        {ingredientQuantityPairs.map(([ingredient, quantity], ix) => (
+          <React.Fragment key={ix}>
+            <IngredientAndPrice ingredient={ingredient} quantity={quantity} />
+            {ix + 1 < ingredientQuantityPairs.length ? (
+              <div className={'pt-4'} />
+            ) : null}
+          </React.Fragment>
+        ))}
+      </ul>
+      <div className={'pt-10'} />
+      <div
+        className={
+          orderDetailsStyles[`${orderDetailsClassname}__date-and-price-wrapper`]
+        }
+      >
+        <div
+          className={cs(
+            orderDetailsStyles[`${orderDetailsClassname}__date`],
+            'text text_color_inactive'
+          )}
+        >
+          {order.createdAt}
+        </div>
+        <div className={orderDetailsStyles[`${orderDetailsClassname}__price`]}>
+          <Amount amount={totalPrice} />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export { OrderDetails };

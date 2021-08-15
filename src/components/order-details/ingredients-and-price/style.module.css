@@ -1,0 +1,14 @@
+.ingredient-and-price {
+    align-items: center;
+    display: grid;
+    grid-template-columns: min-content min-content 1fr min-content min-content;
+}
+
+.ingredient-and-price__quantity-and-price-wrapper {
+    display: grid;
+    grid-template-columns: min-content min-content;
+}
+
+.ingredient-and-price__quantity {
+    white-space: pre;
+}
