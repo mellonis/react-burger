@@ -1,8 +1,8 @@
 import cs from 'classnames';
 import PropTypes from 'prop-types';
 import React from 'react';
-import { orderStatusToStatusTitleMap } from '../../../consts';
-import { Order as OrderType, OrderStatus } from '../../../types';
+import { Order as OrderType } from '../../../types';
+import { OrderStatus } from '../../order-status';
 import { IngredientsAndPrice } from './ingredients-and-price';
 import orderStyles from './style.module.css';
 
@@ -45,14 +45,7 @@ const Order = ({
     {renderStatus ? (
       <>
         <div className={'pt-2'} />
-        <div
-          className={cs(orderStyles[`${orderClassname}__status`], {
-            [orderStyles[`${orderClassname}__status_done`]]:
-              order.status === OrderStatus.done,
-          })}
-        >
-          {orderStatusToStatusTitleMap[order.status]}
-        </div>
+        <OrderStatus status={order.status} />
       </>
     ) : null}
     <div className={'pt-6'} />

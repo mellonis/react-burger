@@ -17,11 +17,3 @@
 
 .order__title {
 }
-
-.order__status {
-
-}
-
-.order__status_done {
-    color: var(--colors-interface-success);
-}

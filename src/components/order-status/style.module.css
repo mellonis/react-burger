@@ -1,0 +1,6 @@
+.order-status {
+}
+
+.order-status_done {
+    color: var(--colors-interface-success);
+}
