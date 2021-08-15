@@ -5,13 +5,18 @@ import { WsActionTypes } from '../middleware';
 
 const initialState: Readonly<{
   orders: Order[];
+  total?: number;
+  totalToday?: number;
   userOrders: Order[];
 }> = {
   orders: [],
   userOrders: [],
 };
 
-const chunkCodeToUrlMap: { orders: string; userOrders: string } = {
+const chunkCodeToUrlMap: {
+  orders: string;
+  userOrders: string;
+} = {
   orders: '/orders/all',
   userOrders: '/orders/all',
 };
@@ -47,11 +52,18 @@ const slice = createSlice({
     [chunkCodeToChunkWsDataMap.orders.wsActionTypes.wsGetMessage](
       state,
       {
-        payload: { success, orders },
-      }: PayloadAction<{ success: boolean; orders?: Order[] }>
+        payload: { success, orders, total, totalToday },
+      }: PayloadAction<{
+        success: boolean;
+        orders?: Order[];
+        total?: number;
+        totalToday?: number;
+      }>
     ) {
       if (success) {
         state.orders = orders!;
+        state.total = total!;
+        state.totalToday = totalToday!;
       }
     },
   },

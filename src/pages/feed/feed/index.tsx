@@ -1,5 +1,6 @@
 import cs from 'classnames';
 import React from 'react';
+import { FeedActivity } from '../../../components/feed-activity';
 import { Feed as FeedComponent } from '../../../components/feed/intex';
 import { lexemes } from '../../../consts';
 import { useAppSelector } from '../../../services/store';
@@ -8,7 +9,7 @@ import feedPageStyles from './style.module.css';
 const feedPageClassname = 'feed-page';
 
 const FeedPage = () => {
-  const orders = useAppSelector((state) => state.orders.orders);
+  const { orders, total, totalToday } = useAppSelector((state) => state.orders);
 
   if (orders.length === 0) {
     return null;
@@ -44,7 +45,7 @@ const FeedPage = () => {
           'pt-25 pb-5 text'
         )}
       >
-        Activity
+        <FeedActivity orders={orders} total={total} totalToday={totalToday} />
       </div>
     </div>
   );

@@ -1,0 +1,35 @@
+.feed-activity {
+}
+
+.feed-activity__orders-by-status {
+    display: grid;
+    grid-template-columns: 1fr min-content 1fr;
+}
+
+.feed-activity__orders-list {
+}
+
+.feed-activity__orders-list_done {
+}
+
+.feed-activity__orders-list_done .feed-activity__order {
+    color: var(--colors-interface-success);
+}
+
+.feed-activity__orders-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.feed-activity__orders {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.feed-activity__order {
+}
+
+.feed-activity__orders-total-count {
+    text-shadow: 0 0 50px var(--colors-interface-accent);
+}

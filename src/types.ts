@@ -52,11 +52,11 @@ export type ActualIngredientDragItem = {
 };
 
 export enum OrderStatus_t {
-  BEING_COOKED = 'being-cooked',
-  COOKED = 'cooked',
-  BEING_DELIVERED = 'being-delivered',
-  DELIVERED = 'delivered',
-  DONE = 'done',
+  beingCooked = 'being-cooked',
+  cooked = 'cooked',
+  beingDelivered = 'being-delivered',
+  delivered = 'delivered',
+  done = 'done',
 }
 
 export type OrderDetails_t = {
@@ -82,14 +82,10 @@ export interface UserResponse {
 
 export type AuthUserResponse = RefreshTokensResponse & UserResponse;
 
-export enum OrderStatus {
-  done = 'done',
-}
-
 export interface Order {
   _id: string;
   ingredients: string[];
-  status: OrderStatus;
+  status: OrderStatus_t;
   name: string;
   createdAt: string;
   updatedAt: string;

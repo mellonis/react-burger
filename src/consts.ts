@@ -3,11 +3,11 @@ import { OrderStatus_t } from './types';
 export const orderStatusToStatusTitleMap: {
   [key in OrderStatus_t]: string;
 } = {
-  [OrderStatus_t.BEING_COOKED]: 'Ваш заказ начали готовить',
-  [OrderStatus_t.COOKED]: 'Заказ приготовлен',
-  [OrderStatus_t.BEING_DELIVERED]: 'Ваш заказ доставляется',
-  [OrderStatus_t.DELIVERED]: 'Заказ доставлен',
-  [OrderStatus_t.DONE]: 'Выполнен',
+  [OrderStatus_t.beingCooked]: 'Готовится',
+  [OrderStatus_t.cooked]: 'Приготовлен',
+  [OrderStatus_t.beingDelivered]: 'Доставляется',
+  [OrderStatus_t.delivered]: 'Доставлен',
+  [OrderStatus_t.done]: 'Готов',
 };
 
 const allLexemes = {
@@ -25,6 +25,8 @@ const allLexemes = {
     orderId: 'Идентификатор заказа',
     orderIngredients: 'Состав',
     orderList: 'Лента заказов',
+    ordersTotalCount: 'Выполнено за все время',
+    ordersTodayTotalCount: 'Выполнено за сегодня',
     placeAnOrder: 'Оформить заказ',
     profile: 'Личный кабинет',
     proteins: 'Белки, г',

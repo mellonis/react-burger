@@ -95,7 +95,7 @@ export const placeAnOrder = async (
     return {
       id: result.order.number,
       message: 'Дождитесь готовности на орбитальной станции',
-      status: OrderStatus_t.BEING_COOKED,
+      status: OrderStatus_t.beingCooked,
     };
   } else {
     throw new Error("Can't get data from server");
