@@ -7,8 +7,7 @@ import {
   User,
   UserResponse,
 } from '../../types';
-
-export const apiHostUrl = 'https://norma.nomoreparties.space';
+import { apiHostUrl } from './consts';
 
 const getAccessSchemaAndTokenAndRefreshToken = (
   response: any
@@ -263,3 +262,5 @@ export const updateUserData = async ({
     user: result.user,
   };
 };
+
+export { apiHostUrl };

@@ -1,5 +1,7 @@
-import { AuthUserResponse, RefreshTokensResponse } from '../../types';
 import Cookies from 'universal-cookie';
+import { v4 as uuidV4 } from 'uuid';
+import { AuthUserResponse, RefreshTokensResponse } from '../../types';
+import { WsActionType, WsActionTypes } from '../middleware';
 
 const authRefreshTokenKey = 'authRefreshToken';
 const cookiesCtrl = new Cookies();
@@ -25,6 +27,19 @@ export const cleanUpAuthenticationSideEffect = () => {
   ['accessSchema', 'accessToken'].forEach((cookieName) =>
     cookiesCtrl.remove(cookieName)
   );
+};
+
+export const generateActionTypes = (): WsActionTypes => {
+  const id = uuidV4().replace(/-/g, '_');
+
+  return {
+    wsConnectionStart: `${WsActionType.wsConnectionStart}_${id}`,
+    wsConnectionSuccess: `${WsActionType.wsConnectionSuccess}_${id}`,
+    wsConnectionError: `${WsActionType.wsConnectionError}_${id}`,
+    wsConnectionClose: `${WsActionType.wsConnectionClose}_${id}`,
+    wsGetMessage: `${WsActionType.wsGetMessage}_${id}`,
+    wsSendMessage: `${WsActionType.wsSendMessage}_${id}`,
+  };
 };
 
 export const getAccessSchemaAndToken = (): Partial<
