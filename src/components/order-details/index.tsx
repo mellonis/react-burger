@@ -3,7 +3,7 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import { lexemes } from '../../consts';
 import { useOrderIngredients } from '../../hooks';
-import { formatOrderDate } from '../../hrlpers';
+import { formatOrderDate } from '../../helpers';
 import { useAppSelector } from '../../services/store';
 import { Amount } from '../amount';
 import { OrderStatus } from '../order-status';

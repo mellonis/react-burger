@@ -2,7 +2,7 @@ import cs from 'classnames';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
-import { formatOrderDate } from '../../../hrlpers';
+import { formatOrderDate } from '../../../helpers';
 import { Order as OrderType } from '../../../types';
 import { OrderStatus } from '../../order-status';
 import { IngredientsAndPrice } from './ingredients-and-price';
