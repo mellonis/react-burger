@@ -93,25 +93,29 @@ const FeedActivity = ({
           feedActivityStyles[`${feedActivityClassname}__orders-by-status`]
         }
       >
-        {[OrderStatus_t.done, OrderStatus_t.pending].map((status) => (
-          <div
-            key={status}
-            className={cs(
-              feedActivityStyles[`${feedActivityClassname}__orders-list`],
-              feedActivityStyles[
-                `${feedActivityClassname}__orders-list_${status}`
-              ]
-            )}
-          >
-            <div className={'pb-6'}>{orderStatusToStatusTitleMap[status]}:</div>
+        {[OrderStatus_t.done, OrderStatus_t.pending].map((status, ix) => (
+          <React.Fragment key={status}>
+            {ix > 0 ? <div className={'pb-6'} /> : null}
             <div
-              className={
-                feedActivityStyles[`${feedActivityClassname}__orders-wrapper`]
-              }
+              className={cs(
+                feedActivityStyles[`${feedActivityClassname}__orders-list`],
+                feedActivityStyles[
+                  `${feedActivityClassname}__orders-list_${status}`
+                ]
+              )}
             >
-              {statusToStatusUlsMap[status]}
+              <div className={'pb-6'}>
+                {orderStatusToStatusTitleMap[status]}:
+              </div>
+              <div
+                className={
+                  feedActivityStyles[`${feedActivityClassname}__orders-wrapper`]
+                }
+              >
+                {statusToStatusUlsMap[status]}
+              </div>
             </div>
-          </div>
+          </React.Fragment>
         ))}
       </div>
       {total ? (
