@@ -30,7 +30,7 @@ export const cleanUpAuthenticationSideEffect = () => {
 };
 
 export const generateActionTypes = (): WsActionTypes => {
-  const id = uuidV4().replace(/-/g, '_');
+  const id = uuidV4();
 
   return {
     wsConnectionStart: `${WsActionType.wsConnectionStart}_${id}`,
