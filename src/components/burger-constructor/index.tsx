@@ -57,11 +57,13 @@ const BurgerConstructor = ({ className }: { className?: string }) => {
     drop(item) {
       const { refId } = item as IngredientDragItem;
 
-      dispatch(addIngredient(idToIngredientMap[refId]));
+      if (!orderDetailsRequest) {
+        dispatch(addIngredient(idToIngredientMap[refId]));
+      }
     },
     collect(monitor) {
       return {
-        isCanDrop: monitor.canDrop(),
+        isCanDrop: monitor.canDrop() && !orderDetailsRequest,
         isDragOver: monitor.isOver(),
       };
     },
@@ -77,6 +79,7 @@ const BurgerConstructor = ({ className }: { className?: string }) => {
             actualIngredients.length === 0,
           [style['burger-constructor_is-can-drop']]: isCanDrop,
           [style['burger-constructor_is-drag-over']]: isDragOver,
+          [style['burger-constructor_is-request']]: orderDetailsRequest,
         },
         className
       )}
