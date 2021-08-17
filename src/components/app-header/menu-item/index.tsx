@@ -1,23 +1,17 @@
 import { TIconProps } from '@ya.praktikum/react-developer-burger-ui-components/dist/ui/icons/utils';
 import cs from 'classnames';
-import React from 'react';
+import React, { FC } from 'react';
 import style from './style.module.css';
 
 type Icon_t = ({ type }: TIconProps) => JSX.Element;
 
-const MenuItem = ({
-  className,
-  Icon,
-  isActive,
-  onClick,
-  text,
-}: {
+const MenuItem: FC<{
   className?: string;
   Icon: Icon_t;
   isActive?: boolean;
   onClick?: (...a: any[]) => void;
   text: string;
-}) => {
+}> = ({ className, Icon, isActive, onClick, text }) => {
   return (
     <li
       className={cs(

@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { FC, useEffect } from 'react';
 import { Redirect } from 'react-router-dom';
 import { logout, UserLoginPhase } from '../../services/reducers';
 import { useAppDispatch, useAppSelector } from '../../services/store';
 
-const LogoutPage = () => {
+const LogoutPage: FC = () => {
   const { userLoginPhase } = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
 

@@ -1,5 +1,5 @@
 import cs from 'classnames';
-import React from 'react';
+import React, { FC } from 'react';
 import { Ingredient_t } from '../../../types';
 import { Amount } from '../../amount';
 import { IngredientIcon } from '../../ingredient-icon';
@@ -7,13 +7,10 @@ import ingredientAndPriceStyles from './style.module.css';
 
 const ingredientAndPriceClassname = 'ingredient-and-price';
 
-const IngredientAndPrice = ({
-  ingredient,
-  quantity,
-}: {
+const IngredientAndPrice: FC<{
   ingredient: Ingredient_t;
   quantity: number;
-}) => (
+}> = ({ ingredient, quantity }) => (
   <li
     className={cs(
       ingredientAndPriceStyles[ingredientAndPriceClassname],

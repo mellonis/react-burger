@@ -1,6 +1,6 @@
 import { Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import cs from 'classnames';
-import React, { useCallback } from 'react';
+import React, { FC, useCallback } from 'react';
 import { useDrop } from 'react-dnd';
 import { useHistory, useLocation } from 'react-router-dom';
 import { lexemes } from '../../consts';
@@ -19,7 +19,7 @@ import { Amount } from '../amount';
 import { BurgerConstructorItem } from './burger-constructor-item';
 import style from './style.module.css';
 
-const BurgerConstructor = ({ className }: { className?: string }) => {
+const BurgerConstructor: FC<{ className?: string }> = ({ className }) => {
   const {
     actualIngredients,
     idToIngredientMap,

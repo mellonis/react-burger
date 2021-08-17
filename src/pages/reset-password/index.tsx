@@ -1,5 +1,5 @@
 import cs from 'classnames';
-import React, { useEffect } from 'react';
+import React, { FC, useEffect } from 'react';
 import { Redirect } from 'react-router-dom';
 import {
   ComponentInputType,
@@ -40,7 +40,7 @@ const inputDeclarations: InputDeclaration[] = [
   },
 ];
 
-const ResetPasswordPage = () => {
+const ResetPasswordPage: FC = () => {
   const { userLoginPhase, passwordResettingPhase } = useAppSelector(
     (state) => state.user
   );

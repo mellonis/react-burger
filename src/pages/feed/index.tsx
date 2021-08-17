@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { Redirect, Route, Switch, useRouteMatch } from 'react-router-dom';
 import { OrderDetails } from '../../components/order-details';
 import { FeedPage } from './feed';
 
-const FeedPageSwitcher = () => {
+const FeedPageSwitcher: FC = () => {
   const { path } = useRouteMatch();
 
   return (

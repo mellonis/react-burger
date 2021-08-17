@@ -1,5 +1,5 @@
 import cs from 'classnames';
-import React, { useEffect } from 'react';
+import React, { FC, useEffect } from 'react';
 import { Redirect } from 'react-router-dom';
 import {
   ComponentInputType,
@@ -15,7 +15,6 @@ import {
 } from '../../services/reducers';
 import { useAppDispatch, useAppSelector } from '../../services/store';
 import { AdditionalAction } from '../../types';
-
 import pageStyles from '../page-style.module.css';
 
 const registerPageClassname = 'register-page';
@@ -45,7 +44,7 @@ const inputDeclarations: InputDeclaration[] = [
   },
 ];
 
-const RegisterPage = () => {
+const RegisterPage: FC = () => {
   const { userLoginPhase, userRegistrationPhase } = useAppSelector(
     (state) => state.user
   );

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { FC, useEffect, useMemo } from 'react';
 import {
   ComponentInputType,
   Form,
@@ -36,7 +36,7 @@ const inputDeclarations: Readonly<InputDeclaration>[] = [
   },
 ];
 
-const Profile = () => {
+const Profile: FC = () => {
   const { user, updateUserDataPhase } = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
 

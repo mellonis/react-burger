@@ -1,9 +1,8 @@
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import cs from 'classnames';
 import React, {
+  FC,
   MutableRefObject,
-  ReactNode,
-  ReactPortal,
   useCallback,
   useEffect,
   useRef,
@@ -11,17 +10,11 @@ import React, {
 import { ModalOverlay } from './modal-overlay';
 import style from './style.module.css';
 
-const Modal = ({
-  children,
-  className,
-  onClose,
-  title,
-}: {
-  children?: ReactNode | ReactPortal;
+const Modal: FC<{
   className?: string;
   onClose: () => void;
   title?: string;
-}) => {
+}> = ({ children, className, onClose, title }) => {
   const modalElementRef = useRef(null);
 
   useEffect(() => {

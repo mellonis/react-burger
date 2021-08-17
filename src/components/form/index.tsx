@@ -1,7 +1,13 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import cs from 'classnames';
-import React, { MutableRefObject, useCallback, useMemo, useRef } from 'react';
+import React, {
+  FC,
+  MutableRefObject,
+  useCallback,
+  useMemo,
+  useRef,
+} from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { lexemes } from '../../consts';
@@ -14,16 +20,7 @@ import {
 } from './helpers';
 import fromStyles from './style.module.css';
 
-const Form = ({
-  additionalActions,
-  buttonTitle,
-  inputDeclarations,
-  isButtonHiddenOnNotModifiedForm,
-  onSubmit,
-  resetButtonTitle,
-  showErrors,
-  title,
-}: {
+const Form: FC<{
   additionalActions?: AdditionalAction[];
   buttonTitle?: string;
   inputDeclarations: InputDeclaration[];
@@ -32,6 +29,15 @@ const Form = ({
   resetButtonTitle?: string;
   showErrors?: boolean;
   title?: string;
+}> = ({
+  additionalActions,
+  buttonTitle,
+  inputDeclarations,
+  isButtonHiddenOnNotModifiedForm,
+  onSubmit,
+  resetButtonTitle,
+  showErrors,
+  title,
 }) => {
   const componentElementRef: MutableRefObject<HTMLFormElement | null> =
     useRef(null);

@@ -1,8 +1,7 @@
 import cs from 'classnames';
-import React from 'react';
+import React, { FC } from 'react';
 import { Link, Redirect, Route, Switch, useRouteMatch } from 'react-router-dom';
 import { useAppSelector } from '../../services/store';
-
 import pageStyles from '../page-style.module.css';
 import { Orders } from './orders';
 import { Profile } from './profile';
@@ -10,7 +9,7 @@ import profilePageStyle from './style.module.css';
 
 const profilePageClassname = 'profile-page';
 
-const ProfilePage = () => {
+const ProfilePage: FC = () => {
   const { userTimeStamp } = useAppSelector((state) => state.user);
   const { path } = useRouteMatch();
   const isProfileSubpageMatched = useRouteMatch({ path, exact: true });

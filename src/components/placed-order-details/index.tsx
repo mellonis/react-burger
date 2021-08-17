@@ -1,19 +1,16 @@
 import { CheckMarkIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import cs from 'classnames';
-import React from 'react';
+import React, { FC } from 'react';
 import { lexemes, orderStatusToStatusTitleMap } from '../../consts';
 import { OrderDetails_t } from '../../types';
 import placedOrderDetailsStyles from './style.module.css';
 
 const placedOrderDetails = 'placed-order-details';
 
-const PlacedOrderDetails = ({
-  className,
-  orderDetails: { id, status, message },
-}: {
+const PlacedOrderDetails: FC<{
   className?: string;
   orderDetails: OrderDetails_t;
-}) => (
+}> = ({ className, orderDetails: { id, status, message } }) => (
   <div className={cs(placedOrderDetailsStyles[placedOrderDetails], className)}>
     <div
       className={cs(

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { lexemes } from '../../../../consts';
 import { useOrderIngredients } from '../../../../hooks';
 import { Order } from '../../../../types';
@@ -12,7 +12,7 @@ import ingredientsAndPriceStyles from './style.module.css';
 const ingredientsAndPriceClassname = 'ingredients-and-price';
 const ingredientsToRenderLimit = 6;
 
-const IngredientsAndPrice = ({ order }: { order: Order }) => {
+const IngredientsAndPrice: FC<{ order: Order }> = ({ order }) => {
   const {
     ingredientQuantityPairs,
     isItValid,

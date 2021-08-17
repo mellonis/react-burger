@@ -1,6 +1,6 @@
 import { Counter } from '@ya.praktikum/react-developer-burger-ui-components';
 import cs from 'classnames';
-import React from 'react';
+import React, { FC } from 'react';
 import { DragPreviewImage, useDrag } from 'react-dnd';
 import { useAppSelector } from '../../../services/store';
 import {
@@ -11,13 +11,10 @@ import {
 import { Amount } from '../../amount';
 import style from './style.module.css';
 
-const BurgerIngredient = ({
-  ingredient: { _id, image, name: title, price, type },
-  onClick,
-}: {
+const BurgerIngredient: FC<{
   ingredient: Ingredient_t;
   onClick?: () => void;
-}) => {
+}> = ({ ingredient: { _id, image, name: title, price, type }, onClick }) => {
   const { idToActualIngredientsCountMap } = useAppSelector(
     (state) => state.burger
   );

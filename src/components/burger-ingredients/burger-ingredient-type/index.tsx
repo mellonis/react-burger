@@ -1,21 +1,16 @@
 import cs from 'classnames';
-import React from 'react';
+import React, { FC } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import { Ingredient_t } from '../../../types';
 import { BurgerIngredient } from '../burger-ingredient';
 import style from './style.module.css';
 
-const BurgerIngredientType = ({
-  className,
-  ingredients,
-  title,
-  type,
-}: {
+const BurgerIngredientType: FC<{
   className?: string;
   ingredients: Ingredient_t[];
   title: string;
   type: string;
-}) => {
+}> = ({ className, ingredients, title, type }) => {
   const location = useLocation();
   const history = useHistory();
 

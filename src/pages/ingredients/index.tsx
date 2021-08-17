@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 import cs from 'classnames';
 import { Redirect, useRouteMatch } from 'react-router-dom';
 import { IngredientDetails } from '../../components/ingredient-details';
@@ -8,7 +8,7 @@ import pageStyles from '../page-style.module.css';
 
 const ingredientsPageClassname = 'ingredients-page';
 
-const IngredientsPage = () => {
+const IngredientsPage: FC = () => {
   const {
     params: { id },
   } = useRouteMatch() as { params: { id: string } };

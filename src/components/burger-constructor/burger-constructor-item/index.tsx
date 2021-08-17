@@ -3,7 +3,7 @@ import {
   DragIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import cs from 'classnames';
-import React from 'react';
+import React, { FC } from 'react';
 import { DragPreviewImage, useDrag, useDrop } from 'react-dnd';
 import { lexemes } from '../../../consts';
 import { moveIngredient } from '../../../services/reducers';
@@ -16,15 +16,7 @@ import {
 } from '../../../types';
 import style from './style.module.css';
 
-const BurgerConstructorItem = ({
-  className,
-  index,
-  ingredient: { _id, image, name, price },
-  isLocked,
-  onShowIngredientInfo,
-  onDelete,
-  type,
-}: {
+const BurgerConstructorItem: FC<{
   className?: string;
   index?: number;
   ingredient: Ingredient_t;
@@ -32,6 +24,14 @@ const BurgerConstructorItem = ({
   onShowIngredientInfo?: () => void;
   onDelete?: () => void;
   type?: ActualIngredientType;
+}> = ({
+  className,
+  index,
+  ingredient: { _id, image, name, price },
+  isLocked,
+  onShowIngredientInfo,
+  onDelete,
+  type,
 }) => {
   const orderDetailsRequest = useAppSelector(
     (state) => state.burger.orderDetailsRequest

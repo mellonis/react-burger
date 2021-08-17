@@ -1,18 +1,17 @@
-import React from 'react';
-import { Link, useHistory, useRouteMatch } from 'react-router-dom';
-import cs from 'classnames';
 import {
-  Logo,
   BurgerIcon,
   ListIcon,
+  Logo,
   ProfileIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
+import cs from 'classnames';
+import React, { FC } from 'react';
+import { Link, useHistory, useRouteMatch } from 'react-router-dom';
 import { lexemes } from '../../consts';
 import { MenuItem } from './menu-item';
-
 import styles from './style.module.css';
 
-const AppHeader = () => {
+const AppHeader: FC = () => {
   const history = useHistory();
   const mainPageMatch = useRouteMatch('/');
   const feedPageMatch = useRouteMatch('/feed');

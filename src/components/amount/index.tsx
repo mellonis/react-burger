@@ -1,17 +1,13 @@
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import cs from 'classnames';
-import React from 'react';
+import React, { FC } from 'react';
 import style from './style.module.css';
 
-const Amount = ({
-  amount,
-  className,
-  isTotal,
-}: {
+const Amount: FC<{
   amount: number;
   className?: string;
   isTotal?: boolean;
-}) => (
+}> = ({ amount, className, isTotal }) => (
   <div
     className={cs(
       style['amount'],

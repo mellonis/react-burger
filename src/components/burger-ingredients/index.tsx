@@ -1,6 +1,6 @@
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import cs from 'classnames';
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { FC, useEffect, useMemo, useRef, useState } from 'react';
 import { lexemes } from '../../consts';
 import { useAppSelector } from '../../services/store';
 import { IngredientType } from '../../types';
@@ -24,7 +24,7 @@ const thresholds = [
   1,
 ];
 
-const BurgerIngredients = ({ className }: { className?: string }) => {
+const BurgerIngredients: FC<{ className?: string }> = ({ className }) => {
   const { ingredients } = useAppSelector((state) => state.burger);
   const [selectedIngredientType, setSelectedIngredientType] = useState(
     ingredientTypes[0]

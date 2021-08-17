@@ -1,5 +1,5 @@
 import cs from 'classnames';
-import React from 'react';
+import React, { FC } from 'react';
 import { FeedActivity } from '../../../components/feed-activity';
 import { Feed as FeedComponent } from '../../../components/feed/intex';
 import { lexemes } from '../../../consts';
@@ -8,7 +8,7 @@ import feedPageStyles from './style.module.css';
 
 const feedPageClassname = 'feed-page';
 
-const FeedPage = () => {
+const FeedPage: FC = () => {
   const { orders, total, totalToday } = useAppSelector((state) => state.orders);
 
   if (orders.length === 0) {

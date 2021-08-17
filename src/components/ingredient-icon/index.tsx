@@ -1,5 +1,5 @@
 import cs from 'classnames';
-import React from 'react';
+import React, { FC } from 'react';
 import { Ingredient_t } from '../../types';
 import ingredientIconStyles from './style.module.css';
 
@@ -10,17 +10,12 @@ export enum IngredientIconRenderType {
 
 const ingredientIconClassname = 'ingredient-icon';
 
-const IngredientIcon = ({
-  className,
-  ingredient,
-  moreIngredientsCount,
-  tag,
-}: {
+const IngredientIcon: FC<{
   className?: string;
   ingredient: Ingredient_t;
   moreIngredientsCount?: number;
   tag?: IngredientIconRenderType;
-}) => {
+}> = ({ className, ingredient, moreIngredientsCount, tag }) => {
   const Tag = tag!;
 
   return (

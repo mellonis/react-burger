@@ -1,5 +1,5 @@
 import cs from 'classnames';
-import React from 'react';
+import React, { FC } from 'react';
 import { Route, Switch, useHistory, useLocation } from 'react-router-dom';
 import { lexemes } from '../../consts';
 import {
@@ -19,10 +19,9 @@ import { IngredientDetails } from '../ingredient-details';
 import { Modal } from '../modal';
 import { OrderDetails } from '../order-details';
 import { ProtectedRoute } from '../protected-route';
-
 import styles from './style.module.css';
 
-const AppBody = () => {
+const AppBody: FC = () => {
   let location = useLocation();
   const { state: locationState } = useLocation() as {
     state: { backgroundPageLocation?: typeof location } | null;

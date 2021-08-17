@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { FC, useEffect } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import {
   AutoLoginPhase,
@@ -9,10 +9,9 @@ import {
 import { useAppDispatch, useAppSelector } from '../../services/store';
 import { AppBody } from '../app-body';
 import { AppHeader } from '../app-header';
-
 import style from './style.module.css';
 
-const App = () => {
+const App: FC = () => {
   const { ingredientsError, ingredientsRequest } = useAppSelector(
     (state) => state.burger
   );
