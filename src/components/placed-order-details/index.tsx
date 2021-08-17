@@ -1,10 +1,8 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import cs from 'classnames';
 import { CheckMarkIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import { OrderDetails_t } from '../../types';
+import cs from 'classnames';
+import React from 'react';
 import { lexemes, orderStatusToStatusTitleMap } from '../../consts';
-
+import { OrderDetails_t } from '../../types';
 import placedOrderDetailsStyles from './style.module.css';
 
 const placedOrderDetails = 'placed-order-details';
@@ -61,10 +59,5 @@ const PlacedOrderDetails = ({
     </div>
   </div>
 );
-
-PlacedOrderDetails.propTypes = {
-  className: PropTypes.string,
-  orderDetails: PropTypes.object.isRequired,
-};
 
 export { PlacedOrderDetails };

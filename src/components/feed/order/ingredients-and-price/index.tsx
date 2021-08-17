@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import React from 'react';
 import { lexemes } from '../../../../consts';
 import { useOrderIngredients } from '../../../../hooks';
@@ -70,10 +69,6 @@ const IngredientsAndPrice = ({ order }: { order: Order }) => {
       )}
     </div>
   );
-};
-
-IngredientsAndPrice.propTypes = {
-  order: PropTypes.object.isRequired,
 };
 
 export { IngredientsAndPrice };

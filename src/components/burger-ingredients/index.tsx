@@ -1,12 +1,10 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
-import PropTypes from 'prop-types';
-import cs from 'classnames';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
-import { IngredientType } from '../../types';
-import { useAppSelector } from '../../services/store';
+import cs from 'classnames';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { lexemes } from '../../consts';
+import { useAppSelector } from '../../services/store';
+import { IngredientType } from '../../types';
 import { BurgerIngredientType } from './burger-ingredient-type';
-
 import style from './style.module.css';
 
 const ingredientTypeTitles = {
@@ -161,7 +159,5 @@ const BurgerIngredients = ({ className }: { className?: string }) => {
     </div>
   );
 };
-
-BurgerIngredients.propTypes = { className: PropTypes.string };
 
 export { BurgerIngredients };

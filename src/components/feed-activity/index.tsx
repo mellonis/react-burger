@@ -1,5 +1,4 @@
 import cs from 'classnames';
-import PropTypes from 'prop-types';
 import React, { ReactNode, useMemo } from 'react';
 import { lexemes, orderStatusToStatusTitleMap } from '../../consts';
 import { Order, OrderStatus_t } from '../../types';
@@ -156,13 +155,6 @@ const FeedActivity = ({
       ) : null}
     </div>
   );
-};
-
-FeedActivity.propTypes = {
-  className: PropTypes.string,
-  orders: PropTypes.array,
-  total: PropTypes.number,
-  totalToday: PropTypes.number,
 };
 
 export { FeedActivity };

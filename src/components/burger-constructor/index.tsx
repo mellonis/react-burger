@@ -1,6 +1,5 @@
 import { Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import cs from 'classnames';
-import PropTypes from 'prop-types';
 import React, { useCallback } from 'react';
 import { useDrop } from 'react-dnd';
 import { useHistory, useLocation } from 'react-router-dom';
@@ -18,7 +17,6 @@ import {
 } from '../../types';
 import { Amount } from '../amount';
 import { BurgerConstructorItem } from './burger-constructor-item';
-
 import style from './style.module.css';
 
 const BurgerConstructor = ({ className }: { className?: string }) => {
@@ -124,7 +122,6 @@ const BurgerConstructor = ({ className }: { className?: string }) => {
                 ingredient && (
                   <BurgerConstructorItem
                     key={id}
-                    id={id}
                     index={ix + 1}
                     ingredient={idToIngredientMap[refId]!}
                     isLocked={isLocked}
@@ -191,7 +188,5 @@ const BurgerConstructor = ({ className }: { className?: string }) => {
     </div>
   );
 };
-
-BurgerConstructor.propTypes = { className: PropTypes.string };
 
 export { BurgerConstructor };

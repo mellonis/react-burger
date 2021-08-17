@@ -1,10 +1,8 @@
 import cs from 'classnames';
-import PropTypes from 'prop-types';
 import React from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import { Ingredient_t } from '../../../types';
 import { BurgerIngredient } from '../burger-ingredient';
-
 import style from './style.module.css';
 
 const BurgerIngredientType = ({
@@ -54,13 +52,6 @@ const BurgerIngredientType = ({
       </ul>
     </li>
   );
-};
-
-BurgerIngredientType.propTypes = {
-  className: PropTypes.string,
-  ingredients: PropTypes.arrayOf(PropTypes.object).isRequired,
-  title: PropTypes.string.isRequired,
-  type: PropTypes.string.isRequired,
 };
 
 export { BurgerIngredientType };

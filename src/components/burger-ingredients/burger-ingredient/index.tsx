@@ -1,16 +1,14 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import { Counter } from '@ya.praktikum/react-developer-burger-ui-components';
 import cs from 'classnames';
+import React from 'react';
 import { DragPreviewImage, useDrag } from 'react-dnd';
+import { useAppSelector } from '../../../services/store';
 import {
   DraggableTypes,
   Ingredient_t,
   IngredientDragItem,
 } from '../../../types';
-import { useAppSelector } from '../../../services/store';
 import { Amount } from '../../amount';
-import { Counter } from '@ya.praktikum/react-developer-burger-ui-components';
-
 import style from './style.module.css';
 
 const BurgerIngredient = ({
@@ -70,11 +68,6 @@ const BurgerIngredient = ({
       </div>
     </li>
   );
-};
-
-BurgerIngredient.propTypes = {
-  ingredient: PropTypes.object.isRequired,
-  onClick: PropTypes.func,
 };
 
 export { BurgerIngredient };

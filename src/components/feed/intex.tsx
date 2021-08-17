@@ -1,5 +1,4 @@
 import cs from 'classnames';
-import PropTypes from 'prop-types';
 import React from 'react';
 import { Order } from '../../types';
 import { Order as OrderComponent } from './order';
@@ -24,12 +23,6 @@ const Feed = ({
       ))}
     </ul>
   );
-};
-
-Feed.propTypes = {
-  className: PropTypes.string,
-  orders: PropTypes.array.isRequired,
-  renderStatus: PropTypes.bool,
 };
 
 Feed.defaultProps = {

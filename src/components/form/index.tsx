@@ -1,12 +1,10 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import cs from 'classnames';
-import PropTypes from 'prop-types';
 import React, { MutableRefObject, useCallback, useMemo, useRef } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { lexemes } from '../../consts';
-
 import { AdditionalAction } from '../../types';
 import {
   ComponentInputType,
@@ -14,7 +12,6 @@ import {
   produceAdditionalActionReactNode,
   produceInputReactNode,
 } from './helpers';
-
 import fromStyles from './style.module.css';
 
 const Form = ({
@@ -187,17 +184,6 @@ const Form = ({
       ) : null}
     </form>
   );
-};
-
-Form.propTypes = {
-  additionalActions: PropTypes.array,
-  buttonTitle: PropTypes.string,
-  inputDeclarations: PropTypes.array.isRequired,
-  isButtonHiddenOnNotModifiedForm: PropTypes.bool,
-  onSubmit: PropTypes.func.isRequired,
-  resetButtonTitle: PropTypes.string,
-  showErrors: PropTypes.bool,
-  title: PropTypes.string,
 };
 
 Form.defaultProps = {

@@ -1,5 +1,4 @@
 import cs from 'classnames';
-import PropTypes from 'prop-types';
 import React from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import { formatOrderDate } from '../../../helpers';
@@ -70,11 +69,6 @@ const Order = ({
       <IngredientsAndPrice order={order} />
     </li>
   );
-};
-
-Order.propTypes = {
-  order: PropTypes.object.isRequired,
-  renderStatus: PropTypes.bool,
 };
 
 Order.defaultProps = {
