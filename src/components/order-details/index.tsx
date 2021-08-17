@@ -16,9 +16,10 @@ const OrderDetails = () => {
   const { id } = useParams() as { id: string };
   const orders = useAppSelector((state) => state.orders.orders);
   const order = orders.find(({ _id }) => id === _id)!;
-  const { ingredientQuantityPairs, totalPrice } = useOrderIngredients({
-    order,
-  });
+  const { ingredientQuantityPairs, isItValid, totalPrice } =
+    useOrderIngredients({
+      order,
+    });
 
   if (!order) {
     return null;
@@ -43,21 +44,25 @@ const OrderDetails = () => {
         {lexemes.orderIngredients}:
       </div>
       <div className={'pt-6'} />
-      <ul
-        className={cs(
-          orderDetailsStyles[`${orderDetailsClassname}__ingredients`],
-          'custom-scroll'
-        )}
-      >
-        {ingredientQuantityPairs.map(([ingredient, quantity], ix) => (
-          <React.Fragment key={ix}>
-            <IngredientAndPrice ingredient={ingredient} quantity={quantity} />
-            {ix + 1 < ingredientQuantityPairs.length ? (
-              <div className={'pt-4'} />
-            ) : null}
-          </React.Fragment>
-        ))}
-      </ul>
+      {isItValid ? (
+        <ul
+          className={cs(
+            orderDetailsStyles[`${orderDetailsClassname}__ingredients`],
+            'custom-scroll'
+          )}
+        >
+          {ingredientQuantityPairs.map(([ingredient, quantity], ix) => (
+            <React.Fragment key={ix}>
+              <IngredientAndPrice ingredient={ingredient} quantity={quantity} />
+              {ix + 1 < ingredientQuantityPairs.length ? (
+                <div className={'pt-4'} />
+              ) : null}
+            </React.Fragment>
+          ))}
+        </ul>
+      ) : (
+        <div className={'text text_color_error'}>{lexemes.noInformation}</div>
+      )}
       <div className={'pt-10'} />
       <div
         className={cs(
@@ -75,9 +80,13 @@ const OrderDetails = () => {
         >
           {formatOrderDate(order.createdAt)}
         </div>
-        <div className={orderDetailsStyles[`${orderDetailsClassname}__price`]}>
-          <Amount amount={totalPrice} />
-        </div>
+        {isItValid ? (
+          <div
+            className={orderDetailsStyles[`${orderDetailsClassname}__price`]}
+          >
+            <Amount amount={totalPrice} />
+          </div>
+        ) : null}
       </div>
     </div>
   );

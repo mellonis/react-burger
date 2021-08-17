@@ -48,10 +48,24 @@ export const useOrderIngredients = ({
     const ingredients = order.ingredients.map(
       (ingredientId) => idToIngredientMap[ingredientId]
     );
+    const areThereSomeUndefinedIngredients = ingredients.some(
+      (ingredient) => ingredient == null
+    );
+
+    if (areThereSomeUndefinedIngredients) {
+      return {
+        ingredientQuantityPairs: [],
+        isItValid: false,
+        moreIngredientsCount: ingredients.length,
+        totalPrice: NaN,
+      };
+    }
+
     const ingredientQuantityPairs = getOrderIngredientEntries(ingredients);
 
     return {
       ingredientQuantityPairs: ingredientQuantityPairs.slice(0, limit),
+      isItValid: true,
       moreIngredientsCount:
         limit < ingredientQuantityPairs.length
           ? ingredientQuantityPairs.length - limit

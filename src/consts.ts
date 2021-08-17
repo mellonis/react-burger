@@ -30,6 +30,7 @@ const allLexemes = {
     proteins: 'Белки, г',
     sauces: 'Соусы',
     top: 'верх',
+    noInformation: 'Нет информации',
     forms: {
       __common__: {
         __errors__: {
