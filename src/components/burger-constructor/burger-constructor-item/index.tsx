@@ -13,7 +13,7 @@ import {
   Ingredient_t,
 } from '../../../types';
 import { lexemes } from '../../../consts';
-import { useAppDispatch } from '../../../services/store';
+import { useAppDispatch, useAppSelector } from '../../../services/store';
 import { moveIngredient } from '../../../services/reducers';
 
 import style from './style.module.css';
@@ -35,10 +35,13 @@ const BurgerConstructorItem = ({
   onDelete?: () => void;
   type?: ActualIngredientType;
 }) => {
+  const orderDetailsRequest = useAppSelector(
+    (state) => state.burger.orderDetailsRequest
+  );
   const dispatch = useAppDispatch();
   const [{ isItPicked }, dragRef, preview] = useDrag({
     type: DraggableTypes.actualIngredient,
-    canDrag: !isLocked,
+    canDrag: !isLocked && !orderDetailsRequest,
     item: {
       index,
     } as ActualIngredientDragItem,
@@ -51,7 +54,7 @@ const BurgerConstructorItem = ({
   const [{ isCanDrop, isDragOver }, dropRef] = useDrop({
     accept: DraggableTypes.actualIngredient,
     canDrop() {
-      return !isLocked;
+      return !isLocked && !orderDetailsRequest;
     },
     collect(monitor) {
       return {

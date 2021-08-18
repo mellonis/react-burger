@@ -11,6 +11,7 @@ import {
   fetchIngredients as apiFetchIngredients,
   placeAnOrder as apiPlaceAnOrder,
 } from '../api';
+import { getAccessSchemaAndToken } from '../helpers';
 
 const generateIngredientId = () => uuidV4();
 
@@ -74,13 +75,22 @@ export const fetchIngredients = createAsyncThunk(
 export const placeAnOrder = createAsyncThunk(
   'burger/placeAnOrder',
   async (ingredients: Ingredient_t['_id'][]) => {
+    const { accessSchema, accessToken } = getAccessSchemaAndToken();
+
     if (ingredients.length === 0) {
       throw new Error(
         'Unable to place an order for the empty ingredients list'
       );
     }
 
-    return apiPlaceAnOrder(ingredients);
+    if (!accessSchema || !accessToken) {
+      throw new Error('Action cannot be handled');
+    }
+
+    return apiPlaceAnOrder({
+      ingredients,
+      auth: { accessSchema, accessToken },
+    });
   }
 );
 

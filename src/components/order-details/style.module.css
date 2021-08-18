@@ -1,35 +1,29 @@
 .order-details {
+    max-height: calc(min(620px, 100vh - 88px));
+    max-width: 640px;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    width: 100%;
 }
 
-.order-details__id {
-    text-shadow: 0 0 50px var(--colors-interface-accent);
+.order-details__number {
+    text-align: center;
 }
 
-.order-details__id-title {
-    text-transform: lowercase;
+.order-details__ingredients {
+    list-style: none;
+    margin: 0;
+    overflow-y: auto;
+    padding: 0;
 }
 
-.order-details__status-icon-wrapper {
-    align-items: center;
-    background-image:
-        url('/src/images/order-status-icons-wrapper/01.png'),
-        url('/src/images/order-status-icons-wrapper/02.png'),
-        url('/src/images/order-status-icons-wrapper/03.png');
-    background-position: center;
-    background-repeat: no-repeat;
-    display: flex;
-    justify-content: center;
-    height: 120px;
-    width: 120px;
+.order-details__date-and-price-wrapper {
+    display: grid;
+    grid-template-columns: 1fr min-content;
 }
 
-.order-details__status-title {
-
+.order-details__date {
 }
 
-.order-details__message {
+.order-details__price {
 }
-

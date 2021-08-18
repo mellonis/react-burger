@@ -1,0 +1,20 @@
+.feed-page {
+    display: grid;
+    grid-template-columns: 1fr min-content 1fr;
+    min-width: 100%;
+}
+
+.feed-page__feed-wrapper,
+.feed-page__activity,
+.feed-page__space {
+    display: grid;
+    max-height: calc(100vh - 88px);
+}
+
+.feed-page__feed-wrapper,
+.feed-page__activity {
+    display: flex;
+    flex-direction: column;
+}
+
+.feed-page__title {}

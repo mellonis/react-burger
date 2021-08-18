@@ -7,8 +7,7 @@ import {
   User,
   UserResponse,
 } from '../../types';
-
-export const apiHostUrl = 'https://norma.nomoreparties.space';
+import { apiHostUrl } from './consts';
 
 const getAccessSchemaAndTokenAndRefreshToken = (
   response: any
@@ -82,12 +81,18 @@ export const logout = async ({
   }
 };
 
-export const placeAnOrder = async (
-  ingredients: Ingredient_t['_id'][]
-): Promise<OrderDetails_t> => {
+export const placeAnOrder = async ({
+  ingredients,
+  auth: { accessSchema, accessToken },
+}: {
+  ingredients: Ingredient_t['_id'][];
+} & GetUserDataParams): Promise<OrderDetails_t> => {
   const response = await fetch(`${apiHostUrl}/api/orders`, {
     body: JSON.stringify({ ingredients }),
-    headers: new Headers([['Content-Type', 'application/json']]),
+    headers: new Headers([
+      ['Content-Type', 'application/json'],
+      ['Authorization', `${accessSchema} ${accessToken}`],
+    ]),
     method: 'POST',
   });
   const result = await response.json();
@@ -96,7 +101,7 @@ export const placeAnOrder = async (
     return {
       id: result.order.number,
       message: 'Дождитесь готовности на орбитальной станции',
-      status: OrderStatus_t.BEING_COOKED,
+      status: OrderStatus_t.pending,
     };
   } else {
     throw new Error("Can't get data from server");
@@ -204,7 +209,7 @@ export const requestNewPasswordSetting = async ({
   }
 };
 
-type AccessSchemaWithToken = Pick<
+export type AccessSchemaWithToken = Pick<
   RefreshTokensResponse,
   'accessSchema' | 'accessToken'
 >;
@@ -263,3 +268,5 @@ export const updateUserData = async ({
     user: result.user,
   };
 };
+
+export { apiHostUrl };

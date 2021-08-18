@@ -4,6 +4,7 @@ import {
   AutoLoginPhase,
   doAutoLogin,
   fetchIngredients,
+  subscribeForOrders,
 } from '../../services/reducers';
 import { useAppDispatch, useAppSelector } from '../../services/store';
 import { AppBody } from '../app-body';
@@ -24,6 +25,10 @@ const App = () => {
 
   useEffect(() => {
     dispatch(doAutoLogin());
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(subscribeForOrders());
   }, [dispatch]);
 
   if (

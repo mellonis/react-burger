@@ -3,6 +3,27 @@
     grid-template-rows: minmax(0, 1fr) max-content;
 }
 
+@keyframes placingOrder {
+    0% {
+        opacity: 0.7;
+    }
+    50% {
+        opacity: 0.9;
+    }
+    70% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0.5;
+    }
+}
+
+.burger-constructor_is-request {
+    animation-iteration-count: infinite;
+    animation-duration: 1s;
+    animation-name: placingOrder;
+}
+
 .burger-constructor_is-empty .burger-constructor__list,
 .burger-constructor_is-can-drop .burger-constructor__list {
     outline: 1px dashed var(--colors-interface-accent);
@@ -28,7 +49,7 @@
 }
 
 .burger-constructor__filling {
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 .burger-constructor__filling {

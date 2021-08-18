@@ -63,7 +63,9 @@ const Modal = ({
             <CloseIcon type={'primary'} />
           </button>
         </div>
-        <div className={style['modal__content']}>{children}</div>
+        <div className={cs(style['modal__content'], 'custom-scroll')}>
+          {children}
+        </div>
       </div>
     </>
   );
