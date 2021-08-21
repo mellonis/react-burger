@@ -8,9 +8,11 @@ import {
 import {
   getUserData as apiGetUserData,
   login as apiLogin,
+  LoginRequestParams,
   logout as apiLogout,
   refreshTokens as apiRefreshTokens,
   registerUser as apiRegisterUser,
+  RegisterUserRequestParams,
   requestNewPasswordSetting as apiRequestNewPasswordSetting,
   requestPasswordResettingForEmail as apiRequestPasswordResettingForEmail,
   updateUserData as apiUpdateUserData,
@@ -117,19 +119,36 @@ export const doAutoLogin = createAsyncThunk('user/doAutoLogin', async () => {
   }
 });
 
-export const login = createAsyncThunk('user/login', apiLogin);
+export const login = createAsyncThunk(
+  'user/login',
+  async (params: LoginRequestParams) => {
+    const result = await apiLogin(params);
+
+    authenticationSideEffect(result);
+
+    return result;
+  }
+);
 
 export const logout = createAsyncThunk('user/logout', async () => {
   const refreshToken = getRefreshToken();
 
   if (refreshToken) {
-    return apiLogout({ refreshToken: refreshToken });
+    await apiLogout({ refreshToken: refreshToken });
+
+    cleanUpAuthenticationSideEffect();
   }
 });
 
 export const registerUser = createAsyncThunk(
   'user/registerUser',
-  apiRegisterUser
+  async (params: RegisterUserRequestParams) => {
+    const result = await apiRegisterUser(params);
+
+    authenticationSideEffect(result);
+
+    return result;
+  }
 );
 
 export const requestNewPasswordSetting = createAsyncThunk(
@@ -248,7 +267,6 @@ const slice = createSlice({
       .addCase(
         registerUser.fulfilled,
         (state, { payload }: PayloadAction<AuthUserResponse>) => {
-          authenticationSideEffect(payload);
           state.userRegistrationPhase = UserRegistrationPhase.fulfilled;
           setUser(state, payload.user);
         }
@@ -264,7 +282,6 @@ const slice = createSlice({
       .addCase(
         login.fulfilled,
         (state, { payload }: PayloadAction<AuthUserResponse>) => {
-          authenticationSideEffect(payload);
           state.userLoginPhase = UserLoginPhase.fulfilled;
           setUser(state, payload.user);
         }
@@ -276,7 +293,6 @@ const slice = createSlice({
     builder
       .addCase(logout.pending, () => {})
       .addCase(logout.fulfilled, (state) => {
-        cleanUpAuthenticationSideEffect();
         resetUser(state);
         state.userLoginPhase = UserLoginPhase.initial;
       })

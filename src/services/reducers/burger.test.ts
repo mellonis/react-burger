@@ -85,50 +85,120 @@ describe('burger reducer', () => {
     );
   });
 
-  it('correctly calls fetchIngredients', async () => {
-    const action = fetchIngredients();
-    const dispatch = jest.fn();
-    const getState = jest.fn();
+  describe('fetchIngredients', () => {
+    it('updates state with fetchIngredients result (pending)', () => {
+      const state = burgerReducer(initialState, {
+        type: 'burger/fetchIngredients/pending',
+      });
 
-    await action(dispatch, getState, undefined);
+      expect(state.ingredientsRequest).toEqual(true);
+    });
 
-    expect(apiModule.fetchIngredients).toHaveBeenCalledTimes(1);
+    it('updates state with placeAnOrder result (rejected)', () => {
+      const error = Symbol('error');
+      const state = burgerReducer(initialState, {
+        type: 'burger/fetchIngredients/rejected',
+        error,
+      });
+
+      expect(state.ingredientsRequest).toEqual(false);
+      expect(state.ingredientsError).toEqual(error);
+    });
+
+    it('correctly calls fetchIngredients', async () => {
+      const action = fetchIngredients();
+      const dispatch = jest.fn();
+      const getState = jest.fn();
+
+      await action(dispatch, getState, undefined);
+
+      expect(dispatch.mock.calls.map(([{ type }]) => type)).toEqual([
+        'burger/fetchIngredients/pending',
+        'burger/fetchIngredients/fulfilled',
+      ]);
+      expect(apiModule.fetchIngredients).toHaveBeenCalledTimes(1);
+    });
   });
 
-  it("doesn't call placeAnOrder if ingredient list is empty", async () => {
-    const action = placeAnOrder([]);
-    const dispatch = jest.fn();
-    const getState = jest.fn();
+  describe('placeAnOrder', () => {
+    it("doesn't call placeAnOrder if ingredient list is empty", async () => {
+      const action = placeAnOrder([]);
+      const dispatch = jest.fn();
+      const getState = jest.fn();
 
-    await action(dispatch, getState, undefined);
+      await action(dispatch, getState, undefined);
 
-    expect(apiModule.placeAnOrder).toHaveBeenCalledTimes(0);
-  });
+      expect(dispatch.mock.calls.map(([{ type }]) => type)).toEqual([
+        'burger/placeAnOrder/pending',
+        'burger/placeAnOrder/rejected',
+      ]);
+      expect(apiModule.placeAnOrder).toHaveBeenCalledTimes(0);
+    });
 
-  it("doesn't call placeAnOrder if not authenticated", async () => {
-    const action = placeAnOrder([aBun._id, aSauce._id, aBun._id]);
-    const dispatch = jest.fn();
-    const getState = jest.fn();
+    it("doesn't call placeAnOrder if not authenticated", async () => {
+      const action = placeAnOrder([aBun._id, aSauce._id, aBun._id]);
+      const dispatch = jest.fn();
+      const getState = jest.fn();
 
-    await action(dispatch, getState, undefined);
-    expect(apiModule.placeAnOrder).toHaveBeenCalledTimes(0);
-  });
+      await action(dispatch, getState, undefined);
 
-  it('correctly call placeAnOrder', async () => {
-    const ingredientIds = [aBun._id, aSauce._id, aSauce._id, aBun._id];
-    const action = placeAnOrder(ingredientIds);
-    const dispatch = jest.fn();
-    const getState = jest.fn();
+      expect(dispatch.mock.calls.map(([{ type }]) => type)).toEqual([
+        'burger/placeAnOrder/pending',
+        'burger/placeAnOrder/rejected',
+      ]);
+      expect(apiModule.placeAnOrder).toHaveBeenCalledTimes(0);
+    });
 
-    document.cookie = `accessSchema=accessSchema`;
-    document.cookie = `accessToken=accessToken`;
+    it('correctly call placeAnOrder', async () => {
+      const ingredientIds = [aBun._id, aSauce._id, aSauce._id, aBun._id];
+      const action = placeAnOrder(ingredientIds);
+      const dispatch = jest.fn();
+      const getState = jest.fn();
 
-    await action(dispatch, getState, undefined);
+      document.cookie = `accessSchema=accessSchema`;
+      document.cookie = `accessToken=accessToken`;
 
-    expect(apiModule.placeAnOrder).toHaveBeenCalledTimes(1);
-    expect((apiModule.placeAnOrder as jest.Mock).mock.calls[0][0]).toEqual({
-      auth: { accessSchema: 'accessSchema', accessToken: 'accessToken' },
-      ingredients: ingredientIds,
+      await action(dispatch, getState, undefined);
+
+      expect(dispatch.mock.calls.map(([{ type }]) => type)).toEqual([
+        'burger/placeAnOrder/pending',
+        'burger/placeAnOrder/fulfilled',
+      ]);
+      expect(apiModule.placeAnOrder).toHaveBeenCalledTimes(1);
+      expect((apiModule.placeAnOrder as jest.Mock).mock.calls[0][0]).toEqual({
+        auth: { accessSchema: 'accessSchema', accessToken: 'accessToken' },
+        ingredients: ingredientIds,
+      });
+    });
+
+    it('updates state with placeAnOrder result (pending)', () => {
+      const state = burgerReducer(initialState, {
+        type: 'burger/placeAnOrder/pending',
+      });
+
+      expect(state.orderDetailsRequest).toEqual(true);
+    });
+
+    it('updates state with placeAnOrder result (rejected)', () => {
+      const error = Symbol('error');
+      const state = burgerReducer(initialState, {
+        type: 'burger/placeAnOrder/rejected',
+        error,
+      });
+
+      expect(state.orderDetailsRequest).toEqual(false);
+      expect(state.orderDetailsError).toEqual(error);
+    });
+
+    it('updates state with placeAnOrder result', () => {
+      const orderDetails = Symbol('order details');
+
+      const state = burgerReducer(initialState, {
+        type: 'burger/placeAnOrder/fulfilled',
+        payload: orderDetails,
+      });
+
+      expect(state.orderDetails).toEqual(orderDetails);
     });
   });
 
@@ -243,6 +313,15 @@ describe('burger reducer', () => {
         { id: '4', refId: aSauce._id },
         { id: '2', isLocked: true, refId: aBun._id, type: 'bottom' },
       ]);
+
+      state = burgerReducer(state, moveIngredient([1, 1]));
+
+      expect(state.actualIngredients).toEqual([
+        { id: '1', isLocked: true, refId: aBun._id, type: 'top' },
+        { id: '3', refId: aSauce._id },
+        { id: '4', refId: aSauce._id },
+        { id: '2', isLocked: true, refId: aBun._id, type: 'bottom' },
+      ]);
     });
 
     it('handles moveIngredient action (swap with a bun)', () => {
@@ -284,6 +363,51 @@ describe('burger reducer', () => {
       expect(state.actualIngredients).toEqual([
         { id: '1', isLocked: true, refId: aBun._id, type: 'top' },
         { id: '3', refId: aSauce._id },
+        { id: '2', isLocked: true, refId: aBun._id, type: 'bottom' },
+      ]);
+    });
+
+    it('handles removeIngredient action (keep buns)', () => {
+      state = burgerReducer(state, addIngredient(aBun));
+      state = burgerReducer(state, addIngredient(aSauce));
+
+      expect(state.actualIngredients).toEqual([
+        { id: '1', isLocked: true, refId: aBun._id, type: 'top' },
+        { id: '3', refId: aSauce._id },
+        { id: '2', isLocked: true, refId: aBun._id, type: 'bottom' },
+      ]);
+
+      state = burgerReducer(state, removeIngredient('1'));
+
+      expect(state.actualIngredients).toEqual([
+        { id: '1', isLocked: true, refId: aBun._id, type: 'top' },
+        { id: '3', refId: aSauce._id },
+        { id: '2', isLocked: true, refId: aBun._id, type: 'bottom' },
+      ]);
+
+      state = burgerReducer(state, removeIngredient('2'));
+
+      expect(state.actualIngredients).toEqual([
+        { id: '1', isLocked: true, refId: aBun._id, type: 'top' },
+        { id: '3', refId: aSauce._id },
+        { id: '2', isLocked: true, refId: aBun._id, type: 'bottom' },
+      ]);
+    });
+
+    it('handles removeIngredient action', () => {
+      state = burgerReducer(state, addIngredient(aBun));
+      state = burgerReducer(state, addIngredient(aSauce));
+
+      expect(state.actualIngredients).toEqual([
+        { id: '1', isLocked: true, refId: aBun._id, type: 'top' },
+        { id: '3', refId: aSauce._id },
+        { id: '2', isLocked: true, refId: aBun._id, type: 'bottom' },
+      ]);
+
+      state = burgerReducer(state, removeIngredient('3'));
+
+      expect(state.actualIngredients).toEqual([
+        { id: '1', isLocked: true, refId: aBun._id, type: 'top' },
         { id: '2', isLocked: true, refId: aBun._id, type: 'bottom' },
       ]);
     });
