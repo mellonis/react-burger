@@ -39,7 +39,7 @@ const initialState: Readonly<{
   totalAmount: 0,
 };
 
-type InitialState_t = typeof initialState;
+export type InitialState_t = typeof initialState;
 
 const calcTotal = ({
   actualIngredients,
@@ -75,13 +75,13 @@ export const fetchIngredients = createAsyncThunk(
 export const placeAnOrder = createAsyncThunk(
   'burger/placeAnOrder',
   async (ingredients: Ingredient_t['_id'][]) => {
-    const { accessSchema, accessToken } = getAccessSchemaAndToken();
-
     if (ingredients.length === 0) {
       throw new Error(
         'Unable to place an order for the empty ingredients list'
       );
     }
+
+    const { accessSchema, accessToken } = getAccessSchemaAndToken();
 
     if (!accessSchema || !accessToken) {
       throw new Error('Action cannot be handled');
@@ -118,7 +118,7 @@ const slice = createSlice({
           ...actualIngredients.slice(1, -1),
           bottomBun,
         ];
-      } else {
+      } else if (actualIngredients.length > 0) {
         const newValue = [...actualIngredients];
 
         newValue.splice(-1, 0, {
@@ -137,7 +137,23 @@ const slice = createSlice({
       state,
       { payload: [fromIndex, toIndex] }: PayloadAction<[number, number]>
     ) {
+      if (fromIndex === toIndex) {
+        return;
+      }
+
+      if (fromIndex < 1 || toIndex < 1) {
+        return;
+      }
+
       const { actualIngredients: actualIngredientsFromState } = state;
+
+      if (
+        fromIndex >= actualIngredientsFromState.length - 1 ||
+        toIndex >= actualIngredientsFromState.length - 1
+      ) {
+        return;
+      }
+
       const actualIngredients = [...actualIngredientsFromState];
 
       actualIngredients.splice(
