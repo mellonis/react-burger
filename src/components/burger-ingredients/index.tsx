@@ -107,7 +107,10 @@ const BurgerIngredients: FC<{ className?: string }> = ({ className }) => {
   }, []);
 
   return (
-    <div className={cs(style['burger-ingredients'], 'pb-5', className)}>
+    <div
+      className={cs(style['burger-ingredients'], 'pb-5', className)}
+      data-test-id="burger-ingredients"
+    >
       <div
         className={cs(
           style['burger-ingredients__title'],

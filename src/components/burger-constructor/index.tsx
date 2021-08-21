@@ -69,6 +69,7 @@ const BurgerConstructor: FC<{ className?: string }> = ({ className }) => {
 
   return (
     <div
+      data-test-id="burger-constructor"
       className={cs(
         style['burger-constructor'],
         'pt-25 pb-5',
@@ -112,6 +113,7 @@ const BurgerConstructor: FC<{ className?: string }> = ({ className }) => {
         )}
         <div
           className={cs(style['burger-constructor__filling'], 'custom-scroll')}
+          data-test-id="burger-constructor-filling"
         >
           {actualIngredients
             .slice(1, -1)
@@ -170,7 +172,10 @@ const BurgerConstructor: FC<{ className?: string }> = ({ className }) => {
           </>
         )}
       </div>
-      <div className={cs(style['burger-constructor__total-wrapper'], 'pt-10')}>
+      <div
+        className={cs(style['burger-constructor__total-wrapper'], 'pt-10')}
+        data-test-id="total-wrapper"
+      >
         <Amount
           amount={totalAmount}
           className={style['burger-constructor__total']}

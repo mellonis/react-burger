@@ -41,6 +41,7 @@ const BurgerIngredient: FC<{
         [style['burger-ingredient_interactive']]: onClick,
         [style['burger-ingredient_is-picked']]: isItPicked,
       })}
+      data-test-id="burger-ingredient"
       onClick={onClick}
     >
       <DragPreviewImage connect={preview} src={image} />

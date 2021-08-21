@@ -91,6 +91,7 @@ const BurgerConstructorItem: FC<{
         },
         className
       )}
+      data-test-id="burger-constructor-ingredient"
       onClick={(event) => {
         const target = event.target as HTMLElement;
 
