@@ -10,7 +10,7 @@ import {
 import { apiHostUrl } from './consts';
 
 const getAccessSchemaAndTokenAndRefreshToken = (
-  response: any
+  response: AuthUserResponse
 ): RefreshTokensResponse => {
   const { accessToken: accessTokenWithSchema, refreshToken } = response;
   const [accessSchema, accessToken] = accessTokenWithSchema.split(' ');

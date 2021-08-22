@@ -17,7 +17,13 @@ export enum WsActionType {
 }
 
 export type WsActionTypes = {
-  [key in WsActionType]: string;
+  [WsActionType.wsCloseConnection]: `${WsActionType.wsCloseConnection}_${string}`;
+  [WsActionType.wsConnectionSuccess]: `${WsActionType.wsConnectionSuccess}_${string}`;
+  [WsActionType.wsConnectionError]: `${WsActionType.wsConnectionError}_${string}`;
+  [WsActionType.wsConnectionClose]: `${WsActionType.wsConnectionClose}_${string}`;
+  [WsActionType.wsGetMessage]: `${WsActionType.wsGetMessage}_${string}`;
+  [WsActionType.wsOpenConnection]: `${WsActionType.wsOpenConnection}_${string}`;
+  [WsActionType.wsSendMessage]: `${WsActionType.wsSendMessage}_${string}`;
 };
 
 export const socketMiddlewareFabric = (

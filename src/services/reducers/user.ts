@@ -81,6 +81,8 @@ const initialState: Readonly<{
   updateUserDataPhase: UpdateUserDataPhase.initial,
 };
 
+export type UserReducerInitialStateType = typeof initialState;
+
 export const doAutoLogin = createAsyncThunk('user/doAutoLogin', async () => {
   const { accessSchema, accessToken } = getAccessSchemaAndToken();
 

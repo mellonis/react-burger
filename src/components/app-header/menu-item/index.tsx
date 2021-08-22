@@ -9,7 +9,7 @@ const MenuItem: FC<{
   className?: string;
   Icon: Icon_t;
   isActive?: boolean;
-  onClick?: (...a: any[]) => void;
+  onClick?: React.MouseEventHandler<HTMLLIElement>;
   text: string;
 }> = ({ className, Icon, isActive, onClick, text }) => {
   return (
