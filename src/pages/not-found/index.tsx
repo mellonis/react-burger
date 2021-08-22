@@ -1,11 +1,11 @@
-import React from 'react';
 import cs from 'classnames';
+import React, { FC } from 'react';
 
 import pageStyles from '../page-style.module.css';
 
 const notFoundPageClassname = 'not-found-page';
 
-const NotFoundPage = () => (
+const NotFoundPage: FC = () => (
   <div
     className={cs(
       pageStyles['page'],

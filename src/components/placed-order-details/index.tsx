@@ -1,21 +1,16 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import cs from 'classnames';
 import { CheckMarkIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import { OrderDetails_t } from '../../types';
+import cs from 'classnames';
+import React, { FC } from 'react';
 import { lexemes, orderStatusToStatusTitleMap } from '../../consts';
-
+import { OrderDetails_t } from '../../types';
 import placedOrderDetailsStyles from './style.module.css';
 
 const placedOrderDetails = 'placed-order-details';
 
-const PlacedOrderDetails = ({
-  className,
-  orderDetails: { id, status, message },
-}: {
+const PlacedOrderDetails: FC<{
   className?: string;
   orderDetails: OrderDetails_t;
-}) => (
+}> = ({ className, orderDetails: { id, status, message } }) => (
   <div className={cs(placedOrderDetailsStyles[placedOrderDetails], className)}>
     <div
       className={cs(
@@ -61,10 +56,5 @@ const PlacedOrderDetails = ({
     </div>
   </div>
 );
-
-PlacedOrderDetails.propTypes = {
-  className: PropTypes.string,
-  orderDetails: PropTypes.object.isRequired,
-};
 
 export { PlacedOrderDetails };

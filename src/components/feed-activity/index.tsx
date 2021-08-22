@@ -1,23 +1,17 @@
 import cs from 'classnames';
-import PropTypes from 'prop-types';
-import React, { ReactNode, useMemo } from 'react';
+import React, { FC, ReactNode, useMemo } from 'react';
 import { lexemes, orderStatusToStatusTitleMap } from '../../consts';
 import { Order, OrderStatus_t } from '../../types';
 import feedActivityStyles from './style.module.css';
 
 const feedActivityClassname = 'feed-activity';
 
-const FeedActivity = ({
-  className,
-  orders,
-  total,
-  totalToday,
-}: {
+const FeedActivity: FC<{
   className?: string;
   orders: Order[];
   total?: number;
   totalToday?: number;
-}) => {
+}> = ({ className, orders, total, totalToday }) => {
   const statusToOrdersMap = useMemo(() => {
     return orders.reduce(
       (result, order) => {
@@ -156,13 +150,6 @@ const FeedActivity = ({
       ) : null}
     </div>
   );
-};
-
-FeedActivity.propTypes = {
-  className: PropTypes.string,
-  orders: PropTypes.array,
-  total: PropTypes.number,
-  totalToday: PropTypes.number,
 };
 
 export { FeedActivity };

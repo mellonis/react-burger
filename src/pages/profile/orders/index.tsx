@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { FC, useEffect } from 'react';
 import { Feed } from '../../../components/feed/intex';
 import {
   subscribeForUserOrders,
@@ -6,7 +6,7 @@ import {
 } from '../../../services/reducers';
 import { useAppDispatch, useAppSelector } from '../../../services/store';
 
-const Orders = () => {
+const Orders: FC = () => {
   const orders = useAppSelector((state) => state.orders.userOrders);
   const dispatch = useAppDispatch();
 

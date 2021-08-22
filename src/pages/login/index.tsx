@@ -1,5 +1,5 @@
 import cs from 'classnames';
-import React, { useEffect } from 'react';
+import React, { FC, useEffect } from 'react';
 import { Redirect, useLocation } from 'react-router-dom';
 import {
   ComponentInputType,
@@ -13,7 +13,6 @@ import {
   UserLoginPhase,
 } from '../../services/reducers';
 import { useAppDispatch, useAppSelector } from '../../services/store';
-
 import { AdditionalAction } from '../../types';
 
 import pageStyles from '../page-style.module.css';
@@ -45,7 +44,7 @@ const inputDeclarations: InputDeclaration[] = [
   },
 ];
 
-const LoginPage = () => {
+const LoginPage: FC = () => {
   const { userLoginPhase } = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
   const { state: { redirectedFrom = '/' } = {} } = useLocation() as {

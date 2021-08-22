@@ -13,6 +13,8 @@ const initialState: Readonly<{
   userOrders: [],
 };
 
+export type OrderReducerInitialState = typeof initialState;
+
 const chunkCodeToUrlMap: {
   orders: string;
   userOrders: string;

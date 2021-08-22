@@ -1,12 +1,10 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
-import PropTypes from 'prop-types';
-import cs from 'classnames';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
-import { IngredientType } from '../../types';
-import { useAppSelector } from '../../services/store';
+import cs from 'classnames';
+import React, { FC, useEffect, useMemo, useRef, useState } from 'react';
 import { lexemes } from '../../consts';
+import { useAppSelector } from '../../services/store';
+import { IngredientType } from '../../types';
 import { BurgerIngredientType } from './burger-ingredient-type';
-
 import style from './style.module.css';
 
 const ingredientTypeTitles = {
@@ -26,7 +24,7 @@ const thresholds = [
   1,
 ];
 
-const BurgerIngredients = ({ className }: { className?: string }) => {
+const BurgerIngredients: FC<{ className?: string }> = ({ className }) => {
   const { ingredients } = useAppSelector((state) => state.burger);
   const [selectedIngredientType, setSelectedIngredientType] = useState(
     ingredientTypes[0]
@@ -109,7 +107,10 @@ const BurgerIngredients = ({ className }: { className?: string }) => {
   }, []);
 
   return (
-    <div className={cs(style['burger-ingredients'], 'pb-5', className)}>
+    <div
+      className={cs(style['burger-ingredients'], 'pb-5', className)}
+      data-test-id="burger-ingredients"
+    >
       <div
         className={cs(
           style['burger-ingredients__title'],
@@ -161,7 +162,5 @@ const BurgerIngredients = ({ className }: { className?: string }) => {
     </div>
   );
 };
-
-BurgerIngredients.propTypes = { className: PropTypes.string };
 
 export { BurgerIngredients };

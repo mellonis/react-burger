@@ -1,13 +1,11 @@
 import cs from 'classnames';
-import PropTypes from 'prop-types';
-import React, { useMemo } from 'react';
+import React, { FC, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import { lexemes } from '../../consts';
 import { useAppSelector } from '../../services/store';
-
 import style from './style.module.css';
 
-const IngredientDetails = ({ className }: { className?: string }) => {
+const IngredientDetails: FC<{ className?: string }> = ({ className }) => {
   const { id } = useParams() as { id: string };
   const { idToIngredientMap } = useAppSelector((state) => state.burger);
   const {
@@ -80,10 +78,6 @@ const IngredientDetails = ({ className }: { className?: string }) => {
       </div>
     </div>
   );
-};
-
-IngredientDetails.propTypes = {
-  className: PropTypes.string,
 };
 
 export { IngredientDetails };

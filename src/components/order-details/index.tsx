@@ -1,9 +1,9 @@
 import cs from 'classnames';
-import React from 'react';
+import React, { FC } from 'react';
 import { useParams } from 'react-router-dom';
 import { lexemes } from '../../consts';
-import { useOrderIngredients } from '../../hooks';
 import { formatOrderDate } from '../../helpers';
+import { useOrderIngredients } from '../../hooks';
 import { useAppSelector } from '../../services/store';
 import { Amount } from '../amount';
 import { OrderStatus } from '../order-status';
@@ -12,7 +12,7 @@ import orderDetailsStyles from './style.module.css';
 
 const orderDetailsClassname = 'order-details';
 
-const OrderDetails = () => {
+const OrderDetails: FC = () => {
   const { id } = useParams() as { id: string };
   const orders = useAppSelector((state) => state.orders.orders);
   const order = orders.find(({ _id }) => id === _id)!;

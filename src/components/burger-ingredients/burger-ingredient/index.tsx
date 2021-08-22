@@ -1,25 +1,20 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import { Counter } from '@ya.praktikum/react-developer-burger-ui-components';
 import cs from 'classnames';
+import React, { FC } from 'react';
 import { DragPreviewImage, useDrag } from 'react-dnd';
+import { useAppSelector } from '../../../services/store';
 import {
   DraggableTypes,
   Ingredient_t,
   IngredientDragItem,
 } from '../../../types';
-import { useAppSelector } from '../../../services/store';
 import { Amount } from '../../amount';
-import { Counter } from '@ya.praktikum/react-developer-burger-ui-components';
-
 import style from './style.module.css';
 
-const BurgerIngredient = ({
-  ingredient: { _id, image, name: title, price, type },
-  onClick,
-}: {
+const BurgerIngredient: FC<{
   ingredient: Ingredient_t;
   onClick?: () => void;
-}) => {
+}> = ({ ingredient: { _id, image, name: title, price, type }, onClick }) => {
   const { idToActualIngredientsCountMap } = useAppSelector(
     (state) => state.burger
   );
@@ -46,6 +41,7 @@ const BurgerIngredient = ({
         [style['burger-ingredient_interactive']]: onClick,
         [style['burger-ingredient_is-picked']]: isItPicked,
       })}
+      data-test-id="burger-ingredient"
       onClick={onClick}
     >
       <DragPreviewImage connect={preview} src={image} />
@@ -70,11 +66,6 @@ const BurgerIngredient = ({
       </div>
     </li>
   );
-};
-
-BurgerIngredient.propTypes = {
-  ingredient: PropTypes.object.isRequired,
-  onClick: PropTypes.func,
 };
 
 export { BurgerIngredient };

@@ -1,29 +1,20 @@
+import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
+import cs from 'classnames';
 import React, {
+  FC,
   MutableRefObject,
-  ReactNode,
-  ReactPortal,
   useCallback,
   useEffect,
   useRef,
 } from 'react';
-import PropTypes from 'prop-types';
-import cs from 'classnames';
-import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { ModalOverlay } from './modal-overlay';
-
 import style from './style.module.css';
 
-const Modal = ({
-  children,
-  className,
-  onClose,
-  title,
-}: {
-  children?: ReactNode | ReactPortal;
+const Modal: FC<{
   className?: string;
   onClose: () => void;
   title?: string;
-}) => {
+}> = ({ children, className, onClose, title }) => {
   const modalElementRef = useRef(null);
 
   useEffect(() => {
@@ -69,16 +60,6 @@ const Modal = ({
       </div>
     </>
   );
-};
-
-Modal.propTypes = {
-  children: PropTypes.oneOfType([
-    PropTypes.arrayOf(PropTypes.node),
-    PropTypes.node,
-  ]),
-  className: PropTypes.string,
-  onClose: PropTypes.func.isRequired,
-  title: PropTypes.string,
 };
 
 export { Modal };

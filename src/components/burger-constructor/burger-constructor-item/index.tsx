@@ -1,32 +1,22 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import cs from 'classnames';
-import { DragPreviewImage, useDrag, useDrop } from 'react-dnd';
 import {
   ConstructorElement,
   DragIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
+import cs from 'classnames';
+import React, { FC } from 'react';
+import { DragPreviewImage, useDrag, useDrop } from 'react-dnd';
+import { lexemes } from '../../../consts';
+import { moveIngredient } from '../../../services/reducers';
+import { useAppDispatch, useAppSelector } from '../../../services/store';
 import {
   ActualIngredientDragItem,
   ActualIngredientType,
   DraggableTypes,
   Ingredient_t,
 } from '../../../types';
-import { lexemes } from '../../../consts';
-import { useAppDispatch, useAppSelector } from '../../../services/store';
-import { moveIngredient } from '../../../services/reducers';
-
 import style from './style.module.css';
 
-const BurgerConstructorItem = ({
-  className,
-  index,
-  ingredient: { _id, image, name, price },
-  isLocked,
-  onShowIngredientInfo,
-  onDelete,
-  type,
-}: {
+const BurgerConstructorItem: FC<{
   className?: string;
   index?: number;
   ingredient: Ingredient_t;
@@ -34,6 +24,14 @@ const BurgerConstructorItem = ({
   onShowIngredientInfo?: () => void;
   onDelete?: () => void;
   type?: ActualIngredientType;
+}> = ({
+  className,
+  index,
+  ingredient: { _id, image, name, price },
+  isLocked,
+  onShowIngredientInfo,
+  onDelete,
+  type,
 }) => {
   const orderDetailsRequest = useAppSelector(
     (state) => state.burger.orderDetailsRequest
@@ -93,6 +91,7 @@ const BurgerConstructorItem = ({
         },
         className
       )}
+      data-test-id="burger-constructor-ingredient"
       onClick={(event) => {
         const target = event.target as HTMLElement;
 
@@ -140,20 +139,6 @@ const BurgerConstructorItem = ({
       </div>
     </div>
   );
-};
-
-BurgerConstructorItem.propTypes = {
-  className: PropTypes.string,
-  id: PropTypes.string,
-  index: PropTypes.number,
-  ingredient: PropTypes.object.isRequired,
-  isLocked: PropTypes.bool.isRequired,
-  onShowIngredientInfo: PropTypes.func,
-  onDelete: PropTypes.func,
-  type: PropTypes.oneOf([
-    ActualIngredientType.top,
-    ActualIngredientType.bottom,
-  ]),
 };
 
 export { BurgerConstructorItem };

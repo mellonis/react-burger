@@ -1,7 +1,6 @@
 import { Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import cs from 'classnames';
-import PropTypes from 'prop-types';
-import React, { useCallback } from 'react';
+import React, { FC, useCallback } from 'react';
 import { useDrop } from 'react-dnd';
 import { useHistory, useLocation } from 'react-router-dom';
 import { lexemes } from '../../consts';
@@ -18,10 +17,9 @@ import {
 } from '../../types';
 import { Amount } from '../amount';
 import { BurgerConstructorItem } from './burger-constructor-item';
-
 import style from './style.module.css';
 
-const BurgerConstructor = ({ className }: { className?: string }) => {
+const BurgerConstructor: FC<{ className?: string }> = ({ className }) => {
   const {
     actualIngredients,
     idToIngredientMap,
@@ -71,6 +69,7 @@ const BurgerConstructor = ({ className }: { className?: string }) => {
 
   return (
     <div
+      data-test-id="burger-constructor"
       className={cs(
         style['burger-constructor'],
         'pt-25 pb-5',
@@ -114,6 +113,7 @@ const BurgerConstructor = ({ className }: { className?: string }) => {
         )}
         <div
           className={cs(style['burger-constructor__filling'], 'custom-scroll')}
+          data-test-id="burger-constructor-filling"
         >
           {actualIngredients
             .slice(1, -1)
@@ -124,7 +124,6 @@ const BurgerConstructor = ({ className }: { className?: string }) => {
                 ingredient && (
                   <BurgerConstructorItem
                     key={id}
-                    id={id}
                     index={ix + 1}
                     ingredient={idToIngredientMap[refId]!}
                     isLocked={isLocked}
@@ -173,7 +172,10 @@ const BurgerConstructor = ({ className }: { className?: string }) => {
           </>
         )}
       </div>
-      <div className={cs(style['burger-constructor__total-wrapper'], 'pt-10')}>
+      <div
+        className={cs(style['burger-constructor__total-wrapper'], 'pt-10')}
+        data-test-id="total-wrapper"
+      >
         <Amount
           amount={totalAmount}
           className={style['burger-constructor__total']}
@@ -191,7 +193,5 @@ const BurgerConstructor = ({ className }: { className?: string }) => {
     </div>
   );
 };
-
-BurgerConstructor.propTypes = { className: PropTypes.string };
 
 export { BurgerConstructor };

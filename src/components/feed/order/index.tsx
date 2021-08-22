@@ -1,6 +1,5 @@
 import cs from 'classnames';
-import PropTypes from 'prop-types';
-import React from 'react';
+import React, { FC } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import { formatOrderDate } from '../../../helpers';
 import { Order as OrderType } from '../../../types';
@@ -10,13 +9,10 @@ import orderStyles from './style.module.css';
 
 const orderClassname = 'order';
 
-const Order = ({
-  order,
-  renderStatus,
-}: {
+const Order: FC<{
   order: OrderType;
   renderStatus?: boolean;
-}) => {
+}> = ({ order, renderStatus }) => {
   const location = useLocation();
   const history = useHistory();
 
@@ -70,11 +66,6 @@ const Order = ({
       <IngredientsAndPrice order={order} />
     </li>
   );
-};
-
-Order.propTypes = {
-  order: PropTypes.object.isRequired,
-  renderStatus: PropTypes.bool,
 };
 
 Order.defaultProps = {

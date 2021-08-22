@@ -33,7 +33,7 @@ export const fetchIngredients = async (): Promise<Ingredient_t[]> => {
   }
 };
 
-interface LoginRequestParams {
+export interface LoginRequestParams {
   email: string;
   password: string;
 }
@@ -128,7 +128,7 @@ export const refreshTokens = async ({
   }
 };
 
-interface RegisterUserRequestParams {
+export interface RegisterUserRequestParams {
   email: string;
   name: string;
   password: string;
