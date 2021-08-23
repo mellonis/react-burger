@@ -1,4 +1,9 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import {
+  AsyncThunk,
+  createAsyncThunk,
+  createSlice,
+  PayloadAction,
+} from '@reduxjs/toolkit';
 import { Order } from '../../types';
 import { generateActionTypes, getAccessSchemaAndToken } from '../helpers';
 import { WsActionTypes } from '../middleware';
@@ -13,8 +18,6 @@ const initialState: Readonly<{
   userOrders: [],
 };
 
-export type OrderReducerInitialState = typeof initialState;
-
 const chunkCodeToUrlMap: {
   orders: string;
   userOrders: string;
@@ -25,8 +28,8 @@ const chunkCodeToUrlMap: {
 
 type ChunkCodeToChunkWsDataMap = {
   [key in keyof typeof chunkCodeToUrlMap]: {
-    subscribe: any;
-    unsubscribe: any;
+    subscribe: AsyncThunk<void, void, {}>;
+    unsubscribe: AsyncThunk<void, void, {}>;
     url: string;
     wsActionTypes: WsActionTypes;
   };

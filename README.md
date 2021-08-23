@@ -23,3 +23,5 @@
 - библиотека react-router-dom
 - библиотека react-hook-form
 - библиотека yup
+- библиотека date-fns
+- инструменты тестирования jest, cypress
